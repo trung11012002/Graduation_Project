@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <i class="fas fa-check"></i>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Điểm danh</title>
+    <link rel="icon" href="/icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url("study.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 100vh;
+        }
+
+        #header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .sidebar {
+            float: left;
+            width: 170px;
+            background-color: #2f353a;
+            height: 100%;
+        }
+
+        .sidebar .nav-title {
+            padding: 1.1rem 1rem;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #e4e7ea;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .sidebar .nav-link {
+            display: block;
+            padding: 1em 1em;
+            color: #73818f;
+            text-decoration: none;
+            background: 0 0;
+            cursor: pointer;
+        }
+
+        .sidebar .nav-link.active
+        {
+            background-color: #20a8d8;
+            color: #fff;
+        }
+
+        .sidebar .nav-link:hover:not(.active)
+        {
+            background-color: #4a7b8d;
+            color: #fff;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        #attendanceForm {
+            margin: auto;
+            width: 40%;
+        }
+
+        #attendanceCode {
+            margin-bottom: 35px;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .content {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-color: #cfe2f3;
+            color: #495057;
+        }
+
+        .btn-primary {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .btn-primary:hover {
+            background-color: #138496;
+            border-color: #138496;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .info{
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-logout{
+            margin-left: 10px;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav id="header" class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">PHẦN MỀM ĐIỂM DANH SINH VIÊN</a>
+        <!-- <button onclick="showHistory()" class="btn-history btn btn-primary">Xem lịch sử</button> -->
+        <span class="info">
+            <!-- <span>Xin chào, Vũ Đức Chính - B20DCCN119</span> 
+            <button class="btn-logout btn btn-primary">Đăng xuất</button> -->
+        </span>
+    </nav>
+    <aside class="sidebar">
+        <ul class="nav-bar">
+            <li class="nav-title">MENU</li>
+            <li class="nav-item"><a class="nav-link active">Xem lịch sử</a></li>
+            <li class="nav-item"><a class="nav-link">Xem bảng điểm</a></li>
+        </ul>
+    </aside>
+    <div class="container">
+        <h2></h2>
+        <h1 class="text-center mb-4"><strong>Điểm danh sinh viên</strong></h1>
+
+        <form id="attendanceForm">
+            <!-- <div class="form-group">
+                <label for="maSinhVien"><strong>Mã sinh viên:</strong></label>
+                <input type="text" class="form-control" id="maSinhVien" placeholder="Nhập mã sinh viên" required>
+            </div> -->
+            <div class="form-group">
+                <label for="anhDaiDien"><strong>Hình ảnh khuôn mặt:</strong></label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="anhDaiDien" name="anhDaiDien" accept="image/*"
+                        required onchange="displaySelectedFileAndName()">
+                    <label class="custom-file-label" for="anhDaiDien" id="selectedFileName">Chọn tập tin ảnh...</label>
+                </div>
+                <div id="selectedImageContainer" style="display: none; text-align: center;">
+                    <img id="selectedImage" src="#" alt="Ảnh đã chọn"
+                        style="max-width: 100%; max-height: 300px; display: inline-block;">
+                </div>
+            </div>
+            <div class="form-group mt-3">
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary" onclick="sendImageToService2()"><strong>Điểm
+                            danh</strong></button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Link Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const navItems = document.querySelectorAll(".nav-link");
+        navItems.forEach((navItem, index) => {
+          navItem.onclick = () =>{
+            document.querySelector(".nav-link.active").classList.remove("active")
+            navItem.classList.add("active")
+            if(navItem.innerHTML === "Xem lịch sử"){
+              window.location.href = "attendance-log.html"
+            }else if(navItem.innerHTML === "Xem bảng điểm"){
+              window.location.href = "attendance-score.html"
+            }
+          }
+        })
+
+
+        function displaySelectedFileAndName() {
+            displaySelectedFile();
+            displaySelectedFileName();
+        }
+
+        function displaySelectedFileName() {
+            const selectedFile = document.getElementById('anhDaiDien').files[0];
+            const selectedFileNameLabel = document.getElementById('selectedFileName');
+            selectedFileNameLabel.textContent = selectedFile.name;
+        }
+
+        function displaySelectedFile() {
+            const fileInput = document.getElementById('anhDaiDien');
+            const selectedImageContainer = document.getElementById('selectedImageContainer');
+            const selectedImage = document.getElementById('selectedImage');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    selectedImage.src = e.target.result;
+                    selectedImageContainer.style.display = 'block';
+                }
+
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                selectedImage.src = '';
+                selectedImageContainer.style.display = 'none';
+            }
+        }
+
+        function sendImageToService2() {
+            // const SERVICE_2_URL = 'http://localhost:8222/attendance/compare';
+            // const id = document.getElementById('maSinhVien').value;
+            // console.log(id)
+            const fileInput = document.getElementById('anhDaiDien');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+                // formData.append('id', id);
+                let token = window.localStorage.getItem('token');
+                fetch('http://localhost:8222/attendance/compare', {
+                    method: 'POST',
+                    headers: {Authorization: `Bearer ${token}`},
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log(data);
+                        alert(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    
+                    });
+            } else {
+                alert('Vui lòng chọn ảnh để điểm danh')
+            }
+        }
+
+        function logout(){
+            window.localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        }
+
+        function displayInfo(){
+            const info = document.querySelector('.info');
+            let token = window.localStorage.getItem('token');
+            fetch('http://localhost:8222/attendance/info',{
+                method: 'GET',
+                headers: {Authorization: `Bearer ${token}`},
+            })
+            .then(response => response.json())
+            .then(data => {
+                let html = 
+                `<span>Xin chào, ${data.name} - ${data.msv}</span> 
+                <button onclick="logout()" class="btn-logout btn btn-primary">Đăng xuất</button>
+                `
+                info.innerHTML = html;
+            })
+            .catch(error => console.log(error));
+        }
+        displayInfo();
+    </script>
+
+</body>
+
+</html>

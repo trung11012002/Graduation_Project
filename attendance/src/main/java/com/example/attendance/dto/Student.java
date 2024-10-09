@@ -1,0 +1,17 @@
+package com.example.attendance.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Student {
+    private Integer id;
+    private String name;
+    private String msv;
+    private String email;
+    private String pass;
+    private String imgPath;
+}
