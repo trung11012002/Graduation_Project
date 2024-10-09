@@ -1,4 +1,4 @@
-package com.phucvukimcore.enums;
+package com.cinema.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

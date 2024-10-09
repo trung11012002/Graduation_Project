@@ -1,8 +1,8 @@
-package com.phucvukimcore.base;
+package com.cinema.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.phucvukimcore.enums.ResultEnum;
-import com.phucvukimcore.util.JsonUtil;
+import com.cinema.enums.ResultEnum;
+import com.cinema.util.JsonUtil;
 
 import java.io.Serializable;
 
