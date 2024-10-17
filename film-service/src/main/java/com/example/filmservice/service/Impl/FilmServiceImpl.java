@@ -63,8 +63,8 @@ public class FilmServiceImpl implements FilmService {
 
         return ApiResponse.<List<FilmResponse>>builder()
                 .code(1000)
-                .message("Success")
-                .result(filmResponses)
+                .msg("Success")
+                .data(filmResponses)
                 .build();
     }
     // TODO: Implement getFilms method ( THE METHOD IS GET_ALL FILMS WITH PAGINATION)
@@ -76,8 +76,8 @@ public class FilmServiceImpl implements FilmService {
                 films.getContent().stream().map(filmMapper::toFilmResponse).collect(Collectors.toList());
         return ApiResponse.<List<FilmResponse>>builder()
                 .code(1000)
-                .message("Success")
-                .result(filmResponses)
+                .msg("Success")
+                .data(filmResponses)
                 .build();
     }
     // TODO: Implement createFilm method
@@ -106,12 +106,12 @@ public class FilmServiceImpl implements FilmService {
         } catch (ParseException ex) {
             return ApiResponse.<FilmResponse>builder()
                     .code(1001)
-                    .message("Ngày khởi chiếu không đúng định dạng")
+                    .msg("Ngày khởi chiếu không đúng định dạng")
                     .build();
         } catch (IOException ex) {
             return ApiResponse.<FilmResponse>builder()
                     .code(1002)
-                    .message("Xảy ra lỗi trong quá trình upload ảnh")
+                    .msg("Xảy ra lỗi trong quá trình upload ảnh")
                     .build();
         }
 
@@ -122,13 +122,13 @@ public class FilmServiceImpl implements FilmService {
         filmRepository.save(film);
         thumbnailsRepository.saveAll(thumnails);
 
-        FilmResponse resultDto = filmMapper.toFilmResponse(film);
+        FilmResponse dataDto = filmMapper.toFilmResponse(film);
 
         // Trả về kết quả thành công với FilmDto
         return ApiResponse.<FilmResponse>builder()
                 .code(1000)
-                .message("Success")
-                .result(resultDto)
+                .msg("Success")
+                .data(dataDto)
                 .build();
     }
     // TODO: Implement editFilm method
@@ -140,7 +140,7 @@ public class FilmServiceImpl implements FilmService {
         if (!op.isPresent()) {
             return ApiResponse.<FilmResponse>builder()
                     .code(1001)
-                    .message("Không tìm thấy phim")
+                    .msg("Không tìm thấy phim")
                     .build();
         }
         Film film = op.get();
@@ -183,12 +183,12 @@ public class FilmServiceImpl implements FilmService {
         } catch (ParseException ex) {
             return ApiResponse.<FilmResponse>builder()
                     .code(1001)
-                    .message("Ngày khởi chiếu không đúng định dạng")
+                    .msg("Ngày khởi chiếu không đúng định dạng")
                     .build();
         } catch (IOException ex) {
             return ApiResponse.<FilmResponse>builder()
                     .code(1002)
-                    .message("Xảy ra lỗi trong quá trình upload ảnh")
+                    .msg("Xảy ra lỗi trong quá trình upload ảnh")
                     .build();
         }
         film.setDuration(editFilmDto.getDuration());
@@ -196,11 +196,11 @@ public class FilmServiceImpl implements FilmService {
         film.setTypes(types);
         filmRepository.save(film);
 //        thumbnailsRepository.saveAll(thumnails);
-        FilmResponse resultDto = filmMapper.toFilmResponse(film);
+        FilmResponse dataDto = filmMapper.toFilmResponse(film);
         return ApiResponse.<FilmResponse>builder()
                 .code(1000)
-                .result(resultDto)
-                .message("Sửa ảnh thành công")
+                .data(dataDto)
+                .msg("Sửa ảnh thành công")
                 .build();
     }
     // TODO: Implement deleteFilmById method
@@ -211,7 +211,7 @@ public class FilmServiceImpl implements FilmService {
         if (!op.isPresent())
             return ApiResponse.<FilmResponse>builder()
                     .code(1004)
-                    .message("Không tìm thấy phim")
+                    .msg("Không tìm thấy phim")
                     .build();
         Film film = op.get();
         List<Thumnail> thumnails = film.getThumnails();
@@ -222,14 +222,14 @@ public class FilmServiceImpl implements FilmService {
             } catch (IOException e) {
                 return ApiResponse.<FilmResponse>builder()
                         .code(1004)
-                        .message("Xa ra lỗi trong quá trình xóa ảnh")
+                        .msg("Xa ra lỗi trong quá trình xóa ảnh")
                         .build();
             }
         }
             filmRepository.delete(film);
             return ApiResponse.<FilmResponse>builder()
                     .code(1000)
-                    .message("Xóa phim thành công")
+                    .msg("Xóa phim thành công")
                     .build();
     }
     // TODO : Implement getFilmById method
@@ -239,14 +239,14 @@ public class FilmServiceImpl implements FilmService {
         if (!op.isPresent())
             return  ApiResponse.<FilmResponse>builder()
                     .code(1004)
-                    .message("Không tìm thấy phim")
+                    .msg("Không tìm thấy phim")
                     .build();
         Film film = op.get();
-        FilmResponse resultDto = filmMapper.toFilmResponse(film);
+        FilmResponse dataDto = filmMapper.toFilmResponse(film);
         return ApiResponse.<FilmResponse>builder()
                 .code(1000)
-                .message("Success")
-                .result(resultDto)
+                .msg("Success")
+                .data(dataDto)
                 .build();
     }
 
@@ -255,19 +255,19 @@ public class FilmServiceImpl implements FilmService {
         if (name == null) {
             return ApiResponse.<FilmResponse>builder()
                     .code(1001)
-                    .message("Tên phim không được để trống")
+                    .msg("Tên phim không được để trống")
                     .build();
         }
         List<Film> films = filmRepository.searchByName(name);
         if (films.isEmpty())
             return ApiResponse.<FilmResponse>builder()
                     .code(1004)
-                    .message("Không tìm thấy phim")
+                    .msg("Không tìm thấy phim")
                     .build();
         return ApiResponse.<List<FilmResponse>>builder()
                 .code(1000)
-                .message("Success")
-                .result(films.stream().map(filmMapper::toFilmResponse).collect(Collectors.toList()))
+                .msg("Success")
+                .data(films.stream().map(filmMapper::toFilmResponse).collect(Collectors.toList()))
                 .build();
     }
 
