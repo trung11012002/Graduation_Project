@@ -16,6 +16,6 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ApiResponse<T> {
     long code = 1000;
-    String message;
-    T result;
+    String msg;
+    T data;
 }
