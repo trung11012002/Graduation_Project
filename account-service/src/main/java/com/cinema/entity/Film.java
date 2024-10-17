@@ -1,5 +1,9 @@
 package com.cinema.entity;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,12 +16,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "film")
@@ -33,9 +34,10 @@ public class Film {
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "film_type",
-        joinColumns = @JoinColumn(name = "film_id"),
-        inverseJoinColumns = @JoinColumn(name = "type_id"))
+    @JoinTable(
+            name = "film_type",
+            joinColumns = @JoinColumn(name = "film_id"),
+            inverseJoinColumns = @JoinColumn(name = "type_id"))
     private List<Type> types;
 
     @Column(name = "description")
@@ -67,6 +69,4 @@ public class Film {
 
     @Column(name = "lastModifyBy")
     private String lastModifyBy;
-
-
 }

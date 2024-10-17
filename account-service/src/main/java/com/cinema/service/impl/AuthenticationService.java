@@ -1,5 +1,13 @@
 package com.cinema.service.impl;
 
+import java.text.ParseException;
+import java.util.Date;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.cinema.dto.request.AuthenticationResquest;
 import com.cinema.dto.request.IntrospectRequest;
 import com.cinema.dto.request.LogoutRequest;
@@ -20,21 +28,12 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -46,7 +45,6 @@ public class AuthenticationService implements IAuthenticationService {
     PasswordEncoder passwordEncoder;
 
     BaseRedisService<String, String, String> redisServiceInvalidToken;
-
 
     @NonFinal
     @Value("${jwtSignerKey.access}")
@@ -69,7 +67,8 @@ public class AuthenticationService implements IAuthenticationService {
     protected long TIME_DELETE_TOKEN_INVALID;
 
     public AuthenticationResponse authencticate(AuthenticationResquest resquest) {
-        User user = userRepository.findByUsername(resquest.getUsername())
+        User user = userRepository
+                .findByUsername(resquest.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         boolean authenticated = passwordEncoder.matches(resquest.getPassword(), user.getPassword());
@@ -77,11 +76,11 @@ public class AuthenticationService implements IAuthenticationService {
         if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         // role
-//        List<RoleResponse> roles = roleService.getRoleByUserId(user.getId());
-//        String listRole = "";
-//        for (RoleResponse role : roles) {
-//            listRole += (role.getCode() + " ");
-//        }
+        //        List<RoleResponse> roles = roleService.getRoleByUserId(user.getId());
+        //        String listRole = "";
+        //        for (RoleResponse role : roles) {
+        //            listRole += (role.getCode() + " ");
+        //        }
 
         var tokenAccess = generateAccessToken(user);
         var tokenRefresh = generateRefreshToken(user);
@@ -90,7 +89,7 @@ public class AuthenticationService implements IAuthenticationService {
                 .tokenAccess(tokenAccess)
                 .tokenRefresh(tokenRefresh)
                 .authenticated(true)
-//                .role(listRole.trim())
+                //                .role(listRole.trim())
                 .role("")
                 .build();
     }
@@ -127,19 +126,20 @@ public class AuthenticationService implements IAuthenticationService {
             log.info("Token already expired");
         }
     }
-//
-//    @Override
-//    public AuthenticationResponse refreshToken(RefreshRequest refreshRequest) throws ParseException, JOSEException {
-//        SignedJWT signedJWT = verifyTokenRefresh(refreshRequest.getTokenRefresh());
-//        String username = signedJWT.getJWTClaimsSet().getSubject();
-//        UserResponse user = (UserResponse) redisServiceUser.get("user_" + username);
-//        if (user == null) throw new AppException(ErrorCode.USER_NOT_EXISTED);
-//        var token = generateAccessToken(user);
-//        return AuthenticationResponse.builder()
-//                .tokenAccess(token)
-//                .authenticated(true)
-//                .build();
-//    }
+    //
+    //    @Override
+    //    public AuthenticationResponse refreshToken(RefreshRequest refreshRequest) throws ParseException, JOSEException
+    // {
+    //        SignedJWT signedJWT = verifyTokenRefresh(refreshRequest.getTokenRefresh());
+    //        String username = signedJWT.getJWTClaimsSet().getSubject();
+    //        UserResponse user = (UserResponse) redisServiceUser.get("user_" + username);
+    //        if (user == null) throw new AppException(ErrorCode.USER_NOT_EXISTED);
+    //        var token = generateAccessToken(user);
+    //        return AuthenticationResponse.builder()
+    //                .tokenAccess(token)
+    //                .authenticated(true)
+    //                .build();
+    //    }
 
     private String generateAccessToken(User user) {
         // create access token

@@ -1,17 +1,13 @@
 package com.devteria.profile.configuration;
 
-import com.devteria.profile.dto.response.CustomUserDetails;
-import com.devteria.profile.exception.AppException;
-import com.devteria.profile.exception.ErrorCode;
-import com.devteria.profile.service.impl.CustomUserDetailsService;
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jwt.SignedJWT;
+import java.io.IOException;
+import java.text.ParseException;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,8 +15,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.text.ParseException;
+import com.devteria.profile.dto.response.CustomUserDetails;
+import com.devteria.profile.exception.AppException;
+import com.devteria.profile.exception.ErrorCode;
+import com.devteria.profile.service.impl.CustomUserDetailsService;
+import com.nimbusds.jwt.SignedJWT;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -69,11 +68,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     throw new AppException(ErrorCode.UNAUTHENTICATED);
                 }
                 // check status active
-//                if (!userDetails.getActive()) {
-//                    jwtAuthenticationEntryPoint.commence(
-//                            request, response, new AuthenticationException("User is not active") {});
-//                    return;
-//                }
+                //                if (!userDetails.getActive()) {
+                //                    jwtAuthenticationEntryPoint.commence(
+                //                            request, response, new AuthenticationException("User is not active") {});
+                //                    return;
+                //                }
 
                 SecurityContextHolder.clearContext();
                 UsernamePasswordAuthenticationToken authentication =
