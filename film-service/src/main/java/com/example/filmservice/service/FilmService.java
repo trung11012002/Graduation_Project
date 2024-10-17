@@ -19,4 +19,9 @@ public interface FilmService {
     Page<FilmResponse> getAllFilmsOrderByCreateDate(int page, int size);
 
     ApiResponse editFilm(EditFilmDto editFilmDto);
+
+    ApiResponse deleteFilmById(Integer id);
+    ApiResponse getFilmById(Integer id);
+    ApiResponse searchFilm(String keyword);
+
 }

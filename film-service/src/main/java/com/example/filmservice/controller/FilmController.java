@@ -47,4 +47,20 @@ public class FilmController {
         ApiResponse<FilmResponse> response = filmService.editFilm(editFilmDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @PostMapping("/{id}")
+    public ResponseEntity<ApiResponse<FilmResponse>> getFilmById(@PathVariable Integer id) {
+        ApiResponse<FilmResponse> response = filmService.getFilmById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ApiResponse<FilmResponse>> deleteFilm(@PathVariable Integer id) {
+        ApiResponse<FilmResponse> response = filmService.deleteFilmById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/search-film-by-name")
+    public ResponseEntity<ApiResponse<List<FilmResponse>>> searchFilm(@RequestParam String keyword) {
+        ApiResponse<List<FilmResponse>> response = filmService.searchFilm(keyword);
+        return ResponseEntity.ok(response);
+    }
+
 }

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.cloudinary.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -133,31 +134,34 @@ public class FilmServiceImpl implements FilmService {
     // TODO: Implement editFilm method
     @Transactional(transactionManager = "transactionManager")
     @Override
-    public ApiResponse editFilm(EditFilmDto editFilmDto) {
+    public ApiResponse<FilmResponse> editFilm(EditFilmDto editFilmDto) {
         Integer id = editFilmDto.getId();
         Optional<Film> op = filmRepository.findById(id);
-        if (!op.isPresent())
-            return ApiResponse.<EditFilmDto>builder()
+        if (!op.isPresent()) {
+            return ApiResponse.<FilmResponse>builder()
                     .code(1001)
                     .message("Không tìm thấy phim")
                     .build();
+        }
         Film film = op.get();
         List<Thumnail> thumnails = film.getThumnails();
         if (editFilmDto.getDeleteThumbnails() != null) {
-            for (Thumnail thumnail : thumnails) {
-                for (Integer idThum : editFilmDto.getDeleteThumbnails()) {
-                    if (thumnail.getId().equals(idThum)) {
-                        thumnails.remove(thumnail);
-                        Thumnail delThumnail =
-                                thumbnailsRepository.findById(idThum).get();
-                        try {
-                            cloudinaryService.deleteFile(delThumnail.getPublicId());
-                        } catch (IOException ex) {
-                        }
-                        thumbnailsRepository.deleteById(idThum);
-                    }
-                }
+            List<Thumnail> thumnailsToRemove = new ArrayList<>();
+            for (Integer idThum : editFilmDto.getDeleteThumbnails()) {
+                thumnails.stream()
+                        .filter(thumnail -> thumnail.getId().equals(idThum))
+                        .findFirst()
+                        .ifPresent(thumnail -> {
+                            thumnailsToRemove.add(thumnail);
+                            try {
+                                cloudinaryService.deleteFile(thumnail.getPublicId());
+                            } catch (IOException ex) {
+                                // Handle exception
+                            }
+                            thumbnailsRepository.deleteById(idThum);
+                        });
             }
+            thumnails.removeAll(thumnailsToRemove);
         }
         film.setName(editFilmDto.getName());
         film.setDescription(editFilmDto.getDescription());
@@ -175,6 +179,7 @@ public class FilmServiceImpl implements FilmService {
                 }
             }
             film.setThumnails(thumnails);
+            thumbnailsRepository.saveAll(thumnails);
         } catch (ParseException ex) {
             return ApiResponse.<FilmResponse>builder()
                     .code(1001)
@@ -189,15 +194,84 @@ public class FilmServiceImpl implements FilmService {
         film.setDuration(editFilmDto.getDuration());
         List<Type> types = getListFilmTypes(editFilmDto.getTypeIds());
         film.setTypes(types);
-        FilmResponse resultDto = filmMapper.toFilmResponse(film);
         filmRepository.save(film);
-        thumbnailsRepository.saveAll(thumnails);
+//        thumbnailsRepository.saveAll(thumnails);
+        FilmResponse resultDto = filmMapper.toFilmResponse(film);
         return ApiResponse.<FilmResponse>builder()
                 .code(1000)
                 .result(resultDto)
                 .message("Sửa ảnh thành công")
                 .build();
     }
+    // TODO: Implement deleteFilmById method
+    @Transactional(transactionManager = "transactionManager")
+    @Override
+    public ApiResponse deleteFilmById(Integer id) {
+        Optional<Film> op = filmRepository.findById(id);
+        if (!op.isPresent())
+            return ApiResponse.<FilmResponse>builder()
+                    .code(1004)
+                    .message("Không tìm thấy phim")
+                    .build();
+        Film film = op.get();
+        List<Thumnail> thumnails = film.getThumnails();
+
+        for(Thumnail thumnail: thumnails) {
+            try {
+                cloudinaryService.deleteFile(thumnail.getPublicId());
+            } catch (IOException e) {
+                return ApiResponse.<FilmResponse>builder()
+                        .code(1004)
+                        .message("Xa ra lỗi trong quá trình xóa ảnh")
+                        .build();
+            }
+        }
+            filmRepository.delete(film);
+            return ApiResponse.<FilmResponse>builder()
+                    .code(1000)
+                    .message("Xóa phim thành công")
+                    .build();
+    }
+    // TODO : Implement getFilmById method
+    @Override
+    public ApiResponse getFilmById(Integer id) {
+        Optional<Film> op = filmRepository.findById(id);
+        if (!op.isPresent())
+            return  ApiResponse.<FilmResponse>builder()
+                    .code(1004)
+                    .message("Không tìm thấy phim")
+                    .build();
+        Film film = op.get();
+        FilmResponse resultDto = filmMapper.toFilmResponse(film);
+        return ApiResponse.<FilmResponse>builder()
+                .code(1000)
+                .message("Success")
+                .result(resultDto)
+                .build();
+    }
+
+    @Override
+    public ApiResponse searchFilm(String name) {
+        if (name == null) {
+            return ApiResponse.<FilmResponse>builder()
+                    .code(1001)
+                    .message("Tên phim không được để trống")
+                    .build();
+        }
+        List<Film> films = filmRepository.searchByName(name);
+        if (films.isEmpty())
+            return ApiResponse.<FilmResponse>builder()
+                    .code(1004)
+                    .message("Không tìm thấy phim")
+                    .build();
+        return ApiResponse.<List<FilmResponse>>builder()
+                .code(1000)
+                .message("Success")
+                .result(films.stream().map(filmMapper::toFilmResponse).collect(Collectors.toList()))
+                .build();
+    }
+
+//
 
     private List<Type> getListFilmTypes(List<Integer> ids) {
         List<Type> types = new ArrayList<>();
