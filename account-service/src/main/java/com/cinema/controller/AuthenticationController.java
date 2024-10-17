@@ -3,17 +3,21 @@ package com.cinema.controller;
 import com.cinema.dto.request.AuthenticationResquest;
 import com.cinema.dto.request.IntrospectRequest;
 import com.cinema.dto.request.LogoutRequest;
+import com.cinema.dto.request.RegisterRequest;
 import com.cinema.dto.response.ApiResponse;
 import com.cinema.dto.response.AuthenticationResponse;
 import com.cinema.dto.response.IntrospectResponse;
+import com.cinema.dto.response.UserResponse;
 import com.cinema.service.IAuthenticationService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,11 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     IAuthenticationService authenticationService;
 
-    @PostMapping("/login")
+    @PostMapping("/signin")
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationResquest resquest) {
         var result = authenticationService.authencticate(resquest);
         return ApiResponse.<AuthenticationResponse>builder()
-                .result(result)
+                .data(result)
                 .code(1000)
                 .build();
     }
@@ -36,16 +40,25 @@ public class AuthenticationController {
     ApiResponse<IntrospectResponse> authenticate(@RequestBody @Valid IntrospectRequest resquest) {
         var result = authenticationService.introspect(resquest);
         return ApiResponse.<IntrospectResponse>builder()
-                .result(result)
+                .data(result)
                 .code(1000)
                 .build();
     }
 
     @PostMapping("/logout")
-    ApiResponse<Void> logout(@RequestBody LogoutRequest resquest){
+    ApiResponse<Void> logout(@RequestBody LogoutRequest resquest) {
         authenticationService.logout(resquest);
         return ApiResponse.<Void>builder().code(1000).build();
     }
+
+    @PostMapping("/signup")
+    public ApiResponse<UserResponse> signup(@RequestBody RegisterRequest request) {
+        return ApiResponse.<UserResponse>builder()
+                .code(1000)
+                .data(authenticationService.register(request, false))
+                .build();
+    }
+
 
 //    @PostMapping("/refresh")
 //    ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest resquest)
@@ -54,5 +67,19 @@ public class AuthenticationController {
 //                .result(authenticationService.refreshToken(resquest))
 //                .code(1000)
 //                .build();
+//    }
+
+
+//    @GetMapping("/change-password")
+//    public Result signup(@RequestParam Integer userId,
+//                         @RequestParam String oldPassword,
+//                         @RequestParam String newPassword) {
+//        Result result = userService.changePassword(userId, oldPassword, newPassword);
+//        return result ;
+//    }
+//
+//    @PostMapping("/forgot-password")
+//    public Result forgotPassword(@RequestBody String email) {
+//        return userService.forgotPassword(email);
 //    }
 }

@@ -1,8 +1,8 @@
 
 server:
-  port: 8082
+  port: 8083
   servlet:
-    context-path: /cinema
+    context-path: /cinema-service
 
 spring:
   application:

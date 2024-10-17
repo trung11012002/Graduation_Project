@@ -11,7 +11,7 @@ public enum ErrorCode {
     USER_EXISTED(1002, "User existed", HttpStatus.BAD_REQUEST),
     USERNAME_INVALID(1003, "Username must be at least 3 character", HttpStatus.BAD_REQUEST),
     PASSWORD_INVALID(1004, "Username must be at least 8 character", HttpStatus.BAD_REQUEST),
-    USER_NOT_EXISTED(1005, "User not existed", HttpStatus.NOT_FOUND),
+    USER_NOT_EXISTED(1005, "User not existed", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED(1006, "User Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
     INVALID_DOB(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
@@ -24,6 +24,8 @@ public enum ErrorCode {
     INVALID_TYPE_MYREQUEST_OFF(1015, "Invalid type my request off", HttpStatus.BAD_REQUEST),
     REQUEST_INVALID(1016, "Request invalid", HttpStatus.BAD_REQUEST),
     MY_REQUEST_NOT_EXISTED(1017, "My request not existed", HttpStatus.BAD_REQUEST),
+    USERNAME_INVALID_REGISTER(1018, "Username invalid", HttpStatus.BAD_REQUEST),
+    EMAIL_EXISTED(1019, "Email existed", HttpStatus.BAD_REQUEST),
     ;
 
     private int code;

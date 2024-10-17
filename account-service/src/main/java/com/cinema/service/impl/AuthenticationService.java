@@ -3,11 +3,17 @@ package com.cinema.service.impl;
 import com.cinema.dto.request.AuthenticationResquest;
 import com.cinema.dto.request.IntrospectRequest;
 import com.cinema.dto.request.LogoutRequest;
+import com.cinema.dto.request.RegisterRequest;
 import com.cinema.dto.response.AuthenticationResponse;
 import com.cinema.dto.response.IntrospectResponse;
+import com.cinema.dto.response.UserResponse;
+import com.cinema.entity.Role;
 import com.cinema.entity.User;
+import com.cinema.enums.RoleEnums;
 import com.cinema.exception.AppException;
 import com.cinema.exception.ErrorCode;
+import com.cinema.mapper.UserMapper;
+import com.cinema.repository.RoleRepository;
 import com.cinema.repository.UserRepository;
 import com.cinema.service.IAuthenticationService;
 import com.nimbusds.jose.JOSEException;
@@ -34,6 +40,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -46,6 +53,10 @@ public class AuthenticationService implements IAuthenticationService {
     PasswordEncoder passwordEncoder;
 
     BaseRedisService<String, String, String> redisServiceInvalidToken;
+
+    UserMapper userMapper;
+
+    RoleRepository roleRepository;
 
 
     @NonFinal
@@ -126,6 +137,31 @@ public class AuthenticationService implements IAuthenticationService {
         } catch (AppException | JOSEException | ParseException exception) {
             log.info("Token already expired");
         }
+    }
+
+    @Override
+    public UserResponse register(RegisterRequest request, boolean isAdmin) {
+        String error = errorUsername(request.getUsername());
+        if (error != null)
+            throw new AppException(ErrorCode.USERNAME_INVALID_REGISTER);
+
+        boolean isValid = validateEmail(request.getEmail());
+
+        if (!isValid)
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        
+        User user = userMapper.toUser(request);
+
+        Role role = isAdmin
+                ? roleRepository.findById(RoleEnums.ADMIN.getCode()).get()
+                : roleRepository.findById(RoleEnums.CUSTOMER.getCode()).get();
+
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(role);
+        userRepository.save(user);
+        // TODO: send email
+//       emailSenderService.sendMailRegister(dto.getEmail(), dto.getUsername(), dto.getPassword());
+        return userMapper.toUserResponse(user);
     }
 //
 //    @Override
@@ -220,5 +256,33 @@ public class AuthenticationService implements IAuthenticationService {
         }
 
         return signedJWT;
+    }
+
+    public String errorUsername(String username) {
+        if (isContainsSpecialCharacter(username)) {
+            return "Tên đăng nhập không được chứa ký tự đặc biệt";
+        }
+
+        if (!Character.isLetter(username.charAt(0))) {
+            return "Tên đăng nhập không được bắt đầu bằng chữ số";
+        }
+
+        Optional<User> op = userRepository.findByUsername(username);
+        if (op.isPresent())
+            return "Tên đăng nhập đã được sử dụng";
+
+        return null;
+    }
+
+    private boolean isContainsSpecialCharacter(String data) {
+        String pattern = ".*[^a-zA-Z0-9].*";
+        return data.matches(pattern);
+    }
+
+    public boolean validateEmail(String email) {
+        Optional<User> op = userRepository.findByEmail(email);
+        if (op.isPresent())
+            return false;
+        return true;
     }
 }
