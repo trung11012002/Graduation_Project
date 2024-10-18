@@ -26,7 +26,11 @@ public class RatingController {
     }
 
     @GetMapping("/check-rating")
-    public RatingResponse checkUserRating(Integer filmId, Integer userId){
-        return service.getRatingInFilmByUser(filmId, userId);
+    public ApiResponse checkUserRating(Integer filmId, Integer userId){
+        return ApiResponse.builder().
+                code(1000).
+                result(service.getRatingInFilmByUser(filmId, userId)).
+                message("Success").
+                build();
     }
 }
