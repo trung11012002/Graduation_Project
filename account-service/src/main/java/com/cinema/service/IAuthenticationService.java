@@ -14,6 +14,6 @@ public interface IAuthenticationService {
     IntrospectResponse introspect(IntrospectRequest request);
     void logout(LogoutRequest request);
     UserResponse register(RegisterRequest request, boolean isAdmin);
-//
+    
 //    AuthenticationResponse refreshToken(RefreshRequest refreshRequest) throws ParseException, JOSEException;
 }
