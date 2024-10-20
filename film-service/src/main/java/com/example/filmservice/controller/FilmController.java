@@ -29,10 +29,11 @@ public class FilmController {
         return ResponseEntity.ok(response);
     }
     // phan trang
-    @GetMapping("/all_v2")
+    @GetMapping
     public ResponseEntity<ApiResponse<List<FilmResponse>>> getAllFilms_v2(
-            @RequestParam int page, @RequestParam int size) {
-        ApiResponse<List<FilmResponse>> response = filmService.getFilms(page, size);
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int perPage  ) {
+        ApiResponse<List<FilmResponse>> response = filmService.getFilms(page, perPage);
         return ResponseEntity.ok(response);
     }
 

@@ -1,10 +1,11 @@
-package com.cinema.service.impl;
+package com.example.filmservice.service.Impl;
 
-import com.cinema.dto.response.CustomUserDetails;
-import com.cinema.entity.User;
-import com.cinema.exception.AppException;
-import com.cinema.exception.ErrorCode;
-import com.cinema.repository.UserRepository;
+
+import com.example.filmservice.dto.response.CustomUserDetails;
+import com.example.filmservice.entity.User;
+import com.example.filmservice.exception.AppException;
+import com.example.filmservice.exception.ErrorCode;
+import com.example.filmservice.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

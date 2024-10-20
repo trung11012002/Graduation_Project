@@ -1,6 +1,6 @@
-package com.cinema.configuration;
+package com.example.filmservice.configuration;
 
-import com.cinema.service.impl.CustomUserDetailsService;
+import com.example.filmservice.service.Impl.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

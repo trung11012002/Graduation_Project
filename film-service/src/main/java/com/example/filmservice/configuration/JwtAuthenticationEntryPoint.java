@@ -1,7 +1,9 @@
-package com.cinema.configuration;
+package com.example.filmservice.configuration;
 
-import com.cinema.dto.ApiResponse;
-import com.cinema.exception.ErrorCode;
+
+
+import com.example.filmservice.dto.response.ApiResponse;
+import com.example.filmservice.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,7 +25,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         ApiResponse<?> apiResponse = ApiResponse.builder()
                 .code(errorCode.getCode())
-                .message(errorCode.getMessage())
+                .msg(errorCode.getMessage())
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();

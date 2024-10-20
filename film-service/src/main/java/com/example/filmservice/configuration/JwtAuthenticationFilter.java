@@ -1,9 +1,10 @@
-package com.cinema.configuration;
+package com.example.filmservice.configuration;
 
-import com.cinema.exception.AppException;
-import com.cinema.exception.ErrorCode;
-import com.cinema.dto.response.CustomUserDetails;
-import com.cinema.service.impl.CustomUserDetailsService;
+
+import com.example.filmservice.dto.response.CustomUserDetails;
+import com.example.filmservice.exception.AppException;
+import com.example.filmservice.exception.ErrorCode;
+import com.example.filmservice.service.Impl.CustomUserDetailsService;
 import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

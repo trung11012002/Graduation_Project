@@ -1,4 +1,4 @@
-package com.cinema.dto.response;
+package com.example.filmservice.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
