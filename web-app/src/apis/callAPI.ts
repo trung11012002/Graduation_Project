@@ -18,14 +18,14 @@ export const callApi = async <T>(
     ContentType: string = 'application/json'
 ): Promise<ApiCallResponse<T> | undefined> => {
     try {
-        const token = localStorage.getItem('token');
-
+        const token = localStorage.getItem('tokenAccess');
         const requestData: AxiosRequestConfig = {
             method,
             url: `${API_URL}/${URL}`,
             headers: {
                 'Content-Type': ContentType,
-                Auth: `${token}`,
+                Authorization: `Bearer ${token}`,
+                // Auth: `${token}`,
             },
         };
 
@@ -45,24 +45,22 @@ export const callApi = async <T>(
 
         const response: AxiosResponse<ApiCallResponse<T>> = await axios(requestData);
 
-        // console.log(response.data);
+        console.log(response.data);
 
 
         return response.data;
 
 
     } catch (error: any) {
-        // console.error(error);
-        // throw error;
-        // if (error.response) {
-        //     console.log('Error Response:', error.response);
-        //     console.log('Error Status:', error.response.status);
-        //     console.log('Error Data:', error.response.data);
-        // } else if (error.request) {
-        //     console.log('No Response:', error.request);
-        // } else {
-        //     console.log('Error Message:', error.message);
-        // }
-        return error.response;
+        if (error.response) {
+            console.error('Error Response:', error.response);
+            console.error('Status:', error.response.status);
+            console.error('Data:', error.response.data);
+        } else if (error.request) {
+            console.error('No Response received:', error.request);
+        } else {
+            console.error('Error Message:', error.message);
+        }
+        return error.response; // Có thể trả về undefined nếu response không tồn tại
     }
 };

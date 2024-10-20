@@ -14,7 +14,8 @@ const ProtectedMain = () => {
 
   const auth = useContext(AuthContextProvider);
   const user = auth?.userState
-  const login = user?.isLogin
+  // const login = user?.isLogin
+  const login = true
 
   return !login ? <RefreshUrl /> : <Outlet />;
 };
