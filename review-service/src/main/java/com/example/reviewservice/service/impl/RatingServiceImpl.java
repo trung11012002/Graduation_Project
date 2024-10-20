@@ -59,14 +59,14 @@ public class RatingServiceImpl implements RatingService {
 
         ApiResponse response = restTemplate.getForObject(builder.toUriString(), ApiResponse.class);
 
-        return ApiResponse.builder().message("Success").result(response.getResult()).build();
+        return ApiResponse.builder().msg("Success").data(response.getData()).build();
     }
 
     @Override
     public ApiResponse getFilmRatings(Integer filmId) {
         List<Rating> ratings = ratingRepository.findAllByFilmId(filmId);
         List<RatingResponse> ratingResponses = ratings.stream().map(rating -> ratingMapper.toRatingResponse(rating)).toList();
-        return ApiResponse.builder().result(ratingResponses).message("Success").build();
+        return ApiResponse.builder().data(ratingResponses).msg("Success").build();
     }
 
     @Override

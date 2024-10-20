@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
-        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
+        apiResponse.setMsg(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(errorCode.getMessage());
+        apiResponse.setMsg(errorCode.getMessage());
 
         return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
     }
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getStatusCode())
                 .body(ApiResponse.builder()
                         .code(errorCode.getCode())
-                        .message(errorCode.getMessage())
+                        .msg(errorCode.getMessage())
                         .build());
     }
 
@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(
+        apiResponse.setMsg(
                 Objects.nonNull(attributes)
                         ? mapAttribute(errorCode.getMessage(), attributes)
                         : errorCode.getMessage());

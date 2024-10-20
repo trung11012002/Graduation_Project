@@ -14,6 +14,6 @@ public class ApiResponse<T> {
     @Builder.Default
     private int code = 1000;
 
-    private String message;
-    private T result;
+    private String msg;
+    private T data;
 }
