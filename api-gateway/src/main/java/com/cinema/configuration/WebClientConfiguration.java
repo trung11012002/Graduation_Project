@@ -17,7 +17,7 @@ public class WebClientConfiguration {
     @Bean
     WebClient webClient(){
         return WebClient.builder()
-                .baseUrl("http://localhost:8081/account")
+                .baseUrl("http://localhost:8081/account-service")
                 .build();
     }
 

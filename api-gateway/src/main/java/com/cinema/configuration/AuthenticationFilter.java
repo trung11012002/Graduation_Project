@@ -36,7 +36,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
     @NonFinal
     private String[] publicEndpoints = {
-            "/account-service/auth/.*",
+            "/account-service/auth/**",
             "/account/users/registration",
             "/profile/users"
     };
@@ -61,7 +61,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
         log.info("Token: {}", token);
 
         return identityService.introspect(token).flatMap(introspectResponse -> {
-            if (introspectResponse.getResult().isValid())
+            if (introspectResponse.getData().isValid())
                 return chain.filter(exchange);
             else
                 return unauthenticated(exchange.getResponse());
@@ -73,15 +73,17 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
         return -1;
     }
 
-    private boolean isPublicEndpoint(ServerHttpRequest request){
+    private boolean isPublicEndpoint(ServerHttpRequest request) {
+        String requestPath = request.getURI().getPath();
+
         return Arrays.stream(publicEndpoints)
-                .anyMatch(s -> request.getURI().getPath().matches(apiPrefix + s));
+                .anyMatch(s -> requestPath.startsWith(apiPrefix + s.replace("**", "")));
     }
 
     Mono<Void> unauthenticated(ServerHttpResponse response){
         ApiResponse<?> apiResponse = ApiResponse.builder()
                 .code(1401)
-                .message("Unauthenticated")
+                .msg("Unauthenticated")
                 .build();
 
         String body = null;

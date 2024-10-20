@@ -11,4 +11,5 @@ import java.util.List;
 public interface UserMapper {
     User toUser(RegisterRequest dto);
     UserResponse toUserResponse(User entity);
+    List<UserResponse> toUserResponses(List<User> entities);
 }
