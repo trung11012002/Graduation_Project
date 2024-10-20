@@ -17,7 +17,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINTS = {"/auth/signin", "/auth/introspect", "/auth/logout", "/auth/refresh", "/auth/signup" };
+    private final String[] PUBLIC_ENDPOINTS = {
+            "/auth/**",
+            "/user/**",
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
