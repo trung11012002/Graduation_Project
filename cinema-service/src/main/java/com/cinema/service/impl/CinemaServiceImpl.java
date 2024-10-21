@@ -31,10 +31,9 @@ public class CinemaServiceImpl implements CinemaService {
     private CinemaMapper cinemaMapper;
 
     @Override
-    @Transactional
+//    @Transactional
     public CinemaResponse createCinema(CinemaDto dto) {
         Cinema cinema = cinemaMapper.toCinema(dto);
-
         User user = userRepository.findById(dto.getAdminId())
                 .orElseThrow(() -> new AppException(ErrorCode.ADMIN_NOT_FOUND));
 
@@ -42,11 +41,8 @@ public class CinemaServiceImpl implements CinemaService {
             throw new AppException(ErrorCode.USER_NOT_ADMIN);
 
         cinema.setAdmin(user);
-
         cinemaRepository.save(cinema);
-        user.setManagedCinema(cinema);
-
-        userRepository.save(user);
+        
         return cinemaMapper.toCinemaResponse(cinema);
     }
 
@@ -68,6 +64,7 @@ public class CinemaServiceImpl implements CinemaService {
 
     @Override
     public List<CinemaResponse> findAll() {
-        return cinemaMapper.toCinemaResponses(cinemaRepository.findAll());
+        var cinemas = cinemaRepository.findAll();
+        return cinemaMapper.toCinemaResponses(cinemas);
     }
 }

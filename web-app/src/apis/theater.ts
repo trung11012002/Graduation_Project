@@ -1,7 +1,7 @@
 import { callApi } from "./callAPI"
 
 export const GetAllCinema = async () => {
-    return await callApi<any>("cinema-service/api/v1/cinema", "post")
+    return await callApi<any>("cinema-service/cinema", "post")
 }
 
 export const createCinema = async (
@@ -11,7 +11,7 @@ export const createCinema = async (
         adminId?: number
     }
 ) => {
-    return await callApi<any>("cinema-service/api/v1/cinema/create-cinema", "post", data)
+    return await callApi<any>("cinema-service/cinema/create-cinema", "post", data)
 }
 
 // cinema-service/api/v1/cinema/by-admin
@@ -70,7 +70,7 @@ export const createRoom = async (
         cinemaId?: number
     }
 ) => {
-    return await callApi("cinema-service/api/v1/room/create-room", "post", data)
+    return await callApi("cinema-service/room/create-room", "post", data)
 } 
 
 // cinema-service/api/v1/room/room-in-cinema
