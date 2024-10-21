@@ -7,6 +7,7 @@ import com.cinema.dto.request.RegisterRequest;
 import com.cinema.dto.response.ApiResponse;
 import com.cinema.dto.response.AuthenticationResponse;
 import com.cinema.dto.response.IntrospectResponse;
+import com.cinema.dto.response.LoginResponse;
 import com.cinema.dto.response.UserResponse;
 import com.cinema.service.IAuthenticationService;
 import jakarta.validation.Valid;
@@ -16,6 +17,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,6 +58,14 @@ public class AuthenticationController {
         return ApiResponse.<UserResponse>builder()
                 .code(1000)
                 .data(authenticationService.register(request, false))
+                .build();
+    }
+
+    @GetMapping("/verify-token")
+    public ApiResponse<LoginResponse> refreshRequest(@RequestHeader(value = "Auth") String token) {
+        return ApiResponse.<LoginResponse>builder()
+                .data(authenticationService.verifyToken(token))
+                .code(1000)
                 .build();
     }
 

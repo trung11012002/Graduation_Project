@@ -6,6 +6,8 @@ import com.cinema.dto.request.LogoutRequest;
 import com.cinema.dto.request.RegisterRequest;
 import com.cinema.dto.response.AuthenticationResponse;
 import com.cinema.dto.response.IntrospectResponse;
+import com.cinema.dto.response.LoginResponse;
+import com.cinema.dto.response.RoleResponse;
 import com.cinema.dto.response.UserResponse;
 import com.cinema.entity.Role;
 import com.cinema.entity.User;
@@ -40,6 +42,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -88,11 +91,7 @@ public class AuthenticationService implements IAuthenticationService {
         if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         // role
-//        List<RoleResponse> roles = roleService.getRoleByUserId(user.getId());
-//        String listRole = "";
-//        for (RoleResponse role : roles) {
-//            listRole += (role.getCode() + " ");
-//        }
+        String role = user.getRole().getName().toUpperCase();
 
         var tokenAccess = generateAccessToken(user);
         var tokenRefresh = generateRefreshToken(user);
@@ -101,8 +100,7 @@ public class AuthenticationService implements IAuthenticationService {
                 .tokenAccess(tokenAccess)
                 .tokenRefresh(tokenRefresh)
                 .authenticated(true)
-//                .role(listRole.trim())
-                .role("")
+                .role(role)
                 .build();
     }
 
@@ -163,6 +161,42 @@ public class AuthenticationService implements IAuthenticationService {
 //       emailSenderService.sendMailRegister(dto.getEmail(), dto.getUsername(), dto.getPassword());
         return userMapper.toUserResponse(user);
     }
+
+    @Override
+    public LoginResponse verifyToken(String token) {
+        String username = null;
+        try{
+            SignedJWT signedJWT = verifyTokenAccess(token);
+            username = signedJWT.getJWTClaimsSet().getSubject();
+        } catch (AppException | JOSEException | ParseException e) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+        if (username == null) throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        LoginResponse response = new LoginResponse();
+        response.setId(user.getId());
+        response.setUsername(user.getUsername());
+        response.setPassword(user.getPassword() != null? user.getPassword() : null);
+        response.setFullname(user.getFullname() != null? user.getFullname() : null);
+        response.setDateOfBirth(user.getDateOfBirth() != null? user.getDateOfBirth() : null);
+        response.setAddress(user.getAddress() != null? user.getAddress() : null);
+        response.setEmail(user.getEmail());
+        response.setPhone(user.getPhone() != null? user.getPhone() : null);
+        response.setBlocked(user.isBlocked());
+
+        RoleResponse roleResponse = new RoleResponse();
+        roleResponse.setName(user.getRole().getName());
+
+        response.setRole(roleResponse);
+        response.setToken(token);
+        response.setRefreshToken(null);
+        return response;
+    }
+
+
 //
 //    @Override
 //    public AuthenticationResponse refreshToken(RefreshRequest refreshRequest) throws ParseException, JOSEException {

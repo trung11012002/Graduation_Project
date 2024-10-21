@@ -27,7 +27,7 @@ const CreateRoom = () => {
             cinemaId: cinema.id
         }
         const res = await createRoom(req)
-        if(res?.code === 200) {
+        if(res?.code === 1000) {
             success("Tạo phòng thành công :vv")
         }else {
             error(res?.msg)
