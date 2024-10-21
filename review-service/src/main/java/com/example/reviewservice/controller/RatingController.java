@@ -5,10 +5,7 @@ import com.example.reviewservice.dto.request.RatingRequest;
 import com.example.reviewservice.dto.response.RatingResponse;
 import com.example.reviewservice.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class RatingController {
@@ -17,17 +14,19 @@ public class RatingController {
     private RatingService service;
 
     @PostMapping("/create-rating")
-    public ApiResponse createRating(RatingRequest dto){
+    public ApiResponse createRating(@RequestBody RatingRequest dto){
         return service.createRating(dto);
     }
 
-    @GetMapping("/film-ratings")
-    public ApiResponse getRatings(Integer filmId){
+    @GetMapping("/film-ratings/{filmId}")
+    public ApiResponse getRatings(@PathVariable Integer filmId){
         return service.getFilmRatings(filmId);
     }
 
     @GetMapping("/check-rating")
-    public ApiResponse checkUserRating(Integer filmId, Integer userId){
+    public ApiResponse checkUserRating(@RequestParam(name = "filmId") Integer filmId,
+                                       @RequestParam(name = "userId") Integer userId)
+    {
         return ApiResponse.builder().
                 code(1000).
                 data(service.getRatingInFilmByUser(filmId, userId)).

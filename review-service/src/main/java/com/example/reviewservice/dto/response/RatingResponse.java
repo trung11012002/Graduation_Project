@@ -16,6 +16,6 @@ public class RatingResponse {
     private Integer star;
     private String comment;
     private LocalDateTime createdAt;
-    private Film film;
-    private User user;
+    private Integer filmId;
+    private Integer userId;
 }
