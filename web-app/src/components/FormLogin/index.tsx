@@ -22,7 +22,7 @@ const Form = () => {
         username: undefined,
         password: undefined
     })
-
+    
     const navigate = useNavigate()
     const submitFormLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -32,15 +32,14 @@ const Form = () => {
         // console.log(res?.data)
         if (res?.code === 1000) {
             setUserState?.({
-                isLogin: false,
+                isLogin: true,
                 user: res.data,
                 tokenAccess: res.data.tokenAccess,
                 tokenRefresh: res.data.tokenRefresh
-
             })
             localStorage.setItem('tokenAccess', res.data.tokenAccess)
             localStorage.setItem('tokenRefresh', res.data.tokenRefresh)
-
+            auth?.autoLogin();
             success("Đăng nhập thành công")
             res.data.role === "SUPER_ADMIN" ?
                 navigate('/super-admin/theater-list')

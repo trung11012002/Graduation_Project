@@ -2,6 +2,7 @@ package com.example.filmservice.controller;
 
 import java.util.List;
 
+import com.example.filmservice.dto.response.ListFilmResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +30,11 @@ public class FilmController {
         return ResponseEntity.ok(response);
     }
     // phan trang
-    @GetMapping("/all_v2")
-    public ResponseEntity<ApiResponse<List<FilmResponse>>> getAllFilms_v2(
-            @RequestParam int page, @RequestParam int size) {
-        ApiResponse<List<FilmResponse>> response = filmService.getFilms(page, size);
+    @GetMapping
+    public ResponseEntity<ApiResponse<ListFilmResponse>> getAllFilms_v2(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int perPage  ) {
+        ApiResponse<ListFilmResponse> response = filmService.getFilms(page, perPage);
         return ResponseEntity.ok(response);
     }
 

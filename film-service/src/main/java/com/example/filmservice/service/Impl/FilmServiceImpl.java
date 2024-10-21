@@ -7,6 +7,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.cloudinary.Api;
+import com.example.filmservice.dto.response.ListFilmResponse;
+import com.example.filmservice.dto.response.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -69,15 +71,19 @@ public class FilmServiceImpl implements FilmService {
     }
     // TODO: Implement getFilms method ( THE METHOD IS GET_ALL FILMS WITH PAGINATION)
     @Override
-    public ApiResponse<List<FilmResponse>> getFilms(int page, int size) {
+    public ApiResponse<ListFilmResponse> getFilms(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Film> films = filmRepository.findAll(pageable);
         List<FilmResponse> filmResponses =
                 films.getContent().stream().map(filmMapper::toFilmResponse).collect(Collectors.toList());
-        return ApiResponse.<List<FilmResponse>>builder()
+        PageInfo pageInfo = new PageInfo((int) films.getTotalElements(),  size);
+        ListFilmResponse filmPageResponse = new ListFilmResponse(filmResponses, pageInfo);
+
+
+        return ApiResponse.<ListFilmResponse>builder()
                 .code(1000)
                 .msg("Success")
-                .data(filmResponses)
+                .data(filmPageResponse)  // Trả về FilmPageResponse chứa danh sách phim và thông tin phân trang
                 .build();
     }
     // TODO: Implement createFilm method

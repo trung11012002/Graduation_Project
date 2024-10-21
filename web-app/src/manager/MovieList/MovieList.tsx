@@ -17,7 +17,7 @@ const MovieList = () => {
     const [page, setPage] = useState<any>()
 
     const [optionsMovies, setOptionsMovies] = useState<any[]>()
-    const getFilms = async (pageCurrent: number = 1, perPage: number = 6) => {
+    const getFilms = async (pageCurrent: number = 1, perPage: number = 5) => {
         // const res = await getAllFilms()
         const res = await getAllFilmsPage({
             page: pageCurrent,
@@ -26,19 +26,20 @@ const MovieList = () => {
         if (res?.code === 200) {
             const page = res.data.pageInfo
             setPage({
-                pageSize: 6,
+                pageSize: 5,
                 total: page.totalItems,
             })
 
-            const newData = res.data.films.map((film: any, index: number) => {
+            const newData = res.data.films.map((films: any, index: number) => {
                 return {
                     key: index,
-                    ...film
+                    ...films
                 }
             })
             setOptionsMovies(newData)
         }
     }
+    console.log('optionsMovies', optionsMovies)
 
     useEffect(() => {
         if (user) {

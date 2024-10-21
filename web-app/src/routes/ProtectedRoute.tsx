@@ -3,7 +3,7 @@ import { AuthContextProvider } from "../contexts/AuthContext";
 import { useContext } from "react";
 
 const RefreshUrl = () => {
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("tokenAccess")
   if (!token) {
     return <Navigate to="/login" />;
   }
@@ -14,8 +14,8 @@ const ProtectedMain = () => {
 
   const auth = useContext(AuthContextProvider);
   const user = auth?.userState
-  // const login = user?.isLogin
-  const login = true
+
+  const login = user?.isLogin
 
   return !login ? <RefreshUrl /> : <Outlet />;
 };
