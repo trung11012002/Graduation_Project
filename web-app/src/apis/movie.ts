@@ -12,7 +12,7 @@ export const createMovies = async(
 }
 
 export const getAllFilms = async() => {
-    return await callApi<any>("film-service/api/v1/film", "get")
+    return await callApi<any>("film-service/films", "get")
 }
 
 // film-service//api/v1/film/{id}
@@ -90,5 +90,5 @@ export const getAllFilmsPage = async(
         perPage: number
     }
 ) => {
-    return await callApi<any>(`film-service/api/v1/film/films`, "get", data)
+    return await callApi<any>(`film-service/films`, "get", data)
 }

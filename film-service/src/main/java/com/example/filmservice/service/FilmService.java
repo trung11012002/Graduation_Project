@@ -2,6 +2,7 @@ package com.example.filmservice.service;
 
 import java.util.List;
 
+import com.example.filmservice.dto.response.ListFilmResponse;
 import org.springframework.data.domain.Page;
 
 import com.example.filmservice.dto.request.EditFilmDto;
@@ -12,7 +13,7 @@ import com.example.filmservice.dto.response.FilmResponse;
 public interface FilmService {
     ApiResponse<List<FilmResponse>> getAllFilms();
 
-    ApiResponse<List<FilmResponse>> getFilms(int page, int size);
+    ApiResponse<ListFilmResponse> getFilms(int page, int size);
 
     ApiResponse createFilm(FilmDto filmDto);
 

@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ListFilmResponse {
-    private List<Film> films;
+    private List<FilmResponse> films;
     private PageInfo pageInfo;
 }
