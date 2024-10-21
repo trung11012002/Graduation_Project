@@ -11,6 +11,7 @@ interface IAuthContextProvider {
     userState: IUserState
     setUserState: (userState: IUserState) => void
     logout: () => void
+    autoLogin: () => void
 }
 
 export interface IUserState {
@@ -55,13 +56,13 @@ export const AuthContext: React.FC<IAuthContext> = ({ children }) => {
                 //     navigate('/')
             }
             else {
-                localStorage.removeItem("token");
+                localStorage.removeItem("tokenAccess");
             }
         }
     };
 
     const logout = () => {
-        localStorage.removeItem("token");
+        localStorage.removeItem("tokenAccess");
         setUserState({
             isLogin: false,
             user: null,
@@ -78,7 +79,8 @@ export const AuthContext: React.FC<IAuthContext> = ({ children }) => {
     const data = {
         userState,
         setUserState,
-        logout
+        logout,
+        autoLogin
     };
 
     return (
