@@ -33,11 +33,12 @@ export const login = async (
 }
 
 export const loginByToken = async () => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("tokenAccess")
     if (token) {
+        // let data = { token };
         axios.defaults.headers.common['Auth'] = `${token}`;
         try {
-            return await callApi<any>("account-service/api/v1/auth/verify-token", "get")
+            return await callApi<any>("account-service/auth/verify-token", "get")
 
         } catch (error) {
             console.log(error)

@@ -30,7 +30,7 @@ public class RoomController {
             @RequestBody RoomDto roomDto) {
         return ApiResponse.<RoomResponse>builder()
                 .code(1000)
-                .result(roomService.createRoom(roomDto))
+                .data(roomService.createRoom(roomDto))
                 .build();
     }
 
@@ -38,7 +38,7 @@ public class RoomController {
     public ApiResponse<RoomResponse> findRoomById(@PathVariable Integer id) {
         return ApiResponse.<RoomResponse>builder()
                 .code(1000)
-                .result(roomService.findRoomById(id))
+                .data(roomService.findRoomById(id))
                 .build();
     }
 
@@ -46,7 +46,7 @@ public class RoomController {
     public ApiResponse<List<RoomResponse>> findRoomByCinema(@RequestParam Integer cinemaId) {
         return ApiResponse.<List<RoomResponse>>builder()
                 .code(1000)
-                .result(roomService.findAllRoomInCinema(cinemaId))
+                .data(roomService.findAllRoomInCinema(cinemaId))
                 .build();
     }
 }

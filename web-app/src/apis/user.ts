@@ -23,7 +23,7 @@ export const createAcount = async (
 }
 
 export const findAllAdminAccountWithoutCinema = async () => {
-    return await callApi<any>("account-service/api/v1/user/available-admins", "get")
+    return await callApi<any>("account-service/user/available-admins", "get")
 }
 
 // private int id;

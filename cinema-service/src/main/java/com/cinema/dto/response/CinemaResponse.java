@@ -3,6 +3,7 @@ package com.cinema.dto.response;
 import com.cinema.entity.Room;
 import com.cinema.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,8 @@ public class CinemaResponse {
 
     private String address;
 
-    private User admin;
+//    @JsonIgnore
+    private UserResponse admin;
 
     @JsonIgnore
     private List<Room> rooms;

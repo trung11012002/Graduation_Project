@@ -29,14 +29,15 @@ export const AuthContext: React.FC<IAuthContext> = ({ children }) => {
         isLogin: false,
         user: null,
         tokenAccess: null,
-        tokenRefresh: null
+        tokenRefresh: null,
     };
     // const navigate = useNavigate()
     const [userState, setUserState] = useState<IUserState>(userStateDefault);
 
     const autoLogin = async () => {
-        if (localStorage.getItem('token')) {
+        if (localStorage.getItem('tokenAccess')) {
             const res = await loginByToken()
+            // console.log(res)
             if (res?.data) {
                 setUserState?.({
                     isLogin: true,
@@ -44,7 +45,7 @@ export const AuthContext: React.FC<IAuthContext> = ({ children }) => {
                     tokenAccess: res.data.tokenAccess,
                     tokenRefresh: res.data.tokenRefresh
                 })
-                localStorage.setItem('token', res.data.token)
+                localStorage.setItem('tokenAccess', res.data.token)
                 // res.data.role.name === "SUPER_ADMIN" ?
                 // navigate('/super-admin/theater-list')
                 // :

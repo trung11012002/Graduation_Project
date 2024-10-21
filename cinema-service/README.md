@@ -1,1 +1,1 @@
-# profile service
+# core service

@@ -32,7 +32,7 @@ const Form = () => {
         // console.log(res?.data)
         if (res?.code === 1000) {
             setUserState?.({
-                isLogin: true,
+                isLogin: false,
                 user: res.data,
                 tokenAccess: res.data.tokenAccess,
                 tokenRefresh: res.data.tokenRefresh
@@ -40,11 +40,12 @@ const Form = () => {
             })
             localStorage.setItem('tokenAccess', res.data.tokenAccess)
             localStorage.setItem('tokenRefresh', res.data.tokenRefresh)
+
             success("Đăng nhập thành công")
-            res.data.role.name === "SUPER_ADMIN" ?
+            res.data.role === "SUPER_ADMIN" ?
                 navigate('/super-admin/theater-list')
                 :
-                res.data.role.name === "ADMIN" ?
+                res.data.role === "ADMIN" ?
                     navigate('/admin/movie-schedule')
                     :
                     navigate('/')

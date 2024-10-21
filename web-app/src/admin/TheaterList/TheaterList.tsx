@@ -9,7 +9,7 @@ const TheaterList = () => {
   useEffect(() => {
     (async() => {
       const res = await GetAllCinema()
-      if(res?.code === 200) {
+      if(res?.code === 1000) {
         const newData = res.data.map((value: any, index: number) => {
           return({
             key: index,

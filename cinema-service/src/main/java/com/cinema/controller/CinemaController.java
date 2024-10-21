@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 
-@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/v1/cinema")
+@RequestMapping("/cinema")
 public class CinemaController {
     @Autowired
     private CinemaService cinemaService;
@@ -27,7 +26,7 @@ public class CinemaController {
     public ApiResponse<CinemaResponse> createCinema(@RequestBody CinemaDto request) {
         return ApiResponse.<CinemaResponse>builder()
                 .code(1000)
-                .result(cinemaService.createCinema(request))
+                .data(cinemaService.createCinema(request))
                 .build();
     }
 
@@ -35,7 +34,7 @@ public class CinemaController {
     public  ApiResponse<CinemaResponse> findCinemaByAdmin(@RequestParam Integer adminId) {
         return ApiResponse.<CinemaResponse>builder()
                 .code(1000)
-                .result(cinemaService.findCinemaByAdmin(adminId))
+                .data(cinemaService.findCinemaByAdmin(adminId))
                 .build();
     }
 
@@ -43,7 +42,7 @@ public class CinemaController {
     public ApiResponse<CinemaResponse> findCinema(@PathVariable Integer id) {
         return ApiResponse.<CinemaResponse>builder()
                 .code(1000)
-                .result(cinemaService.findCinemaById(id))
+                .data(cinemaService.findCinemaById(id))
                 .build();
     }
 
@@ -51,7 +50,7 @@ public class CinemaController {
     public ApiResponse<List<CinemaResponse>> findAllCinema() {
         return ApiResponse.<List<CinemaResponse>>builder()
                 .code(1000)
-                .result(cinemaService.findAll())
+                .data(cinemaService.findAll())
                 .build();
     }
 }

@@ -23,7 +23,7 @@ const CreateTheater = () => {
     useEffect(() => {
         (async() => {
             const res = await findAllAdminAccountWithoutCinema()
-            if(res?.code === 200) {
+            if(res?.code === 1000) {
                 const newData = res.data.map((value: any) => {
                     return({
                         ...value,
@@ -46,7 +46,7 @@ const CreateTheater = () => {
             ...values
         }
         const res = await await createCinema(req)
-        if(res?.code === 200) {
+        if(res?.code === 1000) {
             success("Tạo mới rạp thành công ^^")
             navigate("/super-admin/theater-list")
         } else {
