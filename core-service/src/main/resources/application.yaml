@@ -1,17 +1,17 @@
 
 server:
-  port: 8082
+  port: 9000
   servlet:
-    context-path: /profile
+    context-path: /core-service
 
 spring:
   application:
-    name: profile-service
+    name: core-service
 
   datasource:
     url: jdbc:mysql://localhost:3306/cinema_online
     username: root
-    password: 12345
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -26,4 +26,8 @@ spring:
     authentication:
       username: neo4j
       password: 12345678
+
+app:
+  services:
+    cinema: http://localhost:8083/cinema-service
 
