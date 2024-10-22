@@ -32,4 +32,11 @@ public class UserProfileController {
                 .data(userProfileService.getAllProfiles())
                 .build();
     }
+
+    @GetMapping("/test/feign-client")
+    ApiResponse<List<String>> testFeignClient() {
+        return ApiResponse.<List<String>>builder()
+                .data(userProfileService.testFeignClient())
+                .build();
+    }
 }
