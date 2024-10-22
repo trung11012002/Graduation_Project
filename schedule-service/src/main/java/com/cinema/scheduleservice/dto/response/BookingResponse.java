@@ -9,7 +9,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListFilmResponse {
-    private List<FilmResponse> films;
-    private PageInfo pageInfo;
+public class BookingResponse {
+    private Integer scheduleId;
+    private List<Seat> seats;
+    private List<Integer> prices;
 }

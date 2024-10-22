@@ -10,8 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "cinema")
-@Data
 @NoArgsConstructor
+@Data
 public class Cinema {
 
     @Id
@@ -29,7 +29,7 @@ public class Cinema {
     private User admin;
 
     @OneToMany(mappedBy = "cinema", fetch = FetchType.LAZY)
-    @JsonIgnore
+
     private List<Room> rooms;
 
     @Column(name = "createdAt")

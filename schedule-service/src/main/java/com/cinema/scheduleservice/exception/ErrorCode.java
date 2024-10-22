@@ -24,6 +24,9 @@ public enum ErrorCode {
     INVALID_TYPE_MYREQUEST_OFF(1015, "Invalid type my request off", HttpStatus.BAD_REQUEST),
     REQUEST_INVALID(1016, "Request invalid", HttpStatus.BAD_REQUEST),
     MY_REQUEST_NOT_EXISTED(1017, "My request not existed", HttpStatus.BAD_REQUEST),
+    TICKET_NOT_FOUND(1018, "Ticket not found", HttpStatus.NOT_FOUND),
+    SEAT_ALREADY_BOOKED(1019, "Seat already booked", HttpStatus.BAD_REQUEST),
+    BOOKING_NOT_FOUND(1020, "Booking not found", HttpStatus.NOT_FOUND),
     ;
 
     private int code;
