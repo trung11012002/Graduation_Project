@@ -2,11 +2,13 @@ package com.cinema;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-public class ProfileServiceApplication {
+@EnableFeignClients
+public class CoreServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ProfileServiceApplication.class, args);
+        SpringApplication.run(CoreServiceApplication.class, args);
     }
 }
