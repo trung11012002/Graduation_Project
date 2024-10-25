@@ -27,6 +27,14 @@ public enum ErrorCode {
     TICKET_NOT_FOUND(1018, "Ticket not found", HttpStatus.NOT_FOUND),
     SEAT_ALREADY_BOOKED(1019, "Seat already booked", HttpStatus.BAD_REQUEST),
     BOOKING_NOT_FOUND(1020, "Booking not found", HttpStatus.NOT_FOUND),
+    INVALID_TIME(1021, "Invalid time", HttpStatus.BAD_REQUEST),
+    INVALID_TIME_CREATE_BEFORE_6_HOURS(1022, "Please create before 6 hour", HttpStatus.BAD_REQUEST),
+    FILM_NOT_FOUND(1023, "Film not found", HttpStatus.NOT_FOUND),
+    ROOM_NOT_FOUND(1024, "Room not found", HttpStatus.NOT_FOUND),
+    ROOM_NOT_AVAILABLE(1025, "Room was occupied during requested time", HttpStatus.BAD_REQUEST),
+    SCHEDULE_NOT_FOUND(1026, "Schedule not found", HttpStatus.NOT_FOUND),
+    SCHEDULE_IS_BOOKED(1027, "Schedule conflict", HttpStatus.BAD_REQUEST),
+    CINEMA_NOT_FOUND(1028, "Cinema not found", HttpStatus.NOT_FOUND),
     ;
 
     private int code;

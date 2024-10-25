@@ -97,10 +97,6 @@ public class BookingServiceImpl implements BookingService {
             response.setTotalPrice(totalPaid);
 
             ApiResponse<RatingDtoRepsonse> apiResponse = reviewClient.checkUserRatingInAFilm(user.getId(), film.getId());
-//            RatingDtoRepsonse ratingDtoRepsonse = restTemplate.getForObject(apiUrl + "?userId=" + user.getId() + "&filmId=" + film.getId(), RatingDtoRepsonse.class);
-//            response.setRated(ratingDtoRepsonse != null);
-//            response.setRatingDtoRepsonse(ratingDtoRepsonse);
-//            responses.add(response);
             if (apiResponse != null && apiResponse.getData() != null) {
                 RatingDtoRepsonse ratingDtoRepsonse = apiResponse.getData();
                 response.setRated(ratingDtoRepsonse != null);

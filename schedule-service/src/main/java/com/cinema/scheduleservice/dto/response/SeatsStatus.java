@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SeatsStatus {
-    private Schedule schedule;
+    private ScheduleResponse scheduleResponse;
     private Integer row;
     private Integer column;
     private List<String> bookedSeats;
