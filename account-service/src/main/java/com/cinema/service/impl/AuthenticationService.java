@@ -18,6 +18,7 @@ import com.cinema.mapper.UserMapper;
 import com.cinema.repository.RoleRepository;
 import com.cinema.repository.UserRepository;
 import com.cinema.service.IAuthenticationService;
+import com.event.dto.NotificationEvent;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -33,16 +34,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,6 +58,8 @@ public class AuthenticationService implements IAuthenticationService {
     UserMapper userMapper;
 
     RoleRepository roleRepository;
+
+    KafkaTemplate<String, Object> kafkaTemplate;
 
 
     @NonFinal
@@ -147,7 +147,7 @@ public class AuthenticationService implements IAuthenticationService {
 
         if (!isValid)
             throw new AppException(ErrorCode.EMAIL_EXISTED);
-        
+
         User user = userMapper.toUser(request);
 
         Role role = isAdmin
@@ -157,15 +157,24 @@ public class AuthenticationService implements IAuthenticationService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(role);
         userRepository.save(user);
-        // TODO: send email
-//       emailSenderService.sendMailRegister(dto.getEmail(), dto.getUsername(), dto.getPassword());
+
+        NotificationEvent notificationEvent = NotificationEvent.builder()
+                .channel("EMAIL")
+                .recipient(request.getEmail())
+                .subject("Welcome to cinema")
+                .body("Hello, " + request.getUsername())
+                .build();
+
+        //Publish message to kafka
+        kafkaTemplate.send("notification-delivery", notificationEvent);
+
         return userMapper.toUserResponse(user);
     }
 
     @Override
     public LoginResponse verifyToken(String token) {
         String username = null;
-        try{
+        try {
             SignedJWT signedJWT = verifyTokenAccess(token);
             username = signedJWT.getJWTClaimsSet().getSubject();
         } catch (AppException | JOSEException | ParseException e) {
@@ -179,12 +188,12 @@ public class AuthenticationService implements IAuthenticationService {
         LoginResponse response = new LoginResponse();
         response.setId(user.getId());
         response.setUsername(user.getUsername());
-        response.setPassword(user.getPassword() != null? user.getPassword() : null);
-        response.setFullname(user.getFullname() != null? user.getFullname() : null);
-        response.setDateOfBirth(user.getDateOfBirth() != null? user.getDateOfBirth() : null);
-        response.setAddress(user.getAddress() != null? user.getAddress() : null);
+        response.setPassword(user.getPassword() != null ? user.getPassword() : null);
+        response.setFullname(user.getFullname() != null ? user.getFullname() : null);
+        response.setDateOfBirth(user.getDateOfBirth() != null ? user.getDateOfBirth() : null);
+        response.setAddress(user.getAddress() != null ? user.getAddress() : null);
         response.setEmail(user.getEmail());
-        response.setPhone(user.getPhone() != null? user.getPhone() : null);
+        response.setPhone(user.getPhone() != null ? user.getPhone() : null);
         response.setBlocked(user.isBlocked());
 
         RoleResponse roleResponse = new RoleResponse();
