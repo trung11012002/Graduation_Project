@@ -1,0 +1,17 @@
+package com.example.paymentservice.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class TransactionDTO {
+    private Integer scheduleId;
+    private Integer userId;
+    private List<String> seats;
+    private String responseCode;
+}
