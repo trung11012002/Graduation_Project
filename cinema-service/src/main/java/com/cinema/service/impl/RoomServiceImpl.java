@@ -1,7 +1,6 @@
 package com.cinema.service.impl;
 
 import com.cinema.dto.request.RoomDto;
-import com.cinema.dto.response.CinemaResponse;
 import com.cinema.dto.response.RoomResponse;
 import com.cinema.entity.Cinema;
 import com.cinema.entity.Room;
