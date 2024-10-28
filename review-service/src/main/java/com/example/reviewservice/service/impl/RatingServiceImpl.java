@@ -8,6 +8,7 @@ import com.example.reviewservice.entity.Rating;
 import com.example.reviewservice.entity.User;
 import com.example.reviewservice.exception.AppException;
 import com.example.reviewservice.exception.ErrorCode;
+import com.example.reviewservice.httpclient.FilmClient;
 import com.example.reviewservice.mapper.RatingMapper;
 import com.example.reviewservice.repository.FilmRepository;
 import com.example.reviewservice.repository.RatingRepository;
@@ -37,7 +38,7 @@ public class RatingServiceImpl implements RatingService {
 
     private RatingMapper ratingMapper;
 
-    private RestTemplate restTemplate;
+    private FilmClient client;
 
     @Override
     public ApiResponse createRating(RatingRequest dto) {
@@ -53,13 +54,9 @@ public class RatingServiceImpl implements RatingService {
         rating.setUser(user);
         ratingRepository.save(rating);
 
-        String url = "http://localhost:8084/api/v1/film/update-score";
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
-                .queryParam("filmId", dto.getFilmId());
+        ApiResponse filmResponse = client.updateScore(dto.getFilmId());
 
-        ApiResponse response = restTemplate.getForObject(builder.toUriString(), ApiResponse.class);
-
-        return ApiResponse.builder().msg("Success").data(response.getData()).build();
+        return ApiResponse.builder().msg("Success").data(filmResponse.getData()).build();
     }
 
     @Override
