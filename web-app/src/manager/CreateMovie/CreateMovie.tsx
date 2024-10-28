@@ -77,7 +77,7 @@ const CreateMovie = () => {
             ...newFile
         }
         const res = await createMovies(req)
-        if(res?.code === 200) {
+        if(res?.code === 1000) {
             success("Tạo mới phim thành công!!!!!!")
         } else {
             error(res?.msg)

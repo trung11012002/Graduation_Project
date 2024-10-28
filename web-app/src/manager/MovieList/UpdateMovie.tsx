@@ -16,7 +16,7 @@ const UpdateMovie = () => {
     const mess = useContext(MessageContextProvider)
     const success = mess?.success
     const error = mess?.error
-
+    const [data, setData] = useState<any>()
     const navigate = useNavigate()
 
     const { id } = useParams()
@@ -41,12 +41,7 @@ const UpdateMovie = () => {
     const initialValues = {
         ...movie,
         releaseDate: dayjs(movie?.releaseDate),
-        types: movie?.types.map((type: any) => {
-            return ({
-                value: type.id,
-                label: type.name
-            })
-        })
+        types: movie?.types.map((type: any) => type.id) || [] // Lưu trữ ID thay vì object
     }
 
     const options: SelectProps['options'] = [
@@ -83,7 +78,12 @@ const UpdateMovie = () => {
             value: 8
         }
     ];
-
+    const handleChange = (value: string[]) => {
+        setData({
+            ...data,
+            typeIds: value
+        })
+    };
     const onFinish = async (values: any) => {
         let checkFile
         if(file) {
@@ -92,21 +92,29 @@ const UpdateMovie = () => {
             })
         }
         const newFile = converThumnails(checkFile)
-        const { releaseDate, types, name,description, duration } = values
+        const { releaseDate,types , name,description, duration } = values
         const newDate = `${releaseDate.$y}-${releaseDate.$M + 1}-${releaseDate.$D}`
-        const typeIds = types.map((type: any) => type.value)
+        // let typeIds = types.map((type: any) => type.value);
+        // const typeIds = types ? types : [];
+        const typeIds = types || []; // Nếu types là undefined, gán là mảng rỗng
+
+        console.log('typeIds', typeIds)
         const req = {
             id: Number(id),
             releaseDate: newDate,
             typeIds,
             deleteThumbnails: deleteThumbnails,
             ...newFile,
-            name, 
+            name,
             description,
             duration
         }
         const res = await updateMovie(req)
-        if(res?.code === 200) {
+        console.log('res', res)
+        console.log('req', req)
+        console.log('typeIds', typeIds)
+        console.log('types', types)
+        if(res?.code === 1000) {
             success("Update thành công")
             navigate("/super-admin/movie-list")
         }  else {
@@ -118,7 +126,7 @@ const UpdateMovie = () => {
         if (id) {
             (async () => {
                 const res = await getFilmById({ id: Number(id) })
-                if (res?.code === 200) {
+                if (res?.code === 1000) {
                     setMovie(res.data)
                 }
             })()

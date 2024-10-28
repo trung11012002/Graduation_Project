@@ -7,8 +7,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.cloudinary.Api;
+import com.cloudinary.api.exceptions.ApiException;
 import com.example.filmservice.dto.response.ListFilmResponse;
 import com.example.filmservice.dto.response.PageInfo;
+import com.example.filmservice.exception.AppException;
+import com.example.filmservice.exception.ErrorCode;
+import com.example.filmservice.repositories.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +39,8 @@ import com.example.filmservice.service.FilmService;
 public class FilmServiceImpl implements FilmService {
     @Autowired
     private FilmRepository filmRepository;
+    @Autowired
+    private ScheduleRepository scheduleRepository;
 
     @Autowired
     private CloudinaryService cloudinaryService;
@@ -95,11 +101,11 @@ public class FilmServiceImpl implements FilmService {
         film.setDescription(filmDto.getDescription());
         List<Thumnail> thumnails = new ArrayList<>();
 
-        try {
-            // Chuyển đổi ngày phát hành
-            Date releaseDate = convertToDate(filmDto.getReleaseDate());
-            film.setReleaseDate(releaseDate);
-
+    try {
+        // Chuyển đổi ngày phát hành
+        Date releaseDate = convertToDate(filmDto.getReleaseDate());
+        film.setReleaseDate(releaseDate);
+        if(filmDto.getThumnails() != null) {
             for (MultipartFile file : filmDto.getThumnails()) {
                 Map<String, String> map = cloudinaryService.uploadFile(file);
                 Thumnail thumnail = new Thumnail();
@@ -109,18 +115,18 @@ public class FilmServiceImpl implements FilmService {
                 thumnails.add(thumnail);
             }
             film.setThumnails(thumnails);
-        } catch (ParseException ex) {
-            return ApiResponse.<FilmResponse>builder()
-                    .code(1001)
-                    .msg("Ngày khởi chiếu không đúng định dạng")
-                    .build();
-        } catch (IOException ex) {
-            return ApiResponse.<FilmResponse>builder()
-                    .code(1002)
-                    .msg("Xảy ra lỗi trong quá trình upload ảnh")
-                    .build();
         }
-
+    } catch (ParseException ex) {
+        return ApiResponse.<FilmResponse>builder()
+                .code(1001)
+                .msg("Ngày khởi chiếu không đúng định dạng")
+                .build();
+    } catch (IOException ex) {
+        return ApiResponse.<FilmResponse>builder()
+                .code(1002)
+                .msg("Xảy ra lỗi trong quá trình upload ảnh")
+                .build();
+    }
         film.setDuration(filmDto.getDuration());
         List<Type> types = getListFilmTypes(filmDto.getTypeIds());
         film.setTypes(types);
@@ -153,21 +159,32 @@ public class FilmServiceImpl implements FilmService {
         List<Thumnail> thumnails = film.getThumnails();
         if (editFilmDto.getDeleteThumbnails() != null) {
             List<Thumnail> thumnailsToRemove = new ArrayList<>();
+            boolean foundThumbnail = false; // Biến kiểm tra thumbnail có tồn tại
+
             for (Integer idThum : editFilmDto.getDeleteThumbnails()) {
-                thumnails.stream()
+                Optional<Thumnail> thumnailOpt = thumnails.stream()
                         .filter(thumnail -> thumnail.getId().equals(idThum))
-                        .findFirst()
-                        .ifPresent(thumnail -> {
-                            thumnailsToRemove.add(thumnail);
-                            try {
-                                cloudinaryService.deleteFile(thumnail.getPublicId());
-                            } catch (IOException ex) {
-                                // Handle exception
-                            }
-                            thumbnailsRepository.deleteById(idThum);
-                        });
+                        .findFirst();
+
+                if (thumnailOpt.isPresent()) {
+                    foundThumbnail = true; // Có thumbnail được tìm thấy
+                    Thumnail thumnail = thumnailOpt.get();
+                    thumnailsToRemove.add(thumnail);
+                    try {
+                        cloudinaryService.deleteFile(thumnail.getPublicId());
+                        System.out.println("Đã xóa trên cloudinary");
+                    } catch (IOException ex) {
+                        throw new AppException(ErrorCode.THUMBNAIL_NOT_FOUND);
+                    }
+                    thumbnailsRepository.deleteById(idThum);
+                    System.out.println("Đã xóa trên db");
+                } else {
+                    throw new AppException(ErrorCode.THUMBNAIL_NOT_FOUND);
+                }
             }
             thumnails.removeAll(thumnailsToRemove);
+            System.out.println("đã xóa xong");
+
         }
         film.setName(editFilmDto.getName());
         film.setDescription(editFilmDto.getDescription());
@@ -198,8 +215,10 @@ public class FilmServiceImpl implements FilmService {
                     .build();
         }
         film.setDuration(editFilmDto.getDuration());
-        List<Type> types = getListFilmTypes(editFilmDto.getTypeIds());
-        film.setTypes(types);
+        if(editFilmDto.getTypeIds() != null) {
+            List<Type> types = getListFilmTypes(editFilmDto.getTypeIds());
+            film.setTypes(types);
+        }
         filmRepository.save(film);
 //        thumbnailsRepository.saveAll(thumnails);
         FilmResponse dataDto = filmMapper.toFilmResponse(film);
@@ -249,10 +268,10 @@ public class FilmServiceImpl implements FilmService {
                     .build();
         Film film = op.get();
         FilmResponse dataDto = filmMapper.toFilmResponse(film);
-        return ApiResponse.<FilmResponse>builder()
+        return ApiResponse.<Film>builder()
                 .code(1000)
                 .msg("Success")
-                .data(dataDto)
+                .data(film)
                 .build();
     }
 
@@ -282,8 +301,9 @@ public class FilmServiceImpl implements FilmService {
     private List<Type> getListFilmTypes(List<Integer> ids) {
         List<Type> types = new ArrayList<>();
         for (Integer id : ids) {
-            Optional<Type> op = filmTypeRepository.findById(id);
-            op.ifPresent(types::add);
+            Type type = filmTypeRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Loại phim không tồn tại"));
+            types.add(type);
         }
         return types;
     }

@@ -25,6 +25,7 @@ public enum ErrorCode {
     INVALID_TYPE_MYREQUEST_OFF(1015, "Invalid type my request off", HttpStatus.BAD_REQUEST),
     REQUEST_INVALID(1016, "Request invalid", HttpStatus.BAD_REQUEST),
     MY_REQUEST_NOT_EXISTED(1017, "My request not existed", HttpStatus.BAD_REQUEST),
+    THUMBNAIL_NOT_FOUND(1018, "Thumbnail not found", HttpStatus.NOT_FOUND),
     ;
 
     private int code;

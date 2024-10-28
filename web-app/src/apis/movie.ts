@@ -8,7 +8,7 @@ export const getAllMovies = async() => {
 export const createMovies = async(
     data: any
 ) => {
-    return await callApi<any>("film-service/api/v1/film/create-film", "post", data, "multipart/form-data")
+    return await callApi<any>("film-service/films/create", "post", data, "multipart/form-data")
 }
 
 export const getAllFilms = async() => {
@@ -23,7 +23,7 @@ export const getFilmById = async(
         id: number
     }
 ) => {
-    return await callApi<any>(`film-service/api/v1/film/${data.id}`, "post")
+    return await callApi<any>(`film-service/films/${data.id}`, "post")
 }
 
 // film-service/api/v1/film/{id}
@@ -38,7 +38,7 @@ export const getFilmById = async(
 export const updateMovie = async(
     data: any
 ) => {
-    return await callApi<any>(`film-service/api/v1/film/edit`, "post", data, 'multipart/form-data')
+    return await callApi<any>(`film-service/films/edit`, "put", data, 'multipart/form-data')
 }
 
 
@@ -49,7 +49,7 @@ export const deleteMovie = async(
         id: number
     }
 ) => {
-    return await callApi<any>(`film-service/api/v1/film/delete/${data.id}`, "post")
+    return await callApi<any>(`film-service/films/delete/${data.id}`, "delete")
 }
 
 // review-service/api/v1/rating/create-rating
