@@ -29,7 +29,7 @@ const MoviesContext: React.FC<IMoviesContext> = ({ children }) => {
 
     const findCinema = async (userId: number) => {
         const res = await findCinemaByAdmin({ adminId: userId })
-        if (res?.code === 200) {
+        if (res?.code === 1000) {
             setMovies({
                cinema: {
                 ...res.data,

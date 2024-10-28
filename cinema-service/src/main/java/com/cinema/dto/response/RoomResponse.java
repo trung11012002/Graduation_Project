@@ -25,6 +25,7 @@ public class RoomResponse {
 
     private Integer verticalSeats;
 
+    @JsonIgnore
     private Cinema cinema;
 
     @JsonIgnore

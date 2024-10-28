@@ -18,7 +18,7 @@ const RoomList = () => {
     if (cinema.id) {
       (async () => {
         const res = await roomInCinema({cinemaId : cinema.id})
-        if(res?.code === 200) {
+        if(res?.code === 1000) {
 
           const newData = res.data.map((value: any, index: number) => {
               return(

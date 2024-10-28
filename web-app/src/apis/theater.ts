@@ -21,7 +21,7 @@ export const findCinemaByAdmin = async (
         adminId: number
     }
 ) => {
-    return await callApi<any>(`cinema-service/api/v1/cinema/by-admin?adminId=${data.adminId}`, "post")
+    return await callApi<any>(`cinema-service/cinema/by-admin?adminId=${data.adminId}`, "post")
 }
 
 export const getCurrentScheduleInCinema = async (
@@ -79,7 +79,7 @@ export const roomInCinema = async (
         cinemaId: number
     }
 ) => {
-    return await callApi<any>(`cinema-service/api/v1/room/room-in-cinema?cinemaId=${data.cinemaId}`, "post")
+    return await callApi<any>(`cinema-service/room/room-in-cinema?cinemaId=${data.cinemaId}`, "post")
 }
 
 // schedule-service/api/v1/schedule/delete
