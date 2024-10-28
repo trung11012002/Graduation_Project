@@ -23,7 +23,7 @@ const MovieList = () => {
             page: pageCurrent,
             perPage: perPage
         })
-        if (res?.code === 200) {
+        if (res?.code === 1000) {
             const page = res.data.pageInfo
             setPage({
                 pageSize: 5,
@@ -78,7 +78,7 @@ const MovieList = () => {
                     pageSize={page.pageSize}
                     total={page.total}
                     pageCurrent={page.pageCurrent}
-                    getFilms={getFilms}
+                    getFilms={(pageCurrent: number) => getFilms(pageCurrent, 5)}
                 />
             }
         </div>

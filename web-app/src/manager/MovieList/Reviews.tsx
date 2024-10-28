@@ -15,7 +15,7 @@ const Reviews = () => {
     if (id) {
       (async () => {
         const res = await getFilmById({ id: Number(id) })
-        if (res?.code === 200) {
+        if (res?.code === 1000) {
           setData(res.data)
         }
       })()

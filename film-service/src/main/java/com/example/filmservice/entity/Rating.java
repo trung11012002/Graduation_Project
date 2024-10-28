@@ -2,6 +2,7 @@ package com.example.filmservice.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import lombok.Data;
@@ -27,6 +28,7 @@ public class Rating {
     private LocalDateTime createdAt;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "film_id", nullable = false)
     private Film film;
 

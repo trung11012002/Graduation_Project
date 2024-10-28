@@ -3,6 +3,7 @@ package com.example.filmservice.controller;
 import java.util.List;
 
 import com.example.filmservice.dto.response.ListFilmResponse;
+import com.example.filmservice.entity.Film;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import com.example.filmservice.dto.response.ApiResponse;
 import com.example.filmservice.dto.response.FilmResponse;
 import com.example.filmservice.service.FilmService;
 
-// @CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/films")
 public class FilmController {
@@ -50,8 +51,8 @@ public class FilmController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @PostMapping("/{id}")
-    public ResponseEntity<ApiResponse<FilmResponse>> getFilmById(@PathVariable Integer id) {
-        ApiResponse<FilmResponse> response = filmService.getFilmById(id);
+    public ResponseEntity<ApiResponse<Film>> getFilmById(@PathVariable Integer id) {
+        ApiResponse<Film> response = filmService.getFilmById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @DeleteMapping("/delete/{id}")

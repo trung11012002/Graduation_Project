@@ -19,6 +19,9 @@ public class CloudinaryService {
     private final Cloudinary cloudinary;
 
     public Map<String, String> uploadFile(MultipartFile multipartFile) throws IOException {
+        if (multipartFile == null) {
+            throw new IllegalArgumentException("MultipartFile is null");
+        }
         Map<String, Object> params = new HashMap<>();
         String publicId = UUID.randomUUID().toString();
         params.put("public_id", publicId);

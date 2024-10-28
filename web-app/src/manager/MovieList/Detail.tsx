@@ -35,7 +35,7 @@ const Detail: React.FC<IDetail> = ({data, getFilms }) => {
             async onOk() {
                 try {
                     const res = await deleteMovie({ id: id });
-                    if (res?.code === 200) {
+                    if (res?.code === 1000) {
                         getFilms()
                         success("Xoá thành công")
                     }
@@ -52,9 +52,10 @@ const Detail: React.FC<IDetail> = ({data, getFilms }) => {
 
     if (!data) return <></>
 
-    const type = data.types.map((type: any) => type.name)
+    const type = data.typeNames.map((typeName: string) => typeName);
 
-    const urlImg = data.thumnails[0]?.url ? data.thumnails[0]?.url : ""
+    // const urlImg = data.thumnails[0]?.url ? data.thumnails[0]?.url : ""
+    const urlImg = data.thumnails[0] ? data.thumnails[0] : "";
     return (
         <div className='Detail' key={data.id}>
             <div className='left_Detail'>
@@ -65,8 +66,7 @@ const Detail: React.FC<IDetail> = ({data, getFilms }) => {
                 />
                 <div>
                     <span style={{fontWeight: "bold", fontSize:"1.1rem"}}>Tên phim: {data.name}</span>
-                    <span>Thể loại: {type.map((value: any, index: number) => <div key={index}>{value}{type.length - 1 === index ? "" : ", "}</div>)}</span>
-                    <span>Mô tả: {data.description}</span>
+                    <span>Thể loại: {type.join(", ")}</span>
                     <span>Thời lượng: {data.duration} phút</span>
                     <span>Ngày phát hành: {converDate(data.releaseDate)}</span>
                     <span style={{ alignItems: "center", display: "flex" }}>
