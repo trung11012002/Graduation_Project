@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class ScheduleRevenueStatistic {
     private LocalDateTime showDate;
     private FilmResponse filmResponse;
-    private Integer roomId;
+    private String roomName;
     private Integer ticketsSold;
     private Long revenue;
 }
