@@ -12,7 +12,7 @@ export const createMovies = async(
 }
 
 export const getAllFilms = async() => {
-    return await callApi<any>("film-service/films", "get")
+    return await callApi<any>("film-service/films/all", "get")
 }
 
 // film-service//api/v1/film/{id}

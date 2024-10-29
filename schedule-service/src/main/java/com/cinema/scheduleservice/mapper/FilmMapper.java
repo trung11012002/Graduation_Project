@@ -20,6 +20,7 @@ public interface FilmMapper {
     //    FilmDto toFilmDto(Film film);
     @Mapping(target = "typeIds", source = "types")
     @Mapping(target = "thumnails", source = "thumnails")
+    @Mapping(target = "typeNames", source = "types")
     FilmResponse toFilmResponse(Film film);
 
     default List<Integer> mapTypesToTypeIds(List<Type> types) {
@@ -41,6 +42,9 @@ public interface FilmMapper {
             return null;
         }
         return thumbnails.stream().map(Thumnail::getUrl).collect(Collectors.toList());
+    }
+    default List<String> mapTypeNames(List<Type> types) {
+        return types.stream().map(Type::getName).collect(Collectors.toList());
     }
 }
 

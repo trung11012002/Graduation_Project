@@ -24,7 +24,7 @@ const Content: React.FC<IContent> = ({ theater }) => {
   const navigate = useNavigate()
 
 
-  const currentDate = new Date() //'Dec 2, 2023'
+  const currentDate = new Date()
 
   const [date, setDate] = useState<string>(
     `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`
@@ -87,18 +87,20 @@ const Content: React.FC<IContent> = ({ theater }) => {
         {
           schedules && schedules.length ?
             schedules.map((schedule: any, index: number) => {
-              const type = schedule.film.types.map((type: any, index: number) => (<span key={index}>{`${type.name}${schedule.film.types.length - 1 === index ? "" : ", "}`}</span>))
+              // const type = schedule.filmResponse.typeNames.map((type: any, index: number) => (<span key={index}>{`${type}${schedule.filmResponse.typeNames.length - 1 === index ? "" : ", "}`}</span>))
+              const typeNames = schedule.filmResponse.typeNames.join(', ');
+
               return (
                 <div key={index} className='list_film-Content-Showtimes'>
                   <div className='img-list_film-Content-Showtimes'>
-                    <img src={schedule.film.thumnails[0].url} alt="" />
+                    <img src={schedule.filmResponse.thumnails[0]} alt="" />
                   </div>
                   <div>
-                    <p className='name-film'>{schedule.film.name}</p>
-                    <p className='type-film'>{type}</p>
+                    <p className='name-film'>{schedule.filmResponse.name}</p>
+                    <p className='type-film'>{typeNames}</p>
 
                     <div className='list_time-schedule_Content-Showtimes'>
-                      {schedule.schedules.map((value: any, index: number) => {
+                      {schedule.scheduleResponseList.map((value: any, index: number) => {
                         return (
                           <div
                             className='time-schedule_Content-Showtimes'

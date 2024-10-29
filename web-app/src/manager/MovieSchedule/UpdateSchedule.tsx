@@ -56,7 +56,10 @@ const UpdateSchedule = () => {
       success("Thành công!!!!!!!!!!!!!!!!!!!!!")
       navigate("/admin/movie-schedule")
     } else {
-      error(res?.msg)
+      console.log('res', res?.data.msg)
+      switch (res?.data.msg)  {
+        case "Schedule conflict": error("Lịch chiếu đã được đặt(không thể sửa)"); break;
+      }
     }
   }
 
@@ -92,7 +95,7 @@ const UpdateSchedule = () => {
   useEffect(() => {
     (async () => {
       const res = await getAllFilms()
-      if (res?.code === 200) {
+      if (res?.code === 1000) {
         const newData = res.data.map((value: any) => {
           return ({
             label: value.name,
@@ -116,7 +119,7 @@ const UpdateSchedule = () => {
     if (cinema.id) {
       const getAll = async () => {
         const res = await getRoomInCinema({ cinemaId: cinema.id })
-        if (res?.code === 200) {
+        if (res?.code === 1000) {
           const newData = res.data.map((value: any) => {
             return ({
               label: value.name,
@@ -140,14 +143,14 @@ const UpdateSchedule = () => {
         if (res?.code === 200) {
           setRooms({
             room: res.data.room,
-            label: res.data.room.name,
-            value: res.data.room.id
+            label: res.data.roomName,
+            value: res.data.roomId
           })
 
           setFilm({
             film: res.data.film,
-            label: res.data.film.name,
-            value: res.data.film.id
+            label: res.data.filmName,
+            value: res.data.filmId
           })
 
           const originalDateTime = res.data.startTime;
@@ -157,8 +160,8 @@ const UpdateSchedule = () => {
             id: res.data.id,
             date: dateString,
             time: timeString,
-            movies: res.data.film.id,
-            rooms: res.data.room.id
+            movies: res.data.filmId,
+            rooms: res.data.roomId
           })
         }
       })()

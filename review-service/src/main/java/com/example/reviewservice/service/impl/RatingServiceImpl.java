@@ -17,6 +17,7 @@ import com.example.reviewservice.service.RatingService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -37,7 +38,6 @@ public class RatingServiceImpl implements RatingService {
     private UserRepository userRepository;
 
     private RatingMapper ratingMapper;
-
     private FilmClient client;
 
     @Override
@@ -69,7 +69,8 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public RatingResponse getRatingInFilmByUser(Integer filmId, Integer userId) {
         Rating rating = ratingRepository.findByFilmIdAndUserId(filmId, userId)
-                .orElseThrow(() -> new AppException(ErrorCode.RATING_NOT_FOUND));
-        return ratingMapper.toRatingResponse(rating);
+                .orElse(null);
+        return (rating != null) ? ratingMapper.toRatingResponse(rating) : null; // Trả về đối tượng rỗng nếu không có rating
+
     }
 }

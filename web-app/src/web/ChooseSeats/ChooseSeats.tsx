@@ -29,8 +29,8 @@ const ChooseSeats = () => {
 
   const confirmBook = async () => {
     const res = await createPayment({ amount: sumPrice })
-    if (res?.code === 200) {
-      setUrl(res.data.redirect_url)
+    if (res?.code === 1000) {
+      setUrl(res.data)
       localStorage.setItem('checkActive', `${checkActive}`)
       localStorage.setItem('scheduleId', `${scheduleId}`)
       localStorage.setItem('userId', `${user?.id}`)
@@ -79,6 +79,7 @@ const ChooseSeats = () => {
       (async () => {
         const res = await getSeatsStatus({ scheduleId: Number(scheduleId) })
         if (res?.code === 200) {
+          console.log('82',res.data)
           setTickets(res.data)
         }
         else {
@@ -104,11 +105,11 @@ const ChooseSeats = () => {
           </div>
           <div className='infor_BookTickets-ChooseSeats'>
             <div>
-              <p>Phim: {tickets.schedule.film.name}</p>
-              <p>Phòng chiếu: {tickets.schedule.room.name}</p>
+              <p>Phim: {tickets.scheduleResponse.filmName}</p>
+              <p>Phòng chiếu: {tickets.scheduleResponse.roomName}</p>
               <p>Thời gian:
-                &nbsp;{converTime(tickets.schedule.startTime)}
-                &nbsp;{`-`}&nbsp;{converDate(tickets.schedule.startTime)}
+                &nbsp;{converTime(tickets.scheduleResponse.startTime)}
+                &nbsp;{`-`}&nbsp;{converDate(tickets.scheduleResponse.startTime)}
               </p>
               <p>Ghế:
                 {checkActive.map((value: string, index: number) => <span key={index}>{`${index !== 0 ? ", " : " "}${value}`}</span>)}

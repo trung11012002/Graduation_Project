@@ -44,7 +44,7 @@ const ScheduleMovieShowings = () => {
       roomId: req.rooms
     }
     const res = await scheduleCreate(data)
-    if(res?.code === 200) {
+    if(res?.code === 1000) {
       success("Thành công!!!!!!!!!!!!!!!!!!!!!")
       navigate("/admin/movie-schedule")
     } else {
@@ -88,7 +88,8 @@ const ScheduleMovieShowings = () => {
   useEffect(() => {
     (async () => {
       const res = await getAllFilms()
-      if (res?.code === 200) {
+      console.log('res_91', res)
+      if (res?.code === 1000) {
         const newData = res.data.map((value: any) => {
           return ({
             label: value.name,
@@ -112,7 +113,7 @@ const ScheduleMovieShowings = () => {
     if (cinema.id) {
       const getAll = async () => {
         const res = await getRoomInCinema({ cinemaId: cinema.id })
-        if(res?.code === 200) {
+        if(res?.code === 1000) {
           const newData = res.data.map((value: any) => {
             return ({
               label: value.name,
