@@ -19,3 +19,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+app:
+  services:
+    film: http://localhost:8083/film-service
