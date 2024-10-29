@@ -24,5 +24,6 @@ public interface FilmService {
     ApiResponse deleteFilmById(Integer id);
     ApiResponse getFilmById(Integer id);
     ApiResponse searchFilm(String keyword);
+    FilmResponse updateScore(Integer filmId);
 
 }

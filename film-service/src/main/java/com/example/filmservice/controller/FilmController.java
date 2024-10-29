@@ -65,5 +65,13 @@ public class FilmController {
         ApiResponse<List<FilmResponse>> response = filmService.searchFilm(keyword);
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/update-score")
+    public ApiResponse<FilmResponse> updateFilmRatingScore(@RequestParam Integer filmId) {
+        return ApiResponse.<FilmResponse>builder()
+                .code(1000)
+                .data(filmService.updateScore(filmId))
+                .build();
+    }
+
 
 }

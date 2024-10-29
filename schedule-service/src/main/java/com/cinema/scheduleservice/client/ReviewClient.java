@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface ReviewClient {
     @GetMapping(value = "/check-rating", produces = MediaType.APPLICATION_JSON_VALUE)
     ApiResponse<RatingDtoRepsonse> checkUserRatingInAFilm(
-            @RequestParam("userId") Integer userId,
-            @RequestParam("filmId") Integer filmId);
+            @RequestParam("filmId") Integer userId,
+            @RequestParam("userId") Integer filmId);
 }

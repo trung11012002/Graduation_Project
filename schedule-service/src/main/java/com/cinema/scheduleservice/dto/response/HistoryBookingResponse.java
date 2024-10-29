@@ -17,8 +17,7 @@ public class HistoryBookingResponse {
     private CinemaResponse cinema;
     private FilmResponse filmResponse;
     private LocalDateTime timeBooking;
-    @JsonIgnore
-    private List<Ticket> tickets;
+    private List<TicketResponse> tickets;
     private Long totalPrice;
     private boolean isRated;
     private RatingDtoRepsonse ratingDtoRepsonse;

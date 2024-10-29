@@ -48,8 +48,8 @@ public class PaymentController {
         return ApiResponse.builder().code(1000).data(response).msg("Success").build();
     }
 
-    @GetMapping("/result-info")
-    public ApiResponse transactionInfo(TransactionDTO dto){
+    @PostMapping("/result-info")
+    public ApiResponse transactionInfo(@RequestBody TransactionDTO dto){
         return bookingService.createBooking(dto);
     }
 

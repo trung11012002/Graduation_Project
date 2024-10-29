@@ -14,4 +14,5 @@ public interface TicketMapper {
     TicketResponse ticketToTicketResponse(Ticket ticket);
     List<TicketResponse> ticketsToTicketResponses(List<Ticket> tickets);
 
+
 }

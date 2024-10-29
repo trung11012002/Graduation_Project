@@ -16,9 +16,9 @@ const Detail: React.FC<IDetail> = ({ movie, getHistoryBooking }) => {
     const [openDetail, setOpenDetail] = useState<boolean>(false)
     // const navigate = useNavigate()
 
-    const urlImg = movie?.film?.thumnails[0]?.url ? movie.film.thumnails[0]?.url : ""
+    const urlImg = movie?.filmResponse?.thumnails[0]
 
-    const type = movie.film.types.map((type: any) => type.name)
+    const type = movie.filmResponse.typeNames
 
     const openModalRating = () => {
         setOpenRated(true)
@@ -32,11 +32,11 @@ const Detail: React.FC<IDetail> = ({ movie, getHistoryBooking }) => {
                     src={urlImg}
                 />
                 <div>
-                    <span>Tên phim: {movie.film.name}</span>
+                    <span>Tên phim: {movie.filmResponse.name}</span>
                     <span>Thể loại: {type.map((value: any, index: number) => <>{value}{type.length - 1 === index ? "" : ", "}</>)}</span>
                     <span>Rạp chiếu: {movie.cinema.name}</span>
                     <span>Thời gian đặt: {converDate(movie.timeBooking)} {converTime(movie.timeBooking)}</span>
-                    <span>Số lượng vé: {movie.tickets.length} vé</span>
+                    {/*<span>Số lượng vé: {movie.tickets.length} vé</span>*/}
                     <span>Thanh toán: {formatVNDCurrency(movie.totalPrice)}</span>
                     {/* <span style={{ alignItems: "center", display: "flex" }}>
                         Đánh giá: {data.score ? data.score : "Chưa có đánh giá"}
