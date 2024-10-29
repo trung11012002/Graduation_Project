@@ -27,17 +27,20 @@ import java.util.List;
 
 
 @Service
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RatingServiceImpl implements RatingService {
 
+    @Autowired
     private FilmRepository filmRepository;
 
+    @Autowired
     private RatingRepository ratingRepository;
 
+    @Autowired
     private UserRepository userRepository;
 
+    @Autowired
     private RatingMapper ratingMapper;
+
     private FilmClient client;
 
     @Override
