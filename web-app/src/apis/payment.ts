@@ -9,10 +9,10 @@ import { callApi } from "./callAPI"
 export const createPayment = async(
     data: {
         amount: number
-        orderInfor?: string
+        // orderInfor?: string
     }
 ) => {
-    return await callApi<any>(`payment-service/api/v1/payment/create-payment`, "get", data)
+    return await callApi<any>(`payment-service/create-payment?amount=${data.amount}`, "post", data)
 }
 
 // payment-service/api/v1/payment/result-info
@@ -30,5 +30,5 @@ export const resultInfoPayment = async(
     }
 ) => {
     console.log(data)
-    return await callApi<any>(`payment-service/api/v1/payment/result-info`, "post", data)
+    return await callApi<any>(`payment-service/result-info`, "post", data)
 }

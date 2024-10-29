@@ -48,7 +48,7 @@ const Detail: React.FC<IDetail> = ({ data, getSchedule }) => {
 
     if (!data) return <></>
 
-    const urlImg = data.schedule.film.thumnails[0].url
+    const urlImg = data.thumnails[0]
     return (
         <div className='Detail'>
             <div className='left_Detail'>
@@ -57,29 +57,29 @@ const Detail: React.FC<IDetail> = ({ data, getSchedule }) => {
                     src={urlImg}
                 />
                 <div>
-                    <span style={{fontWeight: "bold", fontSize: "1.1rem"}}>Tên phim: {data.schedule.film.name}</span>
-                    <span>Ngày chiếu: {converDate(data.schedule.startTime)}</span>
-                    <span>Giờ bắt đầu: {converTime(data.schedule.startTime)}</span>
-                    <span>Dự kiến kết thúc: {converTime(data.schedule.endTime)}</span>
-                    <span>Phòng chiếu: {data.schedule.room.name}</span>
+                    <span style={{fontWeight: "bold", fontSize: "1.1rem"}}>Tên phim: {data.name}</span>
+                    <span>Ngày chiếu: {converDate(data.startTime)}</span>
+                    <span>Giờ bắt đầu: {converTime(data.startTime)}</span>
+                    <span>Dự kiến kết thúc: {converTime(data.endTime)}</span>
+                    <span>Phòng chiếu: {data.roomName}</span>
                 </div>
             </div>
 
             <div className='right_Detail'>
                 <div>
                     <Button
-                        onClick={() => { navigate(`/admin/movie-schedule/update/${data.schedule.id}`, {
+                        onClick={() => { navigate(`/admin/movie-schedule/update/${data.id}`, {
                             state: data
                         }) }}
                     >
                         Sửa
                     </Button>
                 </div>
-                <div><Button onClick={() => showLogoutModal(data.schedule.id)} danger>Xóa</Button></div>
+                <div><Button onClick={() => showLogoutModal(data.id)} danger>Xóa</Button></div>
                 <div>Còn lại: {`${data.availables}/${data.totalSeats}`}</div>
                 <div><Button
                  onClick={() => {
-                    navigate(`/admin/movie-schedule/view-all-booking/${data.schedule.id}`)
+                    navigate(`/admin/movie-schedule/view-all-booking/${data.id}`)
                 }}>Xem vé đã đặt</Button></div>
             </div>
         </div>

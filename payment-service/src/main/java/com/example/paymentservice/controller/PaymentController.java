@@ -33,7 +33,7 @@ public class PaymentController {
     @Autowired
     private BookingService bookingService;
 
-    @GetMapping("/create-payment")
+    @PostMapping("/create-payment")
     public ApiResponse createPayment(@RequestParam(name = "amount") Long amount,
                                      HttpServletRequest request) throws UnsupportedEncodingException, ParseException {
         String token = request.getHeader("Authorization").substring(7);
@@ -49,7 +49,7 @@ public class PaymentController {
     }
 
     @PostMapping("/result-info")
-    public ApiResponse transactionInfo(TransactionDTO dto){
+    public ApiResponse transactionInfo(@RequestBody TransactionDTO dto){
         return bookingService.createBooking(dto);
     }
 

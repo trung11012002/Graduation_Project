@@ -29,7 +29,7 @@ export const getCurrentScheduleInCinema = async (
         cinemaId: number
     }
 ) => {
-    return await callApi<any>(`schedule-service/api/v1/schedule/schedule-by-cinema?cinemaId=${data.cinemaId}`, "post")
+    return await callApi<any>(`schedule-service/schedule/schedule-by-cinema?cinemaId=${data.cinemaId}`, "post")
 }
 
 // schedule-service/api/v1/room/room-in-cinema
@@ -38,7 +38,7 @@ export const getRoomInCinema = async (
         cinemaId: number
     }
 ) => {
-    return await callApi<any>(`cinema-service/api/v1/room/room-in-cinema?cinemaId=${data.cinemaId}`, "post")
+    return await callApi<any>(`cinema-service/room/room-in-cinema?cinemaId=${data.cinemaId}`, "post")
 }
 
 // schedule-service/api/v1/schedule/create
@@ -49,7 +49,7 @@ export const scheduleCreate = async (
         roomId?: number
     }
 ) => {
-    return await callApi<any>(`schedule-service/api/v1/schedule/create`, "post", data)
+    return await callApi<any>(`schedule-service/schedule/create`, "post", data)
 }
 
 // schedule-service/api/v1/schedule/schedule-history-by-cinema
@@ -58,7 +58,7 @@ export const getHistoryScheduleInCinema = async (
         cinemaId: number
     }
 ) => {
-    return await callApi<any>(`schedule-service/api/v1/schedule/schedule-history-by-cinema?cinemaId=${data.cinemaId}`, "post")
+    return await callApi<any>(`schedule-service/schedule/schedule-history-by-cinema?cinemaId=${data.cinemaId}`, "post")
 }
 
 // cinema-service/api/v1/room/create-room
@@ -101,7 +101,7 @@ export const getScheduleById = async(
         scheduleId: number
     }
 ) => {
-    return await callApi<any>(`schedule-service/api/v1/schedule/get-by-id`, "get", data)
+    return await callApi<any>(`schedule-service/schedule/get-by-id`, "get", data)
 }
 
 // schedule-service/api/v1/schedule/edit
@@ -117,7 +117,7 @@ export const scheduleEdit = async (
         roomId?: number
     }
 ) => {
-    return await callApi<any>(`schedule-service/api/v1/schedule/edit`, "post", data)
+    return await callApi<any>(`schedule-service/schedule/edit`, "put", data)
 }
 
 // schedule-service/api/v1/schedule/view-all-orders
@@ -128,7 +128,7 @@ export const getAllOrders = async (
         scheduleId: number
     }
 ) => {
-    return await callApi<any>(`schedule-service/api/v1/schedule/view-all-orders`, "get", data)
+    return await callApi<any>(`schedule-service/schedule/view-all-orders`, "get", data)
 }
 
 // schedule-service/api/v1/schedule/cinema-by-day
@@ -140,7 +140,7 @@ export const cinemaByDay = async (
         date: string
     }
 ) => {
-    return await callApi<any>(`schedule-service/api/v1/schedule/cinema-by-day?cinemaId=${data.cinemaId}&date=${data.date}`, "post")
+    return await callApi<any>(`schedule-service/schedule/cinema-by-day?cinemaId=${data.cinemaId}&date=${data.date}`, "post")
 }
 
 // schedule-service//api/v1/schedule/get-seats-status
@@ -151,7 +151,7 @@ export const getSeatsStatus = async (
         scheduleId: number
     }
 ) => {
-    return await callApi<any>(`schedule-service/api/v1/schedule/get-seats-status`, "get", data)
+    return await callApi<any>(`schedule-service/schedule/get-seats-status`, "get", data)
 }
 
 
@@ -172,7 +172,7 @@ export const getStatistic = async (
 // schedule-service/api/v1/booking/history
 // Get
 export const historyBooking = async () => {
-    return await callApi<any>(`schedule-service/api/v1/booking/history`, "get")
+    return await callApi<any>(`schedule-service/booking/history`, "get")
 }
 
 
@@ -190,7 +190,7 @@ export const getHistoryScheduleInCinemaByPage = async (
         perPage: number
     }
 ) => {
-    return await callApi<any>(`schedule-service/api/v1/schedule/schedule-history-by-cinema`, "get", data)
+    return await callApi<any>(`schedule-service/schedule/schedule-history-by-cinema`, "get", data)
 }
 
 // @GetMapping("/schedule-by-cinema") // lay schedule theo rap
@@ -206,5 +206,5 @@ export const getCurrentScheduleInCinemaByPage = async (
         perPage: number
     }
 ) => {
-    return await callApi<any>(`schedule-service/api/v1/schedule/schedule-by-cinema`, "get", data)
+    return await callApi<any>(`schedule-service/schedule/schedule-by-cinema_by_page`, "get", data)
 }

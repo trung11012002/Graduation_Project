@@ -25,12 +25,12 @@ const MovieSchedule = () => {
             page: pageCurrent,
             perPage: perPage
         })
-        console.log(res)
+        console.log('res', res)
         if (res?.code === 200) {
             // setSchedule(res.data)
             const page = res.data.pageInfo
             setPage({
-                pageSize: 6,
+                pageSize: 5,
                 total: page.totalItems,
             })
 

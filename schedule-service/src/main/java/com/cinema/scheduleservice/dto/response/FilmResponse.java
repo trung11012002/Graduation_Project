@@ -12,6 +12,7 @@ public class FilmResponse {
     private Integer id;
     private String name;
     private List<Integer> typeIds;
+    private List<String> typeNames;
     private String description;
     private String releaseDate;
     private Integer duration;
