@@ -47,8 +47,8 @@ const Statistical = () => {
                 return({
                     key: index+1,
                     showDate: value.showDate,
-                    nameFilm: value.film.name,
-                    nameRoom: value.room.name,
+                    nameFilm: value.filmResponse.name,
+                    nameRoom: value.roomName,
                     ticketsSold: value.ticketsSold,
                     revenue: value.revenue
                 })

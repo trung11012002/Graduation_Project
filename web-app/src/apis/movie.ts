@@ -65,7 +65,7 @@ export const rateMovie = async(
         comment: string
     }
 ) => {
-    return await callApi<any>(`review-service/api/v1/rating/create-rating`, "post", data)
+    return await callApi<any>(`review-service/create-rating`, "post", data)
 }
 
 // film-service/api/v1/film/search-film-by-name

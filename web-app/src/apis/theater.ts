@@ -166,7 +166,7 @@ export const getStatistic = async (
         endDate: string
     }
 ) => {
-    return await callApi<any>(`schedule-service/api/v1/statistic/view-revenue-statistic?cinemaId=${data.cinemaId}&startDate=${data.startDate}&endDate=${data.endDate}`, "post")
+    return await callApi<any>(`schedule-service/statistic/view-revenue-statistic?cinemaId=${data.cinemaId}&startDate=${data.startDate}&endDate=${data.endDate}`, "post")
 }
 
 // schedule-service/api/v1/booking/history

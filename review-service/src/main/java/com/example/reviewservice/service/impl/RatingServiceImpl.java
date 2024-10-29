@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -40,9 +41,8 @@ public class RatingServiceImpl implements RatingService {
 
     @Autowired
     private RatingMapper ratingMapper;
-
+    @Autowired
     private FilmClient client;
-
     @Override
     public ApiResponse createRating(RatingRequest dto) {
         User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));

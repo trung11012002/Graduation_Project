@@ -307,7 +307,7 @@ public class ScheduleResponseImpl implements ScheduleService {
             ScheduleResponse response = scheduleMapper.toScheduleResponse(schedule);
             ScheduleRevenueStatistic revenueSchedule = new ScheduleRevenueStatistic();
             revenueSchedule.setFilmResponse(filmResponse);
-            revenueSchedule.setRoomId(response.getRoomId());
+            revenueSchedule.setRoomName(response.getRoomName());
             revenueSchedule.setShowDate(schedule.getStartTime());
 
             List<Ticket> tickets = ticketRepository.findByScheduleId(schedule.getId()).orElseThrow(

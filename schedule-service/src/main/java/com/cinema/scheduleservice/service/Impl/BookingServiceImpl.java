@@ -98,7 +98,7 @@ public class BookingServiceImpl implements BookingService {
             response.setTotalPrice(totalPaid);
 
             ApiResponse<RatingDtoRepsonse> apiResponse = reviewClient.checkUserRatingInAFilm(user.getId(), film.getId());
-            if (apiResponse != null && (apiResponse.getData().getComment() != null || apiResponse.getData().getStar() != null)){
+            if (apiResponse.getData() != null){
                 RatingDtoRepsonse ratingDtoRepsonse = apiResponse.getData();
                 response.setRated(true);
                 response.setRatingDtoRepsonse(ratingDtoRepsonse);
