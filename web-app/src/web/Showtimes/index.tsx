@@ -19,7 +19,7 @@ const Showtimes = () => {
   useEffect(() => {
     (async () => {
       const res = await GetAllCinema()
-      if (res?.code === 200) {
+      if (res?.code === 1000) {
         setListTheater(res.data)
       }
     })()
@@ -27,7 +27,7 @@ const Showtimes = () => {
 
   useEffect(() => {
     if (listTheater && !id) {
-      navigate(`/showtimes/${listTheater[0].id}`)
+      navigate(`/showtimes/${listTheater[2].id}`)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listTheater])

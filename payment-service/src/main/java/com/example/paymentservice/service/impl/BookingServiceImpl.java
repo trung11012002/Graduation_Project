@@ -10,11 +10,13 @@ import com.example.paymentservice.entity.User;
 import com.example.paymentservice.exception.AppException;
 import com.example.paymentservice.exception.ErrorCode;
 import com.example.paymentservice.mapper.BookingMapper;
+import com.example.paymentservice.repository.BookingRepository;
 import com.example.paymentservice.repository.UserRepository;
 import com.example.paymentservice.service.BookingService;
 import com.example.paymentservice.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,7 +33,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private BookingMapper mapper;
-
+    @Autowired
+    private BookingRepository bookingrepository;
+    @Transactional(transactionManager = "transactionManager")
     @Override
     public ApiResponse createBooking(TransactionDTO dto) {
         String error = errorTransactionResponseCode(dto.getResponseCode());
@@ -42,6 +46,7 @@ public class BookingServiceImpl implements BookingService {
         User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         booking.setUser(user);
         booking.setBookingTime(LocalDateTime.now());
+        booking = bookingrepository.save(booking);
         List<SeatDTO> seatDTOS = new ArrayList<>();
         for(String s : dto.getSeats()){
             String[] number = s.split("-");
@@ -52,6 +57,7 @@ public class BookingServiceImpl implements BookingService {
         }
         List<Ticket> tickets = ticketService.createTickets(booking, dto.getScheduleId(), seatDTOS);
         booking.setTickets(tickets);
+        booking = bookingrepository.save(booking);
         BookingResponse response = mapper.toBookingResponse(booking);
         return ApiResponse.builder().code(1000).msg("Success").data(response).build();
     }

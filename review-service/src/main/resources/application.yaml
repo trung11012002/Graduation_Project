@@ -19,3 +19,16 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+    devtools:
+      restart:
+        enabled: true
+      livereload:
+        enabled: true
+    servlet:
+      multipart:
+        max-file-size: 10MB
+        max-request-size: 10MB
+
+app:
+  services:
+    film: http://localhost:8083/film-service

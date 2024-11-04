@@ -12,7 +12,7 @@ const Detail: React.FC<IDetail> = ({data}) => {
 
     if(data.length === 0) return <></>
     
-    const urlImg = data.schedule.film.thumnails[0].url
+    const urlImg = data.thumnails[0]
     return (
         <div className='Detail'>
             <div className='left_Detail'>
@@ -21,11 +21,11 @@ const Detail: React.FC<IDetail> = ({data}) => {
                     src={urlImg}
                 />
                 <div>
-                    <span style={{fontWeight: "bold", fontSize: "1.1rem"}}>Tên phim: {data.schedule.film.name}</span>
-                    <span>Ngày chiếu: {converDate(data.schedule.startTime)}</span>
-                    <span>Giờ bắt đầ: {converTime(data.schedule.startTime)}</span>
-                    <span>Dự kiến kết thúc: {converTime(data.schedule.endTime)}</span>
-                    <span>Phòng chiếu:{data.schedule.room.name}</span>
+                    <span style={{fontWeight: "bold", fontSize: "1.1rem"}}>Tên phim: {data.filmName}</span>
+                    <span>Ngày chiếu: {converDate(data.startTime)}</span>
+                    <span>Giờ bắt đầu: {converTime(data.startTime)}</span>
+                    <span>Dự kiến kết thúc: {converTime(data.endTime)}</span>
+                    <span>Phòng chiếu:{data.roomName}</span>
                 </div>
             </div>
 
@@ -33,7 +33,7 @@ const Detail: React.FC<IDetail> = ({data}) => {
                 <div>Còn lại: {`${data.availables}/${data.totalSeats}`}</div>
                 <div><Button
                      onClick={() => {
-                        navigate(`/admin/projection-history/view-all-booking/${data.schedule.id}`)
+                        navigate(`/admin/projection-history/view-all-booking/${data.id}`)
                     }}
                 >Xem vé đã đặt</Button></div>
             </div>

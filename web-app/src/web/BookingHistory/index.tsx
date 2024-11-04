@@ -9,7 +9,8 @@ const BookingHistory = () => {
   const [movies, setMovies] = useState<any>()
   const getHistoryBooking = async() => {
     const res = await historyBooking()
-    if (res?.code === 200) {
+    console.log('res12',res)
+    if (res?.code === 1000) {
       setMovies(res.data)
     } else {
       console.log("looix")

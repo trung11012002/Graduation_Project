@@ -21,7 +21,7 @@ const ModalRating: React.FC<IModalRating> = ({ open, setOpen, movie, getHistoryB
 
     const handleOk = async() => {
         const data = {
-            filmId: Number(movie.film.id),
+            filmId: Number(movie.id),
             userId: Number(user?.id),
             star: valueRate,
             comment: value
@@ -43,7 +43,7 @@ const ModalRating: React.FC<IModalRating> = ({ open, setOpen, movie, getHistoryB
             // width={700}
             style={{}}
             open={open}
-            title={`Đánh giá phim ${movie.film.name}`}
+            title={`Đánh giá phim ${movie.name}`}
             onOk={handleOk}
             onCancel={handleCancel}
             footer={[

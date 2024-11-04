@@ -10,9 +10,10 @@ import com.cloudinary.Api;
 import com.cloudinary.api.exceptions.ApiException;
 import com.example.filmservice.dto.response.ListFilmResponse;
 import com.example.filmservice.dto.response.PageInfo;
+import com.example.filmservice.entity.Rating;
 import com.example.filmservice.exception.AppException;
 import com.example.filmservice.exception.ErrorCode;
-import com.example.filmservice.repositories.ScheduleRepository;
+import com.example.filmservice.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,9 +31,6 @@ import com.example.filmservice.dto.response.FilmResponse;
 import com.example.filmservice.entity.Film;
 import com.example.filmservice.entity.Thumnail;
 import com.example.filmservice.entity.Type;
-import com.example.filmservice.repositories.FilmRepository;
-import com.example.filmservice.repositories.FilmTypeRepository;
-import com.example.filmservice.repositories.ThumbnailsRepository;
 import com.example.filmservice.service.FilmService;
 
 @Service
@@ -50,7 +48,8 @@ public class FilmServiceImpl implements FilmService {
 
     @Autowired
     private FilmTypeRepository filmTypeRepository;
-
+    @Autowired
+    private RatingRepository ratingRepository;
     private final FilmMapper filmMapper;
 
     public FilmServiceImpl(FilmMapper filmMapper) {
@@ -75,6 +74,7 @@ public class FilmServiceImpl implements FilmService {
                 .data(filmResponses)
                 .build();
     }
+
     // TODO: Implement getFilms method ( THE METHOD IS GET_ALL FILMS WITH PAGINATION)
     @Override
     public ApiResponse<ListFilmResponse> getFilms(int page, int size) {
@@ -82,7 +82,7 @@ public class FilmServiceImpl implements FilmService {
         Page<Film> films = filmRepository.findAll(pageable);
         List<FilmResponse> filmResponses =
                 films.getContent().stream().map(filmMapper::toFilmResponse).collect(Collectors.toList());
-        PageInfo pageInfo = new PageInfo((int) films.getTotalElements(),  size);
+        PageInfo pageInfo = new PageInfo((int) films.getTotalElements(), size);
         ListFilmResponse filmPageResponse = new ListFilmResponse(filmResponses, pageInfo);
 
 
@@ -92,6 +92,7 @@ public class FilmServiceImpl implements FilmService {
                 .data(filmPageResponse)  // Trả về FilmPageResponse chứa danh sách phim và thông tin phân trang
                 .build();
     }
+
     // TODO: Implement createFilm method
     @Transactional(transactionManager = "transactionManager")
     @Override
@@ -101,32 +102,32 @@ public class FilmServiceImpl implements FilmService {
         film.setDescription(filmDto.getDescription());
         List<Thumnail> thumnails = new ArrayList<>();
 
-    try {
-        // Chuyển đổi ngày phát hành
-        Date releaseDate = convertToDate(filmDto.getReleaseDate());
-        film.setReleaseDate(releaseDate);
-        if(filmDto.getThumnails() != null) {
-            for (MultipartFile file : filmDto.getThumnails()) {
-                Map<String, String> map = cloudinaryService.uploadFile(file);
-                Thumnail thumnail = new Thumnail();
-                thumnail.setUrl(map.get("url"));
-                thumnail.setPublicId(map.get("publicId"));
-                thumnail.setFilm(film);
-                thumnails.add(thumnail);
+        try {
+            // Chuyển đổi ngày phát hành
+            Date releaseDate = convertToDate(filmDto.getReleaseDate());
+            film.setReleaseDate(releaseDate);
+            if (filmDto.getThumnails() != null) {
+                for (MultipartFile file : filmDto.getThumnails()) {
+                    Map<String, String> map = cloudinaryService.uploadFile(file);
+                    Thumnail thumnail = new Thumnail();
+                    thumnail.setUrl(map.get("url"));
+                    thumnail.setPublicId(map.get("publicId"));
+                    thumnail.setFilm(film);
+                    thumnails.add(thumnail);
+                }
+                film.setThumnails(thumnails);
             }
-            film.setThumnails(thumnails);
+        } catch (ParseException ex) {
+            return ApiResponse.<FilmResponse>builder()
+                    .code(1001)
+                    .msg("Ngày khởi chiếu không đúng định dạng")
+                    .build();
+        } catch (IOException ex) {
+            return ApiResponse.<FilmResponse>builder()
+                    .code(1002)
+                    .msg("Xảy ra lỗi trong quá trình upload ảnh")
+                    .build();
         }
-    } catch (ParseException ex) {
-        return ApiResponse.<FilmResponse>builder()
-                .code(1001)
-                .msg("Ngày khởi chiếu không đúng định dạng")
-                .build();
-    } catch (IOException ex) {
-        return ApiResponse.<FilmResponse>builder()
-                .code(1002)
-                .msg("Xảy ra lỗi trong quá trình upload ảnh")
-                .build();
-    }
         film.setDuration(filmDto.getDuration());
         List<Type> types = getListFilmTypes(filmDto.getTypeIds());
         film.setTypes(types);
@@ -143,6 +144,7 @@ public class FilmServiceImpl implements FilmService {
                 .data(dataDto)
                 .build();
     }
+
     // TODO: Implement editFilm method
     @Transactional(transactionManager = "transactionManager")
     @Override
@@ -215,7 +217,7 @@ public class FilmServiceImpl implements FilmService {
                     .build();
         }
         film.setDuration(editFilmDto.getDuration());
-        if(editFilmDto.getTypeIds() != null) {
+        if (editFilmDto.getTypeIds() != null) {
             List<Type> types = getListFilmTypes(editFilmDto.getTypeIds());
             film.setTypes(types);
         }
@@ -228,6 +230,7 @@ public class FilmServiceImpl implements FilmService {
                 .msg("Sửa ảnh thành công")
                 .build();
     }
+
     // TODO: Implement deleteFilmById method
     @Transactional(transactionManager = "transactionManager")
     @Override
@@ -241,7 +244,7 @@ public class FilmServiceImpl implements FilmService {
         Film film = op.get();
         List<Thumnail> thumnails = film.getThumnails();
 
-        for(Thumnail thumnail: thumnails) {
+        for (Thumnail thumnail : thumnails) {
             try {
                 cloudinaryService.deleteFile(thumnail.getPublicId());
             } catch (IOException e) {
@@ -251,18 +254,19 @@ public class FilmServiceImpl implements FilmService {
                         .build();
             }
         }
-            filmRepository.delete(film);
-            return ApiResponse.<FilmResponse>builder()
-                    .code(1000)
-                    .msg("Xóa phim thành công")
-                    .build();
+        filmRepository.delete(film);
+        return ApiResponse.<FilmResponse>builder()
+                .code(1000)
+                .msg("Xóa phim thành công")
+                .build();
     }
+
     // TODO : Implement getFilmById method
     @Override
     public ApiResponse getFilmById(Integer id) {
         Optional<Film> op = filmRepository.findById(id);
         if (!op.isPresent())
-            return  ApiResponse.<FilmResponse>builder()
+            return ApiResponse.<FilmResponse>builder()
                     .code(1004)
                     .msg("Không tìm thấy phim")
                     .build();
@@ -294,6 +298,27 @@ public class FilmServiceImpl implements FilmService {
                 .msg("Success")
                 .data(films.stream().map(filmMapper::toFilmResponse).collect(Collectors.toList()))
                 .build();
+    }
+
+    @Override
+    public FilmResponse updateScore(Integer filmId) {
+        Film op = filmRepository.findById(filmId).orElseThrow(
+                () -> new AppException(ErrorCode.FILM_NOT_FOUND)
+        );
+        List<Rating> ratings = ratingRepository.findAllByFilm(op);
+        if (ratings == null || ratings.isEmpty())
+            throw new AppException(ErrorCode.RATING_IS_EMPTY);
+        List<Integer> stars = ratings.stream().map(Rating::getStar).collect(Collectors.toList());
+        int sum = 0;
+        for (Integer star: stars) {
+            sum += star;
+        }
+        float avgScore = (float) sum / stars.size();
+        avgScore = (float) (Math.round(avgScore * Math.pow(10, 1)) / Math.pow(10, 1));
+        op.setScore(avgScore);
+        filmRepository.save(op);
+
+        return filmMapper.toFilmResponse(op);
     }
 
 //

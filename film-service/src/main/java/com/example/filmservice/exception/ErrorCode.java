@@ -26,6 +26,8 @@ public enum ErrorCode {
     REQUEST_INVALID(1016, "Request invalid", HttpStatus.BAD_REQUEST),
     MY_REQUEST_NOT_EXISTED(1017, "My request not existed", HttpStatus.BAD_REQUEST),
     THUMBNAIL_NOT_FOUND(1018, "Thumbnail not found", HttpStatus.NOT_FOUND),
+    FILM_NOT_FOUND(1019, "Film not found", HttpStatus.NOT_FOUND),
+    RATING_IS_EMPTY(1020, "Rating is empty", HttpStatus.BAD_REQUEST),
     ;
 
     private int code;

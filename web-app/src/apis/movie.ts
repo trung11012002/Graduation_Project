@@ -12,7 +12,7 @@ export const createMovies = async(
 }
 
 export const getAllFilms = async() => {
-    return await callApi<any>("film-service/films", "get")
+    return await callApi<any>("film-service/films/all", "get")
 }
 
 // film-service//api/v1/film/{id}
@@ -65,7 +65,7 @@ export const rateMovie = async(
         comment: string
     }
 ) => {
-    return await callApi<any>(`review-service/api/v1/rating/create-rating`, "post", data)
+    return await callApi<any>(`review-service/create-rating`, "post", data)
 }
 
 // film-service/api/v1/film/search-film-by-name

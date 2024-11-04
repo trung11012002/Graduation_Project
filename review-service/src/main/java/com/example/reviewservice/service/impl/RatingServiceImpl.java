@@ -8,6 +8,7 @@ import com.example.reviewservice.entity.Rating;
 import com.example.reviewservice.entity.User;
 import com.example.reviewservice.exception.AppException;
 import com.example.reviewservice.exception.ErrorCode;
+import com.example.reviewservice.httpclient.FilmClient;
 import com.example.reviewservice.mapper.RatingMapper;
 import com.example.reviewservice.repository.FilmRepository;
 import com.example.reviewservice.repository.RatingRepository;
@@ -16,7 +17,9 @@ import com.example.reviewservice.service.RatingService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -25,20 +28,21 @@ import java.util.List;
 
 
 @Service
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RatingServiceImpl implements RatingService {
 
+    @Autowired
     private FilmRepository filmRepository;
 
+    @Autowired
     private RatingRepository ratingRepository;
 
+    @Autowired
     private UserRepository userRepository;
 
+    @Autowired
     private RatingMapper ratingMapper;
-
-    private RestTemplate restTemplate;
-
+    @Autowired
+    private FilmClient client;
     @Override
     public ApiResponse createRating(RatingRequest dto) {
         User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -53,13 +57,9 @@ public class RatingServiceImpl implements RatingService {
         rating.setUser(user);
         ratingRepository.save(rating);
 
-        String url = "http://localhost:8084/api/v1/film/update-score";
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
-                .queryParam("filmId", dto.getFilmId());
+        ApiResponse filmResponse = client.updateScore(dto.getFilmId());
 
-        ApiResponse response = restTemplate.getForObject(builder.toUriString(), ApiResponse.class);
-
-        return ApiResponse.builder().msg("Success").data(response.getData()).build();
+        return ApiResponse.builder().msg("Success").data(filmResponse.getData()).build();
     }
 
     @Override
@@ -72,7 +72,8 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public RatingResponse getRatingInFilmByUser(Integer filmId, Integer userId) {
         Rating rating = ratingRepository.findByFilmIdAndUserId(filmId, userId)
-                .orElseThrow(() -> new AppException(ErrorCode.RATING_NOT_FOUND));
-        return ratingMapper.toRatingResponse(rating);
+                .orElse(null);
+        return (rating != null) ? ratingMapper.toRatingResponse(rating) : null; // Trả về đối tượng rỗng nếu không có rating
+
     }
 }

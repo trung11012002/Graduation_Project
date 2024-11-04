@@ -87,7 +87,8 @@ public class BookingServiceImpl implements BookingService {
             response.setTimeBooking(booking.getBookingTime());
             response.setId(booking.getId());
             List<Ticket> tickets = booking.getTickets();
-            response.setTickets(tickets);
+            List<TicketResponse> ticketResponseList = TicketResponse.converToTicketResponse(tickets);
+            response.setTickets(ticketResponseList);
             Film film = tickets.get(0).getSchedule().getFilm();
             FilmResponse filmResponse = filmMapper.toFilmResponse(film);
             response.setFilmResponse(filmResponse);
@@ -97,9 +98,9 @@ public class BookingServiceImpl implements BookingService {
             response.setTotalPrice(totalPaid);
 
             ApiResponse<RatingDtoRepsonse> apiResponse = reviewClient.checkUserRatingInAFilm(user.getId(), film.getId());
-            if (apiResponse != null && apiResponse.getData() != null) {
+            if (apiResponse.getData() != null){
                 RatingDtoRepsonse ratingDtoRepsonse = apiResponse.getData();
-                response.setRated(ratingDtoRepsonse != null);
+                response.setRated(true);
                 response.setRatingDtoRepsonse(ratingDtoRepsonse);
             } else {
                 response.setRated(false);
