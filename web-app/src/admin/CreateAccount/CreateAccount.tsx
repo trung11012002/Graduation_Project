@@ -26,7 +26,7 @@ const CreateAccount = () => {
       ...values
     }
     const res = await createAcount(req)
-    if(res?.code === 200) {
+    if(res?.code === 1000) {
       success("Tạo thành công")
       navigate("/super-admin/admin-accounts")
     }

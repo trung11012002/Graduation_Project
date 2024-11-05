@@ -35,8 +35,8 @@ public class UserResponse {
     @JsonIgnore
     private Role role;
 
-    @JsonIgnore
-    private Cinema managedCinema;
+//    @JsonIgnore
+    private CinemaResponse managedCinema;
 
     private LocalDateTime createdAt;
 

@@ -61,6 +61,7 @@ export const AuthContext: React.FC<IAuthContext> = ({ children }) => {
             }
             else {
                 localStorage.removeItem("tokenAccess");
+                navigate('/login');
             }
         }
     };
