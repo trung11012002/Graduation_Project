@@ -82,7 +82,7 @@ public class AuthenticationService implements IAuthenticationService {
     @Value("${timeDeleteTokenInvalid}")
     protected long TIME_DELETE_TOKEN_INVALID;
 
-    public AuthenticationResponse authencticate(AuthenticationResquest resquest) {
+    public LoginResponse authencticate(AuthenticationResquest resquest) {
         User user = userRepository.findByUsername(resquest.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
@@ -96,12 +96,24 @@ public class AuthenticationService implements IAuthenticationService {
         var tokenAccess = generateAccessToken(user);
         var tokenRefresh = generateRefreshToken(user);
 
-        return AuthenticationResponse.builder()
-                .tokenAccess(tokenAccess)
-                .tokenRefresh(tokenRefresh)
-                .authenticated(true)
-                .role(role)
-                .build();
+        LoginResponse response = new LoginResponse();
+        response.setId(user.getId());
+        response.setUsername(user.getUsername());
+        response.setPassword(user.getPassword() != null ? user.getPassword() : null);
+        response.setFullname(user.getFullname() != null ? user.getFullname() : null);
+        response.setDateOfBirth(user.getDateOfBirth() != null ? user.getDateOfBirth() : null);
+        response.setAddress(user.getAddress() != null ? user.getAddress() : null);
+        response.setEmail(user.getEmail());
+        response.setPhone(user.getPhone() != null ? user.getPhone() : null);
+        response.setBlocked(user.isBlocked());
+
+        RoleResponse roleResponse = new RoleResponse();
+        roleResponse.setName(role);
+
+        response.setRole(roleResponse);
+        response.setToken(tokenAccess);
+        response.setRefreshToken(null);
+        return response;
     }
 
     @Override
@@ -185,6 +197,9 @@ public class AuthenticationService implements IAuthenticationService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
+        // role
+        String role = user.getRole().getName().toUpperCase();
+
         LoginResponse response = new LoginResponse();
         response.setId(user.getId());
         response.setUsername(user.getUsername());
@@ -197,7 +212,7 @@ public class AuthenticationService implements IAuthenticationService {
         response.setBlocked(user.isBlocked());
 
         RoleResponse roleResponse = new RoleResponse();
-        roleResponse.setName(user.getRole().getName());
+        roleResponse.setName(role);
 
         response.setRole(roleResponse);
         response.setToken(token);

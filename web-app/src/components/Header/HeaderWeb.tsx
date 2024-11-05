@@ -2,20 +2,19 @@ import {useContext, useEffect, useState} from 'react';
 import './Header.css';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {AuthContextProvider} from '../../contexts/AuthContext';
-import {Button, Dropdown, Menu, Modal, Space} from 'antd';
+import {Button, Dropdown, Menu, message, Modal, Space} from 'antd';
 import Avatar from '../Avatar/Avatar';
 import {CloseOutlined, ExclamationCircleFilled} from '@ant-design/icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faBell} from '@fortawesome/free-regular-svg-icons';
-import Stomp from 'stompjs';
+import {WebSocketContext} from "../../contexts/WebSocketContext";
+import Stomp from "stompjs";
 import SockJS from 'sockjs-client';
-import {Client} from '@stomp/stompjs';
+import Notification from "./Notification";
 
 const {confirm} = Modal;
 
 
-let socket = new SockJS('http://localhost:8088/notification-service/ws');
-let stompClient = Stomp.over(socket);
 const HeaderWeb = () => {
     const [urlCurrent, setUrlCurrent] = useState<string>('');
     const [notifications, setNotifications] = useState<string[]>([]); // Danh sách thông báo
@@ -24,6 +23,10 @@ const HeaderWeb = () => {
     const auth = useContext(AuthContextProvider);
     const user = auth?.userState;
     const navigate = useNavigate();
+    const username = user?.user?.username;
+    // const websocket = useContext(WebSocketContext);
+    // const stompClientGlobal = websocket?.stompClientGlobal;
+    // const stompClientUser = websocket?.stompClientUser;
 
     const navigateLoginForm = (e: any) => {
         e.preventDefault();
@@ -43,6 +46,7 @@ const HeaderWeb = () => {
             },
         });
     };
+    console.log(user);
 
     const notificationItems = notifications.map((notification, index) => ({
         key: index.toString(),
@@ -59,96 +63,43 @@ const HeaderWeb = () => {
         setNotifications(['Thông báo 1', 'Thông báo 2', 'Thông báo 3']);
     }, [location]);
 
-    function sleep(ms: any) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+
+
+    // stompClientGlobal.connect({}, (frame: any) => {
+    //     // Subscribe to a topic
+    //     stompClientGlobal.subscribe('/notification-global', receiveMessage(message));
+    //     // Send a message to the topic
+    //     // stompClientGlobal.send('/app/notification-global', {}, JSON.stringify({
+    //     //     content: 'Hello World',
+    //     //     sender: 'me'
+    //     // }));
+    // });
+    const notificationsFromParent: string[] = [];
+    function receiveMessage(message: any) {
+        const messageBody = JSON.parse(message.body);
+        notificationsFromParent.push(messageBody.content);
+        // setNotifications([...notifications, messageBody.content]);
     }
-
-
-    //lib-v1
-    let stompClient1 = Stomp.over(socket);
-    let stompClient2 = Stomp.over(socket);
-
-    useEffect(() => {
-        socket = new SockJS('http://localhost:8088/notification-service/ws');
-        stompClient1 = Stomp.over(socket);
-        stompClient1.connect({}, (frame: any) => {
-            console.log('Connected: ' + frame);
-
-            // Subscribe to a topic
-            stompClient1.subscribe('/notification-global', (message) => {
-                console.log('Received message:', message.body);
-            });
-
-
-            // Gửi tin nhắn
-            stompClient1.send('/app/notification-global', {}, JSON.stringify({content: 'Hello World', sender: 'me'}));
-        });
-        socket = new SockJS('http://localhost:8088/notification-service/ws');
-        stompClient2 = Stomp.over(socket);
-        stompClient2.connect({ username: "test" }, (frame: any) => {
-            console.log('Connected: ' + frame);
-
-            // Subscribe to a topic
-            stompClient2.subscribe('/users/notification-user/messages', (message) => {
-                console.log('Received message:', message.body);
-            });
-
-        });
-        // Cleanup khi component bị hủy
-        return () => {
-            stompClient.disconnect(() => {
-            });
-        };
-    }, []);
-
-    function onMessageReceived(payload: any) {
-        console.log("okok");
-        console.log(payload);
-
-        if (payload._binaryBody) {
-            // Chuyển đổi _binaryBody thành chuỗi JSON
-            const bodyArray = new Uint8Array(Object.values(payload._binaryBody));
-            const jsonString = String.fromCharCode(...Array.from(bodyArray));
-
-            try {
-                const jsonObject = JSON.parse(jsonString);
-                console.log("Parsed JSON Body:", jsonObject);
-                console.log(jsonObject.content);
-            } catch (error) {
-                console.error("Failed to parse JSON:", error);
-            }
-        } else {
-            console.warn("No binary body found in payload");
-        }
-    }
-
-    function sendMessage() {
-
-        var chatMessage = {
-            sender: "trung",
-            content: "trung123"
-        };
-        stompClient1.send('/app/chat.sendMessage', {}, JSON.stringify({content: 'Hello World 1', sender: 'me'}));
-        stompClient2.send('/app/hello', {}, JSON.stringify({content: 'Hello World 2', sender: 'me'}));
-    }
-
-
-    const handleSendMessage = () => {
-        sendMessage();
-    }
+    // function sendMessage() {
+    //
+    //     var chatMessage = {
+    //         sender: "trung",
+    //         content: "trung123"
+    //     };
+    //     stompClient1.send('/app/chat.sendMessage', {}, JSON.stringify({content: 'Hello World 1', sender: 'me'}));
+    //     stompClient2.send('/app/hello', {}, JSON.stringify({content: 'Hello World 2', sender: 'me'}));
+    // }
 
     return (
         <div className='header'>
-            <div className='logo' onClick={handleSendMessage}>FILM BOOKING</div>
+            <div className='logo'>FILM BOOKING</div>
             <div className='header-right'>
                 {user?.isLogin ? (
                     <div
                         style={{fontSize: '1.2rem', display: 'flex', alignItems: 'center'}}
                         className='auth'
                     >
-                        <Dropdown overlay={notificationMenu} trigger={['click']}>
-                            <FontAwesomeIcon icon={faBell} size='2x' style={{cursor: 'pointer', marginRight: '15px'}}/>
-                        </Dropdown>
+                        <Notification></Notification>
 
                         <Link to='/' className={`${urlCurrent === '' ? 'bottomCurrent' : ''}`}>
                             <span>Trang chủ</span>

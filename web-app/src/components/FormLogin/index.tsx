@@ -28,16 +28,15 @@ const Form = () => {
         e.preventDefault();
 
         const res = await login(data)
-        console.log(res)
-        // console.log(res?.data)
         if (res?.code === 1000) {
+            localStorage.setItem('websocketConnected', "false");
             setUserState?.({
                 isLogin: true,
                 user: res.data,
-                tokenAccess: res.data.tokenAccess,
+                tokenAccess: res.data.token,
                 tokenRefresh: res.data.tokenRefresh
             })
-            localStorage.setItem('tokenAccess', res.data.tokenAccess)
+            localStorage.setItem('tokenAccess', res.data.token)
             localStorage.setItem('tokenRefresh', res.data.tokenRefresh)
             auth?.autoLogin();
             success("Đăng nhập thành công")

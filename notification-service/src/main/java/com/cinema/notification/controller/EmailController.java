@@ -74,7 +74,7 @@ public class EmailController {
                 .content(message)
                 .sender("System")
                 .build();
-        messagingTemplate.convertAndSendToUser("test", "/notification-user/messages", notifyMessage);
+        messagingTemplate.convertAndSendToUser(message, "/notification-user/messages", notifyMessage);
         return "Thông báo toàn hệ thống đã được gửi: " + message;
     }
 
