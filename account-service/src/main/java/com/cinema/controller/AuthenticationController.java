@@ -30,9 +30,9 @@ public class AuthenticationController {
     IAuthenticationService authenticationService;
 
     @PostMapping("/signin")
-    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationResquest resquest) {
+    ApiResponse<LoginResponse> authenticate(@RequestBody AuthenticationResquest resquest) {
         var result = authenticationService.authencticate(resquest);
-        return ApiResponse.<AuthenticationResponse>builder()
+        return ApiResponse.<LoginResponse>builder()
                 .data(result)
                 .code(1000)
                 .build();

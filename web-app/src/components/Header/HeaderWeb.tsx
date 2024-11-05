@@ -1,115 +1,151 @@
-import { useContext, useEffect, useState } from 'react';
+import {useContext, useEffect, useState} from 'react';
 import './Header.css';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AuthContextProvider } from '../../contexts/AuthContext';
-import { Button, Dropdown, MenuProps, Modal, Space } from 'antd';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {AuthContextProvider} from '../../contexts/AuthContext';
+import {Button, Dropdown, Menu, message, Modal, Space} from 'antd';
 import Avatar from '../Avatar/Avatar';
-import { CloseOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import {CloseOutlined, ExclamationCircleFilled} from '@ant-design/icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faBell} from '@fortawesome/free-regular-svg-icons';
+import {WebSocketContext} from "../../contexts/WebSocketContext";
+import Stomp from "stompjs";
+import SockJS from 'sockjs-client';
+import Notification from "./Notification";
 
-const { confirm } = Modal;
+const {confirm} = Modal;
+
 
 const HeaderWeb = () => {
+    const [urlCurrent, setUrlCurrent] = useState<string>('');
+    const [notifications, setNotifications] = useState<string[]>([]); // Danh sách thông báo
+    const location = useLocation();
 
-  const [urlCurrent, setUrlCurrent] = useState<string>('')
-  const location = useLocation()
+    const auth = useContext(AuthContextProvider);
+    const user = auth?.userState;
+    const navigate = useNavigate();
+    const username = user?.user?.username;
+    // const websocket = useContext(WebSocketContext);
+    // const stompClientGlobal = websocket?.stompClientGlobal;
+    // const stompClientUser = websocket?.stompClientUser;
 
-  const auth = useContext(AuthContextProvider)
-  const user = auth?.userState
-  const navigate = useNavigate();
+    const navigateLoginForm = (e: any) => {
+        e.preventDefault();
+        navigate('/login');
+    };
 
-  const navigateLoginForm = (e: any) => {
-    e.preventDefault();
-    navigate('/login')
-  };
+    const showLogoutModal = () => {
+        confirm({
+            title: 'Bạn có chắc chắn đăng xuất?',
+            icon: <ExclamationCircleFilled/>,
+            okText: 'Đăng xuất',
+            closeIcon: <CloseOutlined/>,
+            cancelText: 'Ở lại',
+            onOk() {
+                auth?.logout();
+                navigate('/login');
+            },
+        });
+    };
+    console.log(user);
 
-  const showLogoutModal = () => {
-    confirm({
-      title: "Bạn có chắc chắn đăng xuất???",
-      icon: <ExclamationCircleFilled />,
-      okText: "Đăng xuất",
-      // okType: 'danger',
-      closeIcon: <CloseOutlined />,
-      cancelText: "Ở lại",
-      onOk() {
-        auth?.logout()
-        navigate('/login')
-      },
-      onCancel() { },
-    });
-  };
+    const notificationItems = notifications.map((notification, index) => ({
+        key: index.toString(),
+        label: <span>{notification}</span>,
+    }));
+
+    const notificationMenu = <Menu items={notificationItems}/>;
+
+    useEffect(() => {
+        const checkUrl = location.pathname.split('/')[1];
+        setUrlCurrent(checkUrl);
+
+        // Ví dụ: Fetch thông báo từ server
+        setNotifications(['Thông báo 1', 'Thông báo 2', 'Thông báo 3']);
+    }, [location]);
 
 
-  const items: MenuProps['items'] = [
-    {
-      key: '1',
-      label: (
-        <Link to="/update-information">{`Thông tin cá nhân -->`}</Link>
-      ),
-    },
-    {
-      key: '2',
-      label: (
-        <Link to="/booking-history">{`Lịch sử đặt vé -->`}</Link>
-      ),
-    },
-    {
-      key: '3',
-      label: (
-        <Button onClick={showLogoutModal}>Đăng xuất</Button>
-      ),
-    },
-  ];
 
-  useEffect(() => {
-    const checkUrl = location.pathname.split("/")[1]
-    setUrlCurrent(checkUrl)
-  }, [location])
+    // stompClientGlobal.connect({}, (frame: any) => {
+    //     // Subscribe to a topic
+    //     stompClientGlobal.subscribe('/notification-global', receiveMessage(message));
+    //     // Send a message to the topic
+    //     // stompClientGlobal.send('/app/notification-global', {}, JSON.stringify({
+    //     //     content: 'Hello World',
+    //     //     sender: 'me'
+    //     // }));
+    // });
+    const notificationsFromParent: string[] = [];
+    function receiveMessage(message: any) {
+        const messageBody = JSON.parse(message.body);
+        notificationsFromParent.push(messageBody.content);
+        // setNotifications([...notifications, messageBody.content]);
+    }
+    // function sendMessage() {
+    //
+    //     var chatMessage = {
+    //         sender: "trung",
+    //         content: "trung123"
+    //     };
+    //     stompClient1.send('/app/chat.sendMessage', {}, JSON.stringify({content: 'Hello World 1', sender: 'me'}));
+    //     stompClient2.send('/app/hello', {}, JSON.stringify({content: 'Hello World 2', sender: 'me'}));
+    // }
 
-  return (
-    <div className='header'>
-      <div className='logo'>FILM BOOKING</div>
-      <div className='header-right'>
-        <div className='option_main'>
+    return (
+        <div className='header'>
+            <div className='logo'>FILM BOOKING</div>
+            <div className='header-right'>
+                {user?.isLogin ? (
+                    <div
+                        style={{fontSize: '1.2rem', display: 'flex', alignItems: 'center'}}
+                        className='auth'
+                    >
+                        <Notification></Notification>
 
+                        <Link to='/' className={`${urlCurrent === '' ? 'bottomCurrent' : ''}`}>
+                            <span>Trang chủ</span>
+                        </Link>
+                        <Link to='/showtimes' className={`${urlCurrent === 'showtimes' ? 'bottomCurrent' : ''}`}>
+                            <span>Lịch chiếu</span>
+                        </Link>
+                        <Link to='/movie-list' className={`${urlCurrent === 'movie-list' ? 'bottomCurrent' : ''}`}>
+                            <span>Phim chiếu</span>
+                        </Link>
+
+                        <p className='name_header'>Xin chào {user.user?.username}</p>
+
+                        <Dropdown
+                            menu={{
+                                items: [
+                                    {key: '1', label: <Link to='/update-information'>Thông tin cá nhân</Link>},
+                                    {key: '2', label: <Link to='/booking-history'>Lịch sử đặt vé</Link>},
+                                    {key: '3', label: <Button onClick={showLogoutModal}>Đăng xuất</Button>}
+                                ]
+                            }}
+                            trigger={['click']}
+                        >
+                            <Space style={{cursor: 'pointer'}}>
+                                <Avatar width='50px'/>
+                            </Space>
+                        </Dropdown>
+                    </div>
+                ) : (
+                    <div className='auth'>
+                        <Link to='/' className={`${urlCurrent === '' ? 'bottomCurrent' : ''}`}>
+                            <span>Trang chủ</span>
+                        </Link>
+                        <Link to='/showtimes' className={`${urlCurrent === 'showtimes' ? 'bottomCurrent' : ''}`}>
+                            <span>Lịch chiếu</span>
+                        </Link>
+                        <Link to='/movie-list' className={`${urlCurrent === 'movie-list' ? 'bottomCurrent' : ''}`}>
+                            <span>Phim chiếu</span>
+                        </Link>
+                        <button onClick={navigateLoginForm}>Đăng nhập</button>
+                        <button onClick={() => navigate('/register')}>Đăng ký</button>
+                    </div>
+                )}
+            </div>
         </div>
+    );
+};
 
-        {user?.isLogin ?
-          <div
-            style={{ fontSize: '1.2rem', display: "flex", alignItems: 'center' }}
-            className='auth'
-          >
-
-            <Link to="/" className={`${urlCurrent === "" ? "bottomCurrent" : ""}`}><span>Trang chủ</span></Link>
-            <Link to="/showtimes" className={`${urlCurrent === "showtimes" ? "bottomCurrent" : ""}`}><span>Lịch chiếu</span></Link>
-            <Link to="/movie-list" className={`${urlCurrent === "movie-list" ? "bottomCurrent" : ""}`}><span>Phim chiếu</span></Link>
-
-            <p className='name_header'> Xin chào {user.user?.username}</p>
-
-            <Dropdown
-              menu={{ items }}
-              trigger={["click"]}
-            >
-              <Space style={{cursor:"pointer"}}>
-                <Avatar width='50px' />
-              </Space>
-            </Dropdown>
-          </div>
-          :
-          <div className='auth'>
-
-            <Link to="/" className={`${urlCurrent === "" ? "bottomCurrent" : ""}`}><span>Trang chủ</span></Link>
-            <Link to="/showtimes" className={`${urlCurrent === "showtimes" ? "bottomCurrent" : ""}`}><span>Lịch chiếu</span></Link>
-            <Link to="/movie-list" className={`${urlCurrent === "movie-list" ? "bottomCurrent" : ""}`}><span>Phim chiếu</span></Link>
-
-
-            <button onClick={navigateLoginForm}>Đăng nhập</button>
-            <button onClick={() => {navigate("/register")}}>Đăng ký</button>
-          </div>
-        }
-
-      </div>
-    </div>
-  )
-}
-
-export default HeaderWeb
+export default HeaderWeb;

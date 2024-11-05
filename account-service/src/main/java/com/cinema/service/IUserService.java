@@ -1,5 +1,6 @@
 package com.cinema.service;
 
+import com.cinema.dto.request.RegisterRequest;
 import com.cinema.dto.response.UserResponse;
 
 import java.util.List;
@@ -16,19 +17,19 @@ public interface IUserService {
 //
 //    Result loginByGoogle(RegisterDto dto);
 //
-//    Result register(RegisterDto dto, boolean isAdmin);
+    UserResponse register(RegisterRequest request, boolean isAdmin);
 //
 //    Result verifyToken(String token);
 //
 //    Result changePassword(Integer userId, String oldPassword, String newPassword);
 //
-//    Result changeUserStatus(Integer id);
+    UserResponse changeUserStatus(Integer id);
 //
 //    Result unBlockUser(Integer id);
 //
-//    Result findAllCustomerAccount();
+    List<UserResponse> findAllCustomerAccount();
 
-//    Result findAllAdminAccount();
+    List<UserResponse> findAllAdminAccount();
 
     List<UserResponse> findAllAdminAccountWithoutCinema();
 

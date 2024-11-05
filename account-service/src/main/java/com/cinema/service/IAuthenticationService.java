@@ -10,7 +10,7 @@ import com.cinema.dto.response.LoginResponse;
 import com.cinema.dto.response.UserResponse;
 
 public interface IAuthenticationService {
-    AuthenticationResponse authencticate(AuthenticationResquest resquest);
+    LoginResponse authencticate(AuthenticationResquest resquest);
 
     IntrospectResponse introspect(IntrospectRequest request);
     void logout(LogoutRequest request);

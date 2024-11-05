@@ -1,11 +1,11 @@
 import { callApi } from "./callAPI"
 
 export const findAllAdminAccount = async () => {
-    return await callApi<any>("account-service/api/v1/user/admins", "get")
+    return await callApi<any>("account-service/user/admins", "get")
 }
 
 export const findAllCustomersAccount = async () => {
-    return await callApi<any>("account-service/api/v1/user/customers", "get")
+    return await callApi<any>("account-service/user/customers", "get")
 }
 
 export const createAcount = async (
@@ -19,7 +19,7 @@ export const createAcount = async (
         phone: string,
     }
 ) => {
-    return await callApi<any>(`account-service/api/v1/sp-admin/create-admin-account`, "post", data)
+    return await callApi<any>(`account-service/sp-admin/create-admin-account`, "post", data)
 }
 
 export const findAllAdminAccountWithoutCinema = async () => {
@@ -69,5 +69,5 @@ export const changeStatus = async (
         id: number
     }
 ) => {
-    return await callApi<any>(`account-service/api/v1/sp-admin/change-status?id=${data.id}`, "post")
+    return await callApi<any>(`account-service/sp-admin/change-status?id=${data.id}`, "post")
 }

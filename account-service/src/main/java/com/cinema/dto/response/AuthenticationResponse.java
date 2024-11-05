@@ -17,4 +17,5 @@ public class AuthenticationResponse {
     String tokenAccess;
     String tokenRefresh;
     String role;
+    String username;
 }

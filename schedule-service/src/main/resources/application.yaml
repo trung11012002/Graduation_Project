@@ -8,7 +8,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/cinema_online
     username: ${DBMS_USERNAME:root}
-    password: ${DBMS_PASSWORD:12345}
+    password: ${DBMS_PASSWORD:123456}
     driver-class-name: com.mysql.cj.jdbc.Driver
     jpa:
       hibernate:

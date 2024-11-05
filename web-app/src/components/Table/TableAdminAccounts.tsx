@@ -18,7 +18,7 @@ const TableAdminAccounts: React.FC<ITableRoom> = ({ dataSource, getAccount }) =>
 
     const change = async(id: number) => {
         const res = await changeStatus({id: id})
-        if(res?.code === 200) {
+        if(res?.code === 1000) {
             getAccount()
             success("Cập nhập trạng thái thành công")
         }

@@ -24,6 +24,9 @@ import java.text.ParseException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
+            "/**",
+            "/notification-global/**",
+            "/app/notification-global/**",
     };
 
     @Autowired

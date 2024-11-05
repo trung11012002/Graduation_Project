@@ -45,8 +45,6 @@ export const callApi = async <T>(
 
         const response: AxiosResponse<ApiCallResponse<T>> = await axios(requestData);
 
-        console.log(response.data);
-
 
         return response.data;
 
@@ -61,6 +59,6 @@ export const callApi = async <T>(
         } else {
             console.error('Error Message:', error.message);
         }
-        return error.response; // Có thể trả về undefined nếu response không tồn tại
+        return error.response.data; // Có thể trả về undefined nếu response không tồn tại
     }
 };

@@ -26,6 +26,7 @@ public enum ErrorCode {
     MY_REQUEST_NOT_EXISTED(1017, "My request not existed", HttpStatus.BAD_REQUEST),
     USERNAME_INVALID_REGISTER(1018, "Username invalid", HttpStatus.BAD_REQUEST),
     EMAIL_EXISTED(1019, "Email existed", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(1020, "User not found", HttpStatus.BAD_REQUEST),
     ;
 
     private int code;

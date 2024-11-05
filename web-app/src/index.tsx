@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import {WebSocketProvider} from "./contexts/WebSocketContext";
 // import App from './AppTest';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
@@ -11,9 +12,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   //<React.StrictMode>
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+    <BrowserRouter>
+        <WebSocketProvider>
+            <App />
+        </WebSocketProvider>
+    </BrowserRouter>
   //</React.StrictMode>
 );
 

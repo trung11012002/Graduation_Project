@@ -1,8 +1,12 @@
 package com.cinema.service.impl;
 
+import com.cinema.dto.request.RegisterRequest;
 import com.cinema.dto.response.UserResponse;
+import com.cinema.entity.Role;
 import com.cinema.entity.User;
 import com.cinema.enums.RoleEnums;
+import com.cinema.exception.AppException;
+import com.cinema.exception.ErrorCode;
 import com.cinema.mapper.UserMapper;
 import com.cinema.repository.CinemaRepository;
 import com.cinema.repository.RoleRepository;
@@ -10,10 +14,12 @@ import com.cinema.repository.UserRepository;
 import com.cinema.service.IUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
@@ -31,6 +37,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
 //    @Autowired
@@ -96,22 +105,27 @@ public class UserService implements IUserService {
 //        return response;
 //    }
 //
-//    @Override
-//    public Result register(RegisterDto dto, boolean isAdmin) {
+    @Override
+    public UserResponse register(RegisterRequest request, boolean isAdmin) {
 //        String error = errorUsername(dto.getUsername());
 //        if (error != null)
 //            return Result.fail(error);
+
 //        boolean isValid = validateEmail(dto.getEmail());
 //        if (!isValid)
 //            return Result.fail("Email đã được sử dụng");
-//        User user = mapper.convertValue(dto, User.class);
-//        Role role = isAdmin? roleRepository.findById(RoleEnums.ADMIN.getCode()).get() : roleRepository.findById(RoleEnums.CUSTOMER.getCode()).get();
-//        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-//        user.setRole(role);
-//        userRepository.save(user);
-////        emailSenderService.sendMailRegister(dto.getEmail(), dto.getUsername(), dto.getPassword());
-//        return new Result(200, "Success", user);
-//    }
+        //check user exist
+        if (userRepository.existsByUsername(request.getUsername()))
+            throw new AppException(ErrorCode.USER_EXISTED);
+        User user = userMapper.toUser(request);
+
+        Role role = isAdmin? roleRepository.findById(RoleEnums.ADMIN.getCode()).get() : roleRepository.findById(RoleEnums.CUSTOMER.getCode()).get();
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(role);
+        userRepository.save(user);
+//        emailSenderService.sendMailRegister(dto.getEmail(), dto.getUsername(), dto.getPassword());
+        return userMapper.toUserResponse(user);
+    }
 //
 //    @Override
 //    public Result loginByGoogle(RegisterDto dto) {
@@ -158,20 +172,20 @@ public class UserService implements IUserService {
 //        return Result.success("Success", response);
 //    }
 //
-//    @Override
-//    public Result changeUserStatus(Integer id) {
-//        Optional<User> op = userRepository.findById(id);
-//        if (!op.isPresent())
-//            return Result.fail("Người dùng không tồn tại!");
-//        else {
-//            User user = op.get();
-//            boolean status = user.isBlocked();
-//            user.setBlocked(!status);
-//            userRepository.save(user);
-//            return new Result(200, "Success", user);
-//        }
-//    }
-//
+    @Override
+    public UserResponse changeUserStatus(Integer id) {
+        Optional<User> op = userRepository.findById(id);
+        if (!op.isPresent())
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        else {
+            User user = op.get();
+            boolean status = user.isBlocked();
+            user.setBlocked(!status);
+            userRepository.save(user);
+            return userMapper.toUserResponse(user);
+        }
+    }
+
 //    @Override
 //    public Result unBlockUser(Integer id) {
 //        Optional<User> op = userRepository.findById(id);
@@ -185,29 +199,19 @@ public class UserService implements IUserService {
 //        }
 //    }
 //
-//    @Override
-//    public Result findAllCustomerAccount() {
-//        List<User> users = userRepository.findAllByRoleId(RoleEnums.CUSTOMER.getCode());
-//        return Result.success("Success", users);
-//    }
-//
-//    @Override
-//    public Result findAllAdminAccount() {
-//
-//        List<User> users = userRepository.findAllByRoleId(RoleEnums.ADMIN.getCode());
-//        List<AdminAccountResponse> responses = new ArrayList<>();
-//
-//        for (User user: users) {
-//            AdminAccountResponse response = new AdminAccountResponse();
-//            response.setUser(user);
-//            Optional<Cinema> optional = cinemaRepository.findByAdmin(user);
-//            optional.ifPresent(response::setCinema);
-//            responses.add(response);
-//        }
-//
-//        return Result.success("Success", responses);
-//    }
-//
+    @Override
+    public List<UserResponse> findAllCustomerAccount() {
+        List<User> users = userRepository.findAllByRoleId(RoleEnums.CUSTOMER.getCode());
+        return userMapper.toUserResponses(users);
+    }
+
+    @Override
+    public List<UserResponse> findAllAdminAccount() {
+        List<User> users = userRepository.findAllByRoleId(RoleEnums.ADMIN.getCode());
+
+        return userMapper.toUserResponses(users);
+    }
+
     @Override
     public List<UserResponse> findAllAdminAccountWithoutCinema() {
         List<User> users = userRepository.findAllByRoleId(RoleEnums.ADMIN.getCode());
@@ -256,7 +260,7 @@ public class UserService implements IUserService {
 //            return false;
 //        return true;
 //    }
-//
+
 //    @Override
 //    public Result changePassword(Integer userId, String oldPassword, String newPassword) {
 //        Optional<User> op = userRepository.findById(userId);

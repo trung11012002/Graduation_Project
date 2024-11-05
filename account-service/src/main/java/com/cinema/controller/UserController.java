@@ -18,15 +18,21 @@ public class UserController {
 //    @Autowired
 //    private JwtUtils jwtUtils;
 //
-//    @GetMapping("/customers")
-//    public Result findAllCustomerAccount() {
-//        return userService.findAllCustomerAccount();
-//    }
-//
-//    @GetMapping("/admins")
-//    public Result findAllAdminAccount() {
-//        return userService.findAllAdminAccount();
-//    }
+    @GetMapping("/customers")
+    public ApiResponse<List<UserResponse>> findAllCustomerAccount() {
+        return ApiResponse.<List<UserResponse>>builder()
+                .data(userService.findAllCustomerAccount())
+                .code(1000)
+                .build();
+    }
+
+    @GetMapping("/admins")
+    public ApiResponse<List<UserResponse>> findAllAdminAccount() {
+        return ApiResponse.<List<UserResponse>>builder()
+                .data(userService.findAllAdminAccount())
+                .code(1000)
+                .build();
+    }
 
     @GetMapping("/available-admins")
     public ApiResponse<List<UserResponse>> findAllAdminAccountWithoutCinema() {
