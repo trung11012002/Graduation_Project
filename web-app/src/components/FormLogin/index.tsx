@@ -48,7 +48,7 @@ const Form = () => {
                     :
                     navigate('/')
         }else{
-            error(res?.data.msg)
+            error(res?.msg)
         }
     };
 
