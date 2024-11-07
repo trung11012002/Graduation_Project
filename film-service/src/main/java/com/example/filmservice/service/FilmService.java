@@ -23,7 +23,7 @@ public interface FilmService {
 
     ApiResponse deleteFilmById(Integer id);
     ApiResponse getFilmById(Integer id);
-    ApiResponse searchFilm(String keyword);
+    ApiResponse<ListFilmResponse> searchFilm(String keyword,int page, int size);
     FilmResponse updateScore(Integer filmId);
 
 }

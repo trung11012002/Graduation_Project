@@ -74,6 +74,8 @@ export const rateMovie = async(
 export const getMoviesByName = async(
     data: {
         name: string
+        page: number
+        perPage: number
     }
 ) => {
     return await callApi<any>(`film-service/films/search-film-by-name`, "get", data)
