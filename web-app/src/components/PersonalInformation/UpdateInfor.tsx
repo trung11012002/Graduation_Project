@@ -49,7 +49,7 @@ const UpdateInfor = () => {
         };
         try {
             const res = await editAcount(data)
-            if (res?.code === 200) {
+            if (res?.code === 1000) {
                 success("Thay đổi thông tin thành công")
                 setUserState?.({
                     isLogin: true,
@@ -78,14 +78,14 @@ const UpdateInfor = () => {
             };
             try {
                 const res = await changePassword(data)
-                if (res?.code === 200) {
+                if (res?.code === 1000) {
                     navigate("/login")
-                    success("Thay đổi mật khẩu thành công");
+                    success(res.msg);
                 } else {
                     warning(res?.msg)
                 }
             } catch (error: any) {
-                error(error?.message);
+                error(error?.msg);
             }
         }
     };

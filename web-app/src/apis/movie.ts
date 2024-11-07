@@ -76,7 +76,7 @@ export const getMoviesByName = async(
         name: string
     }
 ) => {
-    return await callApi<any>(`film-service/api/v1/film/search-film-by-name`, "get", data)
+    return await callApi<any>(`film-service/films/search-film-by-name`, "get", data)
 }
 
 // @GetMapping("/films")

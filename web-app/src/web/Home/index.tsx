@@ -24,7 +24,7 @@ const Web = () => {
         name: name
       }
       const res = await getMoviesByName(data)
-      if (res?.code === 200) {
+      if (res?.code === 1000) {
         if (res.data.length) {
           setMovies(res.data)
           success("phim đã được tìm thấy")

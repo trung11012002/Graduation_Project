@@ -1,6 +1,9 @@
 package com.cinema.service;
 
+import com.cinema.dto.request.ProfileEditRequest;
 import com.cinema.dto.request.RegisterRequest;
+import com.cinema.dto.response.ApiResponse;
+import com.cinema.dto.response.LoginResponse;
 import com.cinema.dto.response.UserResponse;
 
 import java.util.List;
@@ -11,7 +14,7 @@ public interface IUserService {
 //
 //    User findByEmail(String email);
 //
-//    Result editProfile(ProfileDto dto);
+    LoginResponse editProfile(ProfileEditRequest dto);
 //
 //    LoginResponse convertToLoginResp(User user, String token);
 //
@@ -21,7 +24,7 @@ public interface IUserService {
 //
 //    Result verifyToken(String token);
 //
-//    Result changePassword(Integer userId, String oldPassword, String newPassword);
+    ApiResponse<LoginResponse> changePassword(Integer userId, String oldPassword, String newPassword);
 //
     UserResponse changeUserStatus(Integer id);
 //
@@ -32,6 +35,7 @@ public interface IUserService {
     List<UserResponse> findAllAdminAccount();
 
     List<UserResponse> findAllAdminAccountWithoutCinema();
+
 
 //    Result forgotPassword(String email);
 }

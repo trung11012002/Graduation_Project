@@ -18,7 +18,7 @@ public class ScheduleController {
     public ApiResponse<ScheduleCreateResponse> scheduleCreate(@RequestHeader(value = "Authorization") String token,
                                                            @RequestBody ScheduleDto scheduleDto) {
         return  ApiResponse.<ScheduleCreateResponse>builder()
-                .code(200)
+                .code(1000)
                 .msg("Success")
                 .data(scheduleService.createSchedule(scheduleDto))
                 .build();
@@ -43,7 +43,7 @@ public class ScheduleController {
     public ApiResponse deleteSchedule(@RequestParam Integer scheduleId) {
         scheduleService.deleteSchedule(scheduleId);
         return ApiResponse.builder()
-                .code(200)
+                .code(1000)
                 .msg("Delete success with scheduleId: " + scheduleId)
                 .build();
     }

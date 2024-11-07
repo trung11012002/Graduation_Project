@@ -91,7 +91,7 @@ export const deleteSchedule = async(
         scheduleId: number
     }
 ) => {
-    return await callApi<any>(`schedule-service/api/v1/schedule/delete?scheduleId=${data.scheduleId}`, "post")
+    return await callApi<any>(`schedule-service/schedule/delete?scheduleId=${data.scheduleId}`, "delete")
 }
 
 // schedule-service/api/v1/schedule/get-by-id

@@ -1,6 +1,8 @@
 package com.cinema.controller;
 
+import com.cinema.dto.request.ProfileEditRequest;
 import com.cinema.dto.response.ApiResponse;
+import com.cinema.dto.response.LoginResponse;
 import com.cinema.dto.response.UserResponse;
 import com.cinema.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +44,23 @@ public class UserController {
                 .build();
     }
 
-//    @PostMapping("/edit-profile")
-//    public Result editProfile(@RequestBody ProfileDto dto) {
-//        return userService.editProfile(dto);
+    @PostMapping("/edit-profile")
+    public ApiResponse<LoginResponse> editProfile(@RequestBody ProfileEditRequest dto) {
+        return ApiResponse.<LoginResponse>builder()
+                .data(userService.editProfile(dto))
+                .code(1000)
+                .build();
+    }
+    @GetMapping("/change-password")
+    public ApiResponse change_password(@RequestParam Integer userId,
+                         @RequestParam String oldPassword,
+                         @RequestParam String newPassword) {
+
+        return userService.changePassword(userId, oldPassword, newPassword);
+    }
+
+//    @PostMapping("/forgot-password")
+//    public Result forgotPassword(@RequestBody String email) {
+//        return userService.forgotPassword(email);
 //    }
 }
