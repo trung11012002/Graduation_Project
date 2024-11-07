@@ -280,23 +280,28 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public ApiResponse searchFilm(String name) {
+    public ApiResponse<ListFilmResponse> searchFilm(String name, int page, int size) {
         if (name == null) {
-            return ApiResponse.<FilmResponse>builder()
+            return ApiResponse.<ListFilmResponse>builder()
                     .code(1001)
                     .msg("Tên phim không được để trống")
                     .build();
         }
-        List<Film> films = filmRepository.searchByName(name);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Film> films = filmRepository.searchByName(name,pageable);
+        List<FilmResponse> filmResponses =
+                films.getContent().stream().map(filmMapper::toFilmResponse).collect(Collectors.toList());
+        PageInfo pageInfo = new PageInfo((int) films.getTotalElements(), size);
+        ListFilmResponse filmPageResponse = new ListFilmResponse(filmResponses, pageInfo);
         if (films.isEmpty())
-            return ApiResponse.<FilmResponse>builder()
+            return ApiResponse.<ListFilmResponse>builder()
                     .code(1004)
                     .msg("Không tìm thấy phim")
                     .build();
-        return ApiResponse.<List<FilmResponse>>builder()
+        return ApiResponse.<ListFilmResponse>builder()
                 .code(1000)
                 .msg("Success")
-                .data(films.stream().map(filmMapper::toFilmResponse).collect(Collectors.toList()))
+                .data(filmPageResponse)
                 .build();
     }
 

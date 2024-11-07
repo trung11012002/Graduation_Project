@@ -2,6 +2,7 @@ package com.example.filmservice.controller;
 
 import java.util.List;
 
+import com.cloudinary.Api;
 import com.example.filmservice.dto.response.ListFilmResponse;
 import com.example.filmservice.entity.Film;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,12 @@ public class FilmController {
         ApiResponse<List<FilmResponse>> response = filmService.getAllFilms();
         return ResponseEntity.ok(response);
     }
+
     // phan trang
     @GetMapping
     public ResponseEntity<ApiResponse<ListFilmResponse>> getAllFilms_v2(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "5") int perPage  ) {
+            @RequestParam(defaultValue = "5") int perPage) {
         ApiResponse<ListFilmResponse> response = filmService.getFilms(page, perPage);
         return ResponseEntity.ok(response);
     }
@@ -50,21 +52,27 @@ public class FilmController {
         ApiResponse<FilmResponse> response = filmService.editFilm(editFilmDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @PostMapping("/{id}")
     public ResponseEntity<ApiResponse<Film>> getFilmById(@PathVariable Integer id) {
         ApiResponse<Film> response = filmService.getFilmById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse<FilmResponse>> deleteFilm(@PathVariable Integer id) {
         ApiResponse<FilmResponse> response = filmService.deleteFilmById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @GetMapping("/search-film-by-name")
-    public ResponseEntity<ApiResponse<List<FilmResponse>>> searchFilm(@RequestParam String name) {
-        ApiResponse<List<FilmResponse>> response = filmService.searchFilm(name);
+    public ResponseEntity<ApiResponse<ListFilmResponse>> searchFilm(@RequestParam String name,
+                                                                    @RequestParam(defaultValue = "1") int page,
+                                                                    @RequestParam(defaultValue = "5") int perPage) {
+        ApiResponse<ListFilmResponse> response = filmService.searchFilm(name, page, perPage);
         return ResponseEntity.ok(response);
     }
+
     @GetMapping("/update-score")
     public ApiResponse<FilmResponse> updateFilmRatingScore(@RequestParam Integer filmId) {
         return ApiResponse.<FilmResponse>builder()
