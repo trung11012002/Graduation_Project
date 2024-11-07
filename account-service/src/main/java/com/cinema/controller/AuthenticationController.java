@@ -80,16 +80,5 @@ public class AuthenticationController {
 //    }
 
 
-//    @GetMapping("/change-password")
-//    public Result signup(@RequestParam Integer userId,
-//                         @RequestParam String oldPassword,
-//                         @RequestParam String newPassword) {
-//        Result result = userService.changePassword(userId, oldPassword, newPassword);
-//        return result ;
-//    }
-//
-//    @PostMapping("/forgot-password")
-//    public Result forgotPassword(@RequestBody String email) {
-//        return userService.forgotPassword(email);
-//    }
+
 }

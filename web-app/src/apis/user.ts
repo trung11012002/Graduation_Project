@@ -50,7 +50,7 @@ export const editAcount = async (
     // }
     data: any
 ) => {
-    return await callApi<any>(`account-service/api/v1/user/edit-profile`, "post", data)
+    return await callApi<any>(`account-service/user/edit-profile`, "post", data)
 }
 
 // account-service/api/v1/auth/change-password
@@ -60,7 +60,7 @@ export const editAcount = async (
 export const changePassword = async (
     data: any
 ) => {
-    return await callApi<any>(`account-service/api/v1/auth/change-password`, "get", data)
+    return await callApi<any>(`account-service/user/change-password`, "get", data)
 }
 
 // account-service/api/v1/sp-admin/change-status

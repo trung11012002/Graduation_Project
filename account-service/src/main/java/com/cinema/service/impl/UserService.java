@@ -1,6 +1,10 @@
 package com.cinema.service.impl;
 
+import com.cinema.dto.request.ProfileEditRequest;
 import com.cinema.dto.request.RegisterRequest;
+import com.cinema.dto.response.ApiResponse;
+import com.cinema.dto.response.LoginResponse;
+import com.cinema.dto.response.RoleResponse;
 import com.cinema.dto.response.UserResponse;
 import com.cinema.entity.Role;
 import com.cinema.entity.User;
@@ -66,27 +70,35 @@ public class UserService implements IUserService {
 //        return null;
 //    }
 
-//    @Override
-//    public Result editProfile(ProfileDto dto) {
-//        Optional<User> op = userRepository.findById(dto.getId());
-//        if (!op.isPresent()) {
-//            return Result.fail("Không tồn tại người dùng");
-//        }
-//
-////        String error = errorUsername(dto.getUsername());
-////        if (error != null)
-////            return Result.fail(error);
-//
-//        User user = op.get();
-//        user.setUsername(dto.getUsername());
-//        user.setFullname(dto.getFullname());
-//        user.setAddress(dto.getAddress());
-//        user.setDateOfBirth(dto.getDateOfBirth());
-//        user.setPhone(dto.getPhone());
-//        LoginResponse response = convertToLoginResp(user, "");
-//        return Result.success("Success", response);
-//    }
-//
+    @Override
+    public LoginResponse editProfile(ProfileEditRequest dto) {
+        User user = userRepository.findById(dto.getId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        String role = user.getRole().getName().toUpperCase();
+        RoleResponse roleResponse = new RoleResponse();
+        roleResponse.setName(role);
+
+        LoginResponse response = new LoginResponse();
+        response.setId(user.getId());
+        response.setUsername(user.getUsername());
+        response.setPassword(user.getPassword() != null? user.getPassword() : null);
+        response.setFullname(user.getFullname() != null? user.getFullname() : null);
+        response.setDateOfBirth(user.getDateOfBirth() != null? user.getDateOfBirth() : null);
+        response.setAddress(user.getAddress() != null? user.getAddress() : null);
+        response.setEmail(user.getEmail());
+        response.setPhone(user.getPhone() != null? user.getPhone() : null);
+        response.setBlocked(user.isBlocked());
+        response.setRole(roleResponse);
+        response.setToken(null);
+        response.setRefreshToken(null);
+//        String error = errorUsername(dto.getUsername());
+//        if (error != null)
+//            return Result.fail(error);
+
+
+
+        return response;
+    }
+
 //    @Override
 //    public LoginResponse convertToLoginResp(User user, String token) {
 //        LoginResponse response = new LoginResponse();
@@ -261,20 +273,26 @@ public class UserService implements IUserService {
 //        return true;
 //    }
 
-//    @Override
-//    public Result changePassword(Integer userId, String oldPassword, String newPassword) {
-//        Optional<User> op = userRepository.findById(userId);
-//        if (op.isPresent()) {
-//            User user = op.get();
-//            if (!passwordEncoder.matches(oldPassword, user.getPassword()))
-//                return Result.fail("Mật khẩu cũ không chính xác!");
-//            else {
-//                user.setPassword(passwordEncoder.encode(newPassword));
-//                userRepository.save(user);
-//                return Result.success();
-//            }
-//        }
-//        return Result.fail("Người dùng không tồn tại!");
-//    }
+    @Override
+    public ApiResponse changePassword(Integer userId, String oldPassword, String newPassword) {
+        Optional<User> op = userRepository.findById(userId);
+        if (op.isPresent()) {
+            User user = op.get();
+            if (!passwordEncoder.matches(oldPassword, user.getPassword()))
+                throw new AppException(ErrorCode.WRONG_PASSWORD);
+            else {
+                user.setPassword(passwordEncoder.encode(newPassword));
+                userRepository.save(user);
+                return ApiResponse.<LoginResponse>builder()
+                        .msg("Đổi mật khẩu thành công")
+                        .code(1000)
+                        .build();
+            }
+        }
+        return ApiResponse.<LoginResponse>builder()
+                .msg("Người dùng không tồn tại")
+                .code(1000)
+                .build();
+    }
 
 }

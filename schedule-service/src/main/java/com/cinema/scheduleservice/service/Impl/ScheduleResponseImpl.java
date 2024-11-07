@@ -243,49 +243,47 @@ public class ScheduleResponseImpl implements ScheduleService {
     public List<OrderedResponse> findAllOrdered(Integer scheduleId) {
         List<Ticket> tickets = ticketRepository.findByScheduleId(scheduleId)
                 .orElseThrow(() -> new AppException(ErrorCode.TICKET_NOT_FOUND));
-        List<Booking> bookings = new ArrayList<>(tickets.stream().map(Ticket::getBooking).collect(Collectors.toSet()));
-        List<OrderedResponse> responses = new ArrayList<>();
-        Map<Integer, Integer> mark = new HashMap<>();
-        int index = 0;
-        for (Ticket ticket: tickets) {
-            for (Booking booking : bookings) {
-                if (ticket.getBooking().getId().equals(booking.getId())) {
-                    if (mark.containsKey(booking.getId())) {
-                        int currentIndex = mark.get(booking.getId());
-                        OrderedResponse order = responses.get(currentIndex);
-                        order.setNumberOfTicket(order.getNumberOfTicket() + 1);
-                        if (ticket.getTicketClass().equals(0)) {
-                            order.setRegulars(order.getRegulars() + 1);
-                        } else {
-                            order.setVips(order.getVips() + 1);
-                        }
-                        order.setSeats(order.getSeats() + ", " + ticket.getSeatNumberVertical() + "-" + ticket.getSeatNumberHorizontal());
-                        order.setTotalPaid((order.getTotalPaid() + ticket.getPrice()));
-                        responses.set(currentIndex, order);
-                    } else {
-                        OrderedResponse order = new OrderedResponse();
-                        User user = booking.getUser();
-                        order.setFullname(user.getFullname());
-                        order.setEmail(user.getEmail());
-                        order.setBookedTime(booking.getBookingTime());
-                        order.setNumberOfTicket(1);
-                        if (ticket.getTicketClass().equals(0)) {
-                            order.setRegulars(1);
-                            order.setVips(0);
-                        } else {
-                            order.setRegulars(0);
-                            order.setVips(1);
-                        }
-                        order.setSeats(ticket.getSeatNumberVertical() + "-" + ticket.getSeatNumberHorizontal());
-                        order.setTotalPaid(ticket.getPrice());
-                        responses.add(order);
-                        mark.put(booking.getId(), index++);
-                    }
-                }
+
+        // Sử dụng Map để lưu trữ OrderedResponse theo bookingId
+        Map<Integer, OrderedResponse> responseMap = new HashMap<>();
+
+        for (Ticket ticket : tickets) {
+            Booking booking = ticket.getBooking();
+            Integer bookingId = booking.getId();
+
+            // Kiểm tra xem đã có OrderedResponse cho booking này chưa
+            OrderedResponse order = responseMap.computeIfAbsent(bookingId, id -> {
+                // Nếu chưa có, tạo một OrderedResponse mới
+                OrderedResponse newOrder = new OrderedResponse();
+                User user = booking.getUser();
+                newOrder.setFullname(user.getFullname());
+                newOrder.setEmail(user.getEmail());
+                newOrder.setBookedTime(booking.getBookingTime());
+                newOrder.setNumberOfTicket(0);
+                newOrder.setRegulars(0);
+                newOrder.setVips(0);
+                newOrder.setSeats("");
+                newOrder.setTotalPaid(0L);
+                return newOrder;
+            });
+
+            // Cập nhật thông tin của OrderedResponse hiện tại
+            order.setNumberOfTicket(order.getNumberOfTicket() + 1);
+            if (ticket.getTicketClass().equals(0)) {
+                order.setRegulars(order.getRegulars() + 1);
+            } else {
+                order.setVips(order.getVips() + 1);
             }
+            order.setSeats(order.getSeats().isEmpty()
+                    ? ticket.getSeatNumberVertical() + "-" + ticket.getSeatNumberHorizontal()
+                    : order.getSeats() + ", " + ticket.getSeatNumberVertical() + "-" + ticket.getSeatNumberHorizontal());
+            order.setTotalPaid(order.getTotalPaid() + ticket.getPrice());
         }
-        return responses;
+
+        // Chuyển các giá trị từ Map thành List và trả về
+        return new ArrayList<>(responseMap.values());
     }
+
 
     @Override
     public RevenueStatisticResponse getRevenueStatistic(Integer cinemaId, String startDate, String endDate) {

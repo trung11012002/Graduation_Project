@@ -61,8 +61,8 @@ public class FilmController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/search-film-by-name")
-    public ResponseEntity<ApiResponse<List<FilmResponse>>> searchFilm(@RequestParam String keyword) {
-        ApiResponse<List<FilmResponse>> response = filmService.searchFilm(keyword);
+    public ResponseEntity<ApiResponse<List<FilmResponse>>> searchFilm(@RequestParam String name) {
+        ApiResponse<List<FilmResponse>> response = filmService.searchFilm(name);
         return ResponseEntity.ok(response);
     }
     @GetMapping("/update-score")

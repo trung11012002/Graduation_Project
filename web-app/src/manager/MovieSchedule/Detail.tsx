@@ -31,7 +31,7 @@ const Detail: React.FC<IDetail> = ({ data, getSchedule }) => {
             async onOk() {
                 try {
                     const res = await deleteSchedule({ scheduleId: id });
-                    if (res?.code === 200) {
+                    if (res?.code === 1000) {
                         getSchedule()
                         success("Xoá thành công")
                     }

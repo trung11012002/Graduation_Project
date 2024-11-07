@@ -27,6 +27,7 @@ public enum ErrorCode {
     USERNAME_INVALID_REGISTER(1018, "Username invalid", HttpStatus.BAD_REQUEST),
     EMAIL_EXISTED(1019, "Email existed", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1020, "User not found", HttpStatus.BAD_REQUEST),
+    WRONG_PASSWORD(1021, "Wrong password", HttpStatus.BAD_REQUEST),
     ;
 
     private int code;
