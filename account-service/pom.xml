@@ -84,11 +84,6 @@
             <version>2.2.224</version>
             <scope>test</scope>
         </dependency>
-        <!--neo4j-->
-        <dependency>
-            <groupId>org.neo4j.driver</groupId>
-            <artifactId>neo4j-java-driver</artifactId>
-        </dependency>
         <!--redis-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

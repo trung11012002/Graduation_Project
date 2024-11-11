@@ -54,6 +54,6 @@ public class Cinema {
     private String lastModifyBy;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "CinemaItemFood")
+    @OneToMany(mappedBy = "cinema")
     private List<CinemaItemFood> cinemaItemFoods;
 }
