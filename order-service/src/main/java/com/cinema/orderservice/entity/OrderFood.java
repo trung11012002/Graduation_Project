@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,14 @@ public class OrderFood {
     @Column(name = "total_price", nullable = false)
     private Double totalPrice;
 
+    @Column(name = "order-time")
+    private LocalDateTime orderTime;
+
     @OneToMany(mappedBy = "orderFood")
     private List<OrderFoodItem> orderFoodItems;
+
+    @PrePersist
+    protected void onCreate(){
+        this.orderTime = LocalDateTime.now();
+    }
 }

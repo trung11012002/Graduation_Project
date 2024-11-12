@@ -47,4 +47,8 @@ public class Cinema {
     @JsonIgnore
     @OneToMany(mappedBy = "cinema")
     private List<CinemaItemFood> cinemaItemFoods;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cinema", cascade = CascadeType.ALL)
+    private List<OrderFood> orderFoods;
 }

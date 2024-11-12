@@ -21,4 +21,10 @@ public class OrderFoodItem {
     @ManyToOne
     @JoinColumn(name = "item_food_id", nullable = false)
     private ItemFood itemFood;
+
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    @Column(name = "unit-price")
+    private Double unitPrice;
 }

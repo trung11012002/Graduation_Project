@@ -34,4 +34,7 @@ public class ItemFood {
     @ManyToOne
     @JoinColumn(name = "ncc_id", nullable = false)
     private Supplier supplier;
+
+    @OneToMany(mappedBy = "itemFood")
+    private List<OrderFoodItem> orderFoodItems;
 }
