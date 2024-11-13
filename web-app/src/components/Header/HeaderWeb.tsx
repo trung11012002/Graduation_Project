@@ -10,7 +10,7 @@ import {faBell} from '@fortawesome/free-regular-svg-icons';
 import {WebSocketContext} from "../../contexts/WebSocketContext";
 import Stomp from "stompjs";
 import SockJS from 'sockjs-client';
-import Notification from "./Notification";
+import NotificationComponent from "./Notification";
 
 const {confirm} = Modal;
 
@@ -99,7 +99,7 @@ const HeaderWeb = () => {
                         style={{fontSize: '1.2rem', display: 'flex', alignItems: 'center'}}
                         className='auth'
                     >
-                        <Notification></Notification>
+                        <NotificationComponent></NotificationComponent>
 
                         <Link to='/' className={`${urlCurrent === '' ? 'bottomCurrent' : ''}`}>
                             <span>Trang chủ</span>

@@ -37,11 +37,11 @@ public class WebSocketSessionManager {
 
 //        userSessions.put(username, sessionId);
         System.out.println("User " + " connected with sessionId: " + sessionId);
-        NotifyMessage notifyMessage = NotifyMessage.builder()
-                .content("User connected")
-                .sender("System")
-                .build();
-        messagingTemplate.convertAndSend("/notification-global", notifyMessage);
+//        NotifyMessage notifyMessage = NotifyMessage.builder()
+//                .content("User connected")
+//                .sender("System")
+//                .build();
+//        messagingTemplate.convertAndSend("/notification-global", notifyMessage);
     }
 
     // Khi user ngắt kết nối, xóa sessionId khỏi danh sách

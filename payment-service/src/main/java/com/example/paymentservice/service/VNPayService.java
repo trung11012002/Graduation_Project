@@ -4,6 +4,7 @@ import com.example.paymentservice.constants.VNPayConstants;
 import com.example.paymentservice.constants.VNPayHelper;
 import com.example.paymentservice.dto.OrderRequest;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -12,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Service
+@Slf4j
 public class VNPayService {
     public String createOrder(HttpServletRequest request, OrderRequest orderRequest) throws UnsupportedEncodingException {
 
@@ -35,8 +37,11 @@ public class VNPayService {
                 + "&vnp_SecureHash="
                 + VNPayHelper.hmacSHA512(VNPayConstants.SECRET_KEY, getQueryUrl(payload).get("hashData"));
 
+        log.info("Query URL: {}", queryUrl);
         String paymentUrl = VNPayConstants.VNP_PAY_URL + "?" + queryUrl;
         payload.put("redirect_url", paymentUrl);
+
+        log.info("Payment URL: {}", paymentUrl);
 
         return paymentUrl;
     }

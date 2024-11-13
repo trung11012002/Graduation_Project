@@ -6,14 +6,44 @@ import {AuthContextProvider} from "../../contexts/AuthContext";
 import {useNavigate} from "react-router-dom";
 import Stomp from "stompjs";
 import SockJS from 'sockjs-client';
+import {initNotification} from "../../apis/notify";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
+import {MessageContextProvider} from "../../contexts/MessageContext";
+import { Notification } from "../../types/Notification";
 
-const Notification = () => {
+
+const NotificationComponent = () => {
     const auth = useContext(AuthContextProvider);
     const user = auth?.userState;
     const navigate = useNavigate();
     const username = user?.user?.username;
 
-    const [notifications, setNotifications] = useState<string[]>([]);
+    const mess = useContext(MessageContextProvider)
+    const success = mess?.success
+    const error = mess?.error
+
+    const [notifications, setNotifications] = useState<Notification[]>([]);
+
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const response = await initNotification({ username: username || "" });
+                if (response && response.code === 1000) {
+                    const res = JSON.parse(JSON.stringify(response.data));
+                    console.log("--------------------" ,res)
+                    setNotifications(res || []);
+                } else {
+                    error(response?.msg);
+                }
+            } catch (err) {
+                console.error("Error fetching notifications:", err);
+            }
+        };
+
+        fetchNotifications();
+    }, []);
+
     let socket = new SockJS('http://localhost:8088/notification-service/ws');
 
     //lib-v1
@@ -47,8 +77,11 @@ const Notification = () => {
 
     const notificationItems = notifications.map((notification, index) => ({
         key: index.toString(),
-        label: <span>{notification}</span>,
+        label: <span>{ notification.message }</span>,
     }));
+
+
+
 
     const notificationMenu = <Menu items={notificationItems} />;
 
@@ -59,4 +92,4 @@ const Notification = () => {
     );
 }
 
-export default Notification;
+export default NotificationComponent ;

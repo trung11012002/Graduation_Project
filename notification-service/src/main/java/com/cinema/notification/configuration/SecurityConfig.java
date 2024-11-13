@@ -28,6 +28,7 @@ public class SecurityConfig {
             "/**",
             "/notification-global/**",
             "/app/notification-global/**",
+            "/notification-service/**",
     };
 
     @Bean
