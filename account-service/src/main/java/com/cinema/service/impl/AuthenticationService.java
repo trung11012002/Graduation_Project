@@ -3,20 +3,24 @@ package com.cinema.service.impl;
 import com.cinema.dto.request.AuthenticationResquest;
 import com.cinema.dto.request.IntrospectRequest;
 import com.cinema.dto.request.LogoutRequest;
+import com.cinema.dto.request.NotificationRequest;
 import com.cinema.dto.request.RegisterRequest;
 import com.cinema.dto.response.AuthenticationResponse;
 import com.cinema.dto.response.IntrospectResponse;
 import com.cinema.dto.response.LoginResponse;
 import com.cinema.dto.response.RoleResponse;
 import com.cinema.dto.response.UserResponse;
+import com.cinema.entity.Notification;
 import com.cinema.entity.Role;
 import com.cinema.entity.User;
 import com.cinema.enums.RoleEnums;
 import com.cinema.exception.AppException;
 import com.cinema.exception.ErrorCode;
 import com.cinema.mapper.UserMapper;
+import com.cinema.repository.NotificationRepository;
 import com.cinema.repository.RoleRepository;
 import com.cinema.repository.UserRepository;
+import com.cinema.repository.httpclient.NotificationClient;
 import com.cinema.service.IAuthenticationService;
 import com.event.dto.NotificationEvent;
 import com.nimbusds.jose.JOSEException;
@@ -38,6 +42,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -60,6 +65,10 @@ public class AuthenticationService implements IAuthenticationService {
     RoleRepository roleRepository;
 
     KafkaTemplate<String, Object> kafkaTemplate;
+
+    NotificationClient notificationClient;
+
+    NotificationRepository notificationRepository;
 
 
     @NonFinal
@@ -149,6 +158,7 @@ public class AuthenticationService implements IAuthenticationService {
         }
     }
 
+    @Transactional
     @Override
     public UserResponse register(RegisterRequest request, boolean isAdmin) {
         String error = errorUsername(request.getUsername());
@@ -168,15 +178,24 @@ public class AuthenticationService implements IAuthenticationService {
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(role);
-        userRepository.save(user);
+        user = userRepository.save(user);
 
+        //create notification
+        Notification notification = Notification.builder()
+                .message("Welcome to cinema")
+                .type("only-user")
+                .user(user)
+                .build();
+
+        notificationRepository.save(notification);
+
+        //send email
         NotificationEvent notificationEvent = NotificationEvent.builder()
                 .channel("EMAIL")
                 .recipient(request.getEmail())
                 .subject("Welcome to cinema")
-                .body("Hello, " + request.getUsername())
+                .body(request.getUsername())
                 .build();
-
         //Publish message to kafka
         kafkaTemplate.send("notification-delivery", notificationEvent);
 

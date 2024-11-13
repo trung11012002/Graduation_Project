@@ -52,4 +52,8 @@ public class Cinema {
 
     @Column(name = "lastModifyBy")
     private String lastModifyBy;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cinema")
+    private List<CinemaItemFood> cinemaItemFoods;
 }

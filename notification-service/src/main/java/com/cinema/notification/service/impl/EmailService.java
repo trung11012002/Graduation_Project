@@ -1,4 +1,4 @@
-package com.cinema.notification.service;
+package com.cinema.notification.service.impl;
 
 import com.cinema.notification.dto.request.EmailRequest;
 import com.cinema.notification.dto.request.SendEmailRequest;
@@ -7,6 +7,7 @@ import com.cinema.notification.dto.response.EmailResponse;
 import com.cinema.notification.exception.AppException;
 import com.cinema.notification.exception.ErrorCode;
 import com.cinema.notification.repository.httpclient.EmailClient;
+import com.cinema.notification.utils.GenerateHtmlEmail;
 import feign.FeignException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,11 @@ public class EmailService {
     @Value("${notification.email.brevo-apikey}")
     @NonFinal
     String apiKey;
+//    @NonFinal
+//    GenerateHtmlEmail generateHtmlEmail;
 
     public EmailResponse sendEmail(SendEmailRequest request) {
+        String body = GenerateHtmlEmail.generateHtmlEmailWelcome(request.getTo().getEmail());
         EmailRequest emailRequest = EmailRequest.builder()
                 .sender(Sender.builder()
                         .name("Cinema Welcome")

@@ -16,4 +16,5 @@ public class SendEmailRequest {
     Recipient to;
     String subject;
     String htmlContent;
+    String type; // welcome, reset-password, ...
 }

@@ -51,13 +51,13 @@ export const AuthContext: React.FC<IAuthContext> = ({ children }) => {
                     tokenRefresh: res.data.tokenRefresh
                 })
                 localStorage.setItem('tokenAccess', res.data.token)
-                res.data.role.name === "SUPER_ADMIN" ?
-                navigate('/super-admin/theater-list')
-                :
-                res.data.role.name === "ADMIN" ?
-                    navigate('/admin/movie-schedule')
-                    :
-                    navigate('/')
+                // res.data.role.name === "SUPER_ADMIN" ?
+                // navigate('/super-admin/theater-list')
+                // :
+                // res.data.role.name === "ADMIN" ?
+                //     navigate('/admin/movie-schedule')
+                //     :
+                //     navigate('/')
             }
             else {
                 localStorage.removeItem("tokenAccess");

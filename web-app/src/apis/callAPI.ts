@@ -45,7 +45,6 @@ export const callApi = async <T>(
 
         const response: AxiosResponse<ApiCallResponse<T>> = await axios(requestData);
 
-
         return response.data;
 
 
