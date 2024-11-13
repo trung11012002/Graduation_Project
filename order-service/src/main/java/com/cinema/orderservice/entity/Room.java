@@ -1,4 +1,4 @@
-package com.cinema.entity;
+package com.cinema.orderservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "cinema")
+@Table(name = "room")
 @Data
 @NoArgsConstructor
-public class Cinema {
+public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,16 +21,19 @@ public class Cinema {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "horizontalSeats")
+    private Integer horizontalSeats;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id", nullable = false)
-    private User admin;
+    @Column(name = "verticalSeats")
+    private Integer verticalSeats;
 
-    @OneToMany(mappedBy = "cinema", fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "cinema_id", nullable = false)
+    private Cinema cinema;
+
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Room> rooms;
+    private List<Schedule> schedules;
 
     @Column(name = "createdAt")
     private LocalDateTime createdAt;
@@ -43,12 +46,4 @@ public class Cinema {
 
     @Column(name = "lastModifyBy")
     private String lastModifyBy;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "cinema")
-    private List<CinemaItemFood> cinemaItemFoods;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "cinema", cascade = CascadeType.ALL)
-    private List<OrderFood> orderFoods;
 }

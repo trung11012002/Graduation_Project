@@ -1,4 +1,4 @@
-package com.cinema.entity;
+package com.cinema.orderservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
