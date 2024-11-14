@@ -25,8 +25,7 @@ const ForgotPassword = () => {
         const { email } = data
         if (email) {
             const res = await forgotPassword({ email })
-            if (res?.code === 200) {
-                console.log(res)
+            if (res?.code === 1000) {
                 success("Mật khẩu đăng nhập đã được gửi về email của bạn. Vui lòng kiểm tra")
                 navigate('/login')
             } else {

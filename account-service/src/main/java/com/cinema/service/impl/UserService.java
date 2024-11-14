@@ -16,14 +16,18 @@ import com.cinema.repository.CinemaRepository;
 import com.cinema.repository.RoleRepository;
 import com.cinema.repository.UserRepository;
 import com.cinema.service.IUserService;
+import com.event.dto.NotificationEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class UserService implements IUserService {
@@ -45,6 +49,8 @@ public class UserService implements IUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
 //    @Autowired
 //    private JwtUtils jwtUtils;
@@ -235,15 +241,35 @@ public class UserService implements IUserService {
         return userMapper.toUserResponses(response);
     }
 //
-//    @Override
-//    public Result forgotPassword(String email) {
-//        Optional<User> op = userRepository.findByEmail(email);
-//
-//        if (!op.isPresent()) {
-//            return Result.fail("Email không tồn tại trong hệ thống");
-//        }
-//        return Result.success("Success", "");
-//    }
+    @Override
+    public String forgotPassword(String email) {
+        String jsonString = email;
+
+        JSONObject jsonObject = new JSONObject(jsonString);
+        email = jsonObject.getString("email");
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        Random random = new Random();
+        int randomNumber = 10000000 + random.nextInt(90000000);
+        String newPassword = String.valueOf(randomNumber);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        //send new password to email
+        NotificationEvent notificationEvent = NotificationEvent.builder()
+                .channel("EMAIL")
+                .recipient(user.getEmail())
+                .subject("Cinema new password")
+                .body(newPassword)
+                .templateCode("forgot-password")
+                .build();
+
+        //Publish message to kafka
+        kafkaTemplate.send("notification-delivery", notificationEvent);
+
+        return "Success";
+    }
 //
 //    public String errorUsername(String username) {
 //        if (isContainsSpecialCharacter(username)) {
