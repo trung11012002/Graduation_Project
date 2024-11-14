@@ -41,4 +41,66 @@ public class GenerateHtmlEmail {
                 """, userName);
     }
 
+    public static String generateHtmlEmailResetPassword(String password) {
+        return
+                """
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <title>Password Reset</title>
+                  <style>
+                    body {
+                      font-family: Arial, sans-serif;
+                      background-color: #f4f4f4;
+                      margin: 0;
+                      padding: 0;
+                    }
+                    .email-container {
+                      max-width: 600px;
+                      margin: 20px auto;
+                      background-color: #ffffff;
+                      padding: 20px;
+                      border-radius: 8px;
+                      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    }
+                    h1 {
+                      color: #333;
+                    }
+                    p {
+                      line-height: 1.6;
+                      color: #555;
+                    }
+                    .new-password {
+                      font-weight: bold;
+                      color: #007bff;
+                      font-size: 18px;
+                    }
+                    .footer {
+                      margin-top: 20px;
+                      font-size: 12px;
+                      color: #777;
+                      text-align: center;
+                    }
+                  </style>
+                </head>
+                <body>
+                  <div class="email-container">
+                    <h1>Password Reset Successfully</h1>
+                    <p>Hello,</p>
+                    <p>Your password has been reset successfully. Below is your new password:</p>
+                    <p class="new-password">%s</p>
+                    <p>Please use this new password to log in and make sure to change it after logging in for better security.</p>
+                    <p>If you did not request a password reset, please contact our support immediately.</p>
+                    <div class="footer">
+                      <p>Thank you, <br> The Support Team</p>
+                    </div>
+                  </div>
+                </body>
+                </html>
+                """.formatted(password);
+    }
+
+
 }

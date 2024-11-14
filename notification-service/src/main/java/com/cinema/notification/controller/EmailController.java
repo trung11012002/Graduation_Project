@@ -39,7 +39,17 @@ public class EmailController {
     @KafkaListener(topics = "notification-delivery")
     public void listenNotificationDelivery(NotificationEvent message) {
         log.info("Message received: {}", message);
-        String htmlContent = GenerateHtmlEmail.generateHtmlEmailWelcome(message.getBody());
+        String htmlContent = "";
+        switch (message.getTemplateCode()){
+            case "welcome":
+                htmlContent = GenerateHtmlEmail.generateHtmlEmailWelcome(message.getBody());
+                break;
+            case "forgot-password":
+                htmlContent = GenerateHtmlEmail.generateHtmlEmailResetPassword(message.getBody());
+                break;
+            default:
+                htmlContent = "";
+        }
         emailService.sendEmail(SendEmailRequest.builder()
                 .to(Recipient.builder()
                         .email(message.getRecipient())

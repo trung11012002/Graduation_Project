@@ -195,6 +195,7 @@ public class AuthenticationService implements IAuthenticationService {
                 .recipient(request.getEmail())
                 .subject("Welcome to cinema")
                 .body(request.getUsername())
+                .templateCode("welcome")
                 .build();
         //Publish message to kafka
         kafkaTemplate.send("notification-delivery", notificationEvent);
