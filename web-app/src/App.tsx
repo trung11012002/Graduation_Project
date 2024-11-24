@@ -24,7 +24,7 @@ import {WebSocketProvider} from "./contexts/WebSocketContext";
 import ProtectedMain from './routes/ProtectedRoute';
 import DetailMovie from './web/MovieList/DetailMovie';
 import BookingHistory from './web/BookingHistory';
-
+import Footer from './components/Footer/Footer';
 function App() {
     return (
         <div className="App">
@@ -52,6 +52,7 @@ function App() {
                                 <Route path="/booking-history" element={<BookingHistory/>}/>
                                 <Route path='*' element={<NotFound/>}/>
                             </Routes>
+                            <Footer />
                         </MoviesContext>
                     </MessageContext>
                 </WebSocketProvider>

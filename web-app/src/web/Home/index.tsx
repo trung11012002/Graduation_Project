@@ -5,6 +5,8 @@ import { getMoviesByName } from '../../apis/movie';
 import Detail from '../../manager/MovieList/Detail';
 import { MessageContextProvider } from '../../contexts/MessageContext';
 import PaginationCustom from '../../components/Pagination/PaginationCustom';
+import './SpotlightEffect.css';
+import { Button, Input, Select, Space } from 'antd';
 
 const Web = () => {
   const mess = useContext(MessageContextProvider);
@@ -69,28 +71,25 @@ const Web = () => {
       <div className='web'>
         <HeaderWeb />
         <div className='Home'>
-          <div className='search-home'>
-            <form onSubmit={handleSubmit}>
-              <label htmlFor="searchmovies">Phim bộ</label>
-              <input
-                  type="text"
-                  id='searchmovies'
-                  onChange={(e: any) => {
-                    setName(e.target.value);
-                    if (!e.target.value) {
-                      setMovies(null);
-                    }
-                  }}
-                  placeholder='Tìm kiếm tên phim bạn muốn xem'
-              />
-              <button type='submit'>Tìm kiếm</button>
+            <form onSubmit={handleSubmit} className="search-btn-home">
+              <Space.Compact style={{ width: '100%' , height : '50px' }}>
+                <Input
+                    onChange={(e: any) => {
+                      setName(e.target.value);
+                      if (!e.target.value) {
+                        setMovies(null);
+                      }
+                    }}
+                    style = {{ fontSize : 20 }} placeholder="Tìm kiếm phim muốn xem ..." />
+                <Button className= "search-txt-home" htmlType="submit" style={{ height : '50px'}} type="primary">Tìm kiếm</Button>
+              </Space.Compact>
             </form>
-          </div>
+
 
           {movies ? (
               <>
                 {movies.map((movie: any, index: number) => (
-                    <Detail key={index} data={movie} />
+                    <Detail key={index} data={movie}/>
                 ))}
                 <PaginationCustom
                     pageSize={pageSize}
@@ -102,8 +101,14 @@ const Web = () => {
                 />
               </>
           ) : (
-              <div className='img-home'>
-                <img src="https://cdnphoto.dantri.com.vn/9fJvg-3fkeZdXc7efkMQPtmeaDI=/zoom/1200_630/2021/03/08/dan-triv-2-docx-1615178918200.jpeg" alt="" />
+
+              <div className="spotlight-container img-home">
+                <img
+                    // src="https://cdnphoto.dantri.com.vn/9fJvg-3fkeZdXc7efkMQPtmeaDI=/zoom/1200_630/2021/03/08/dan-triv-2-docx-1615178918200.jpeg"
+                    src="https://files.betacorp.vn/media/images/2024/11/20/1702x621-24-162735-201124-55.jpg"
+                    alt="Movie Poster"
+                    className="spotlight-image"
+                />
               </div>
           )}
         </div>

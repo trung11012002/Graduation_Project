@@ -1,0 +1,23 @@
+.play-btn{
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.poster-img:hover .play-btn{
+    opacity: 1;
+}
+.poster-img:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.poster-img:hover .poster-img-v2{
+    transform: scale(1.1);
+    transition: transform 0.5s;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    filter: brightness(0.5);
+}
+.poster-img{
+    position: relative; /* Đảm bảo lớp cha có vị trí để lớp con có thể được điều khiển */
+}
+.poster-img-v2{
+    transition: transform 0.5s;
+}

@@ -6,6 +6,8 @@ import { AuthContextProvider } from '../../contexts/AuthContext';
 import { CloseOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { MessageContextProvider } from '../../contexts/MessageContext';
 import { deleteMovie } from '../../apis/movie';
+import AnimatedPoster from "../../components/ImageFilm/AnimatedPoster";
+
 const { confirm } = Modal;
 
 interface IDetail {
@@ -59,55 +61,69 @@ const Detail: React.FC<IDetail> = ({data, getFilms }) => {
     return (
         <div className='Detail' key={data.id}>
             <div className='left_Detail'>
-                <Image
-                    width={250}
-                    src={urlImg}
-                    style={{minWidth: 250}}
-                />
+                <AnimatedPoster imgUrl={urlImg} videoUrl={""}></AnimatedPoster>
                 <div>
-                    <span style={{fontWeight: "bold", fontSize:"1.1rem"}}>Tên phim: {data.name}</span>
+                    <span style={{fontWeight: "bold", fontSize: "1.1rem"}}>Tên phim: {data.name}</span>
                     <span>Thể loại: {type.join(", ")}</span>
                     <span>Thời lượng: {data.duration} phút</span>
                     <span>Ngày phát hành: {converDate(data.releaseDate)}</span>
-                    <span style={{ alignItems: "center", display: "flex" }}>
+                    <span style={{alignItems: "center", display: "flex"}}>
                         Đánh giá: {data.score ? data.score : "Chưa có đánh giá"}
                         {
                             data.score && <img
-                                style={{ width: "1rem" }}
-                                src="https://res.cloudinary.com/dbduzdrla/image/upload/v1702803666/phuc/star_i5npej.png" alt=""
+                                style={{width: "1rem"}}
+                                src="https://res.cloudinary.com/dbduzdrla/image/upload/v1702803666/phuc/star_i5npej.png"
+                                alt=""
                             />
                         }
                     </span>
+                    <div className='right_Detail'>
+                        <div>
+                            {
+                                user && user.role.name === "SUPER_ADMIN" ?
+                                    <>
+                                        <Button className="btn-detail"
+                                            onClick={() => {
+                                                navigate(`/super-admin/movie-list/update/${data.id}`)
+                                            }}
+                                        >Sửa</Button><br/><br/>
+                                        <Button className="btn-detail" danger
+                                                onClick={() => {
+                                                    showLogoutModal(data.id)
+                                                }}
+                                        >Xóa</Button><br/><br/>
+                                    </>
+                                    :
+                                    <></>
+                            }
+
+                            <Button className="btn-detail"
+                                style={{
+                                    textAlign: "center",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    margin: 0,
+                                }}
+                                onClick={() => {
+                                    navigate(
+                                        user?.role.name === "ADMIN"
+                                            ? `/admin/movie-list/${data.id}`
+                                            : user?.role.name === "SUPER_ADMIN"
+                                                ? `/super-admin/movie-list/${data.id}`
+                                                : `/movie-list/${data.id}`
+                                    );
+                                }}
+                            >
+                                Xem chi tiết
+                            </Button>
+
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
-            <div className='right_Detail'>
-                <div>
-                    {
-                        user && user.role.name === "SUPER_ADMIN" ?
-                            <>
-                                <Button
-                                    onClick={() => {
-                                        navigate(`/super-admin/movie-list/update/${data.id}`)
-                                    }}
-                                >Sửa</Button><br /><br />
-                                <Button danger
-                                    onClick={() => {
-                                        showLogoutModal(data.id)
-                                    }}
-                                >Xóa</Button><br /><br />
-                            </>
-                            :
-                            <></>
-                    }
-
-                    <Button
-                        onClick={() => {
-                            navigate(`${user?.role.name === "ADMIN" ? `${`/admin/movie-list/${data.id}`}` : user?.role.name === "SUPER_ADMIN" ? `${`/super-admin/movie-list/${data.id}`}` : `${`/movie-list/${data.id}`}`}`)
-                        }}>Xem chi tiết
-                    </Button>
-                </div>
-            </div>
         </div>
     )
 }

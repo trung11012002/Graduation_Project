@@ -1,0 +1,75 @@
+
+.footer {
+    background-color: #222; /* Nền tối */
+    color: #fff; /* Chữ trắng */
+    padding: 2rem 0;
+    font-family: Arial, sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-section {
+    flex: 1 1 calc(25% - 20px); /* Chiếm 25% chiều rộng */
+    margin: 10px;
+}
+
+.footer-logo {
+    max-width: 150px;
+    margin-bottom: 1rem;
+}
+
+.slogan {
+    font-size: 14px;
+    color: #ccc;
+}
+
+.links-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.links-section ul li {
+    margin-bottom: 0.5rem;
+}
+
+.links-section ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.links-section ul li a:hover {
+    color: #ff4500; /* Màu cam nổi bật */
+}
+
+.contact-section p {
+    margin: 0.5rem 0;
+}
+
+.social-section .social-icons a {
+    display: inline-block;
+    margin-right: 10px;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.social-section .social-icons a:hover {
+    color: #ff4500; /* Màu cam nổi bật */
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 14px;
+    color: #ccc;
+    border-top: 1px solid #444;
+    padding-top: 1rem;
+}
