@@ -115,13 +115,13 @@
 }
 
 .date_Content-Showtimes p:nth-child(2) {
-    background-color: rgb(99, 193, 255);
+    background-color: #222;
     color: white;
 }
 
 .reverse-date_Content-Showtimes p:nth-child(1) {
     font-size: 1.5rem;
-    background-color: rgb(99, 193, 255);
+    background-color: #e00d2a;
     color: white;
 }
 

@@ -4,7 +4,23 @@
     color: #fff; /* Chữ trắng */
     padding: 2rem 0;
     font-family: Arial, sans-serif;
+    z-index: 101;
+    position: relative;
+    bottom: -50px;
+    left: 0;
+
 }
+/*footer {*/
+/*    position: relative; !* Đặt cố định vị trí *!*/
+/*    bottom: 0;       !* Đặt ở cuối trang *!*/
+/*    left: 0;         !* Căn trái *!*/
+/*    width: 100%;     !* Chiếm toàn bộ chiều ngang *!*/
+/*    background-color: #222; !* Màu nền *!*/
+/*    color: white;    !* Màu chữ *!*/
+/*    z-index: 9999;   !* Đảm bảo nổi trên các thành phần khác *!*/
+/*    text-align: center;*/
+/*    padding: 10px 0;*/
+/*}*/
 
 .footer-container {
     display: flex;
@@ -21,7 +37,8 @@
 }
 
 .footer-logo {
-    max-width: 150px;
+    max-height: 50px;
+    max-width: 50px;
     margin-bottom: 1rem;
 }
 

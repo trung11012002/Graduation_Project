@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
                 {/* Logo và Slogan */}
                 <div className="footer-section logo-section">
                     <img
-                        src="/path-to-your-logo.png" // Thay đường dẫn logo
+                        src="https://res.cloudinary.com/dbym9b0xi/image/upload/v1732724157/film-booking-high-resolution-logo-transparent_2_jl4w9a.webp"
                         alt="Cinema Logo"
                         className="footer-logo"
                     />
@@ -39,9 +39,9 @@ const Footer: React.FC = () => {
                 {/* Thông tin liên hệ */}
                 <div className="footer-section contact-section">
                     <h3>Liên hệ</h3>
-                    <p>Địa chỉ: 123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh</p>
-                    <p>Điện thoại: (028) 123 456 789</p>
-                    <p>Email: support@cinema.com</p>
+                    <p>Địa chỉ: 123 Đường Thanh Bình, Quận Hà Đông, Hà Nội</p>
+                    <p>Điện thoại: (098) 982 7309 </p>
+                    <p>Email: support_doan@cinema.com</p>
                 </div>
 
                 {/* Kết nối mạng xã hội */}
@@ -53,9 +53,6 @@ const Footer: React.FC = () => {
                         </a>
                         <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
                             Instagram
-                        </a>
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-                            Twitter
                         </a>
                         <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
                             YouTube
