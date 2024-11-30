@@ -25,9 +25,11 @@ import ProtectedMain from './routes/ProtectedRoute';
 import DetailMovie from './web/MovieList/DetailMovie';
 import BookingHistory from './web/BookingHistory';
 import Footer from './components/Footer/Footer';
+import ChatModal from './web/Chat/ChatModal';
 function App() {
     return (
         <div className="App">
+            <ChatModal />
             <AuthContext>
                 <WebSocketProvider>
                     <MessageContext>

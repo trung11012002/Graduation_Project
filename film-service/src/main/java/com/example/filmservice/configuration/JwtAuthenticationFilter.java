@@ -26,6 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
             "/user/**",
+            "/films/all",
     };
 
     @Autowired

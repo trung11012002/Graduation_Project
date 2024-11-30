@@ -1,0 +1,92 @@
+/* styles.css */
+.ModalContent {
+    width: 350px; /* Kích thước nhỏ gọn */
+    height: 500px;
+    position: fixed;
+    bottom: 20px; /* Vị trí ở góc dưới bên phải */
+    right: 20px;
+    z-index: 1000;
+    background-color: white;
+    border-radius: 20px; /* Bo góc mềm mại */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Bóng đổ mờ */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.ModalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Overlay tối */
+    z-index: 999;
+    transition: opacity 0.3s ease;
+}
+
+/* Phần tiêu đề của modal */
+.ModalHeader {
+    background-color: #0084ff; /* Màu xanh giống Facebook */
+    color: white;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 20px 20px 0 0;
+    text-align: center;
+}
+
+/* Phần nội dung của tin nhắn */
+.MessageBox {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #f1f1f1; /* Màu nền của vùng chat */
+}
+
+/* Khung nhập tin nhắn */
+.InputBox {
+    display: flex;
+    border-top: 1px solid #ddd;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.InputBox textarea {
+    width: 100%;
+    height: 40px;
+    border: none;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.InputBox button {
+    background-color: #0084ff; /* Màu nút gửi tin giống Facebook */
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.InputBox button:hover {
+    background-color: #006bb3;
+}
+.message{
+    margin-bottom: 7px;
+}
+.btnModelChat{
+    background-color: #0084ff;
+    border: none;
+    color: white;
+    padding: 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 10px;
+}
+.iconModelChat{
+    width: 20px;
+    height: 20px;
+}

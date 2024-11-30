@@ -11,6 +11,7 @@ import {WebSocketContext} from "../../contexts/WebSocketContext";
 import Stomp from "stompjs";
 import SockJS from 'sockjs-client';
 import NotificationComponent from "./Notification";
+import {geminiAi} from "../../apis/geminiAi";
 
 const {confirm} = Modal;
 
@@ -122,6 +123,7 @@ const HeaderWeb = () => {
                         </Link>
                         <button onClick={navigateLoginForm}>Đăng nhập</button>
                         <button onClick={() => navigate('/register')}>Đăng ký</button>
+                        <button onClick={geminiAi}>Test gemini</button>
                     </div>
                 )}
             </div>

@@ -13,7 +13,6 @@ const Header = () => {
   const auth = useContext(AuthContextProvider)
   const user = auth?.userState
   const navigate = useNavigate();
-
   const navigateLoginForm = (e: any) => {
     e.preventDefault();
     navigate('/login')
@@ -76,10 +75,10 @@ const Header = () => {
             </Dropdown>
           </div>
           :
-          <div className='auth'>
-            <span onClick={navigateLoginForm}>Đăng nhập</span>
-            <span onClick={() => {navigate("/register")}}>Đăng ký</span>
-          </div>
+            <div className='auth'>
+              <span onClick={navigateLoginForm}>Đăng nhập</span>
+              <span onClick={() => { navigate("/register") }}>Đăng ký</span>
+            </div>
         }
 
       </div>
