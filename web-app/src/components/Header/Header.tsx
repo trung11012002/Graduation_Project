@@ -53,7 +53,9 @@ const Header = () => {
 
   return (
     <div className='header'>
-      <div className='logo'>FILM BOOKING</div>
+      <div className='logo'>
+        <img src="https://res.cloudinary.com/dme0cssq0/image/upload/v1732725928/film-booking-high-resolution-logo-transparent_5_mksz3f.webp" />
+      </div>
       <div className='header-right'>
         <div className='option_main'>
           

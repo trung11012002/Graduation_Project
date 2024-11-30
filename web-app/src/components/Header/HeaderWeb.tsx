@@ -74,7 +74,7 @@ const HeaderWeb = () => {
 
     return (
         <div className='header'>
-            <div className='logo'><img src="https://res.cloudinary.com/dme0cssq0/image/upload/v1732462753/film-booking-high-resolution-logo-transparent_ax46no.webp" /></div>
+            <div className='logo'><img src="https://res.cloudinary.com/dme0cssq0/image/upload/v1732725928/film-booking-high-resolution-logo-transparent_5_mksz3f.webp" /></div>
             <div className='header-right'>
                 {user?.isLogin ? (
                     <div

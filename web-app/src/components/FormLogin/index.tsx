@@ -69,7 +69,7 @@ const Form = () => {
             <div>
 
                 <div className='login-form'>
-                    <h1 onClick={navigateHome}>FILM BOOKING</h1>
+                    <h1 onClick={navigateHome}>ABSOLUTE CINEMA</h1>
                     <form onSubmit={submitFormLogin}>
                         <div>
                             <label htmlFor="username">Tên đăng nhập:</label>
@@ -99,7 +99,7 @@ const Form = () => {
                 </div>
 
                 <div className='img-loginform'>
-                    <img src={"https://kaliforms.com/wp-content/uploads/2021/04/movie-ticket-booking-form-scaled.jpg"} alt="" />
+                    <img className="stylish-img" src={"https://res.cloudinary.com/dbym9b0xi/image/upload/v1732933898/d8f685cc-81cb-480e-879e-72a58649454c_oejrgi.jpg"} alt="" />
                 </div>
             </div>
         </div>

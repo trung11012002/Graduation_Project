@@ -42,11 +42,18 @@
 .right_Detail div button{
     width: 150px;
 }
-
+/*.right_Detail div button:hover{*/
+/*    width: 150px;*/
+/*    background-color: #222 !important;*/
+/*}*/
 .UpdateSchedule header{
     display: flex;
     justify-content: center;
     font-size: 1.2rem;
     margin: 1rem 0;
     font-weight: bold;
+}
+.ant-btn-variant-outlined:hover {
+    color: #e00d2a !important;
+    border-color: #e00d2a !important;
 }
