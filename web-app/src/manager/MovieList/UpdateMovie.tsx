@@ -92,7 +92,7 @@ const UpdateMovie = () => {
             })
         }
         const newFile = converThumnails(checkFile)
-        const { releaseDate,types , name,description, duration } = values
+        const { releaseDate,types , name,description, duration ,urlTrailer} = values
         const newDate = `${releaseDate.$y}-${releaseDate.$M + 1}-${releaseDate.$D}`
         // let typeIds = types.map((type: any) => type.value);
         // const typeIds = types ? types : [];
@@ -107,13 +107,11 @@ const UpdateMovie = () => {
             ...newFile,
             name,
             description,
-            duration
+            duration,
+            urlTrailer
         }
         const res = await updateMovie(req)
         console.log('res', res)
-        console.log('req', req)
-        console.log('typeIds', typeIds)
-        console.log('types', types)
         if(res?.code === 1000) {
             success("Update thành công")
             navigate("/super-admin/movie-list")
@@ -137,7 +135,7 @@ const UpdateMovie = () => {
 
     return (
         <div className='MovieSchedule'>
-            <header>Cập nhập phim</header>
+            <header>Cập nhật phim</header>
             <Form
                 name="basic"
                 labelCol={{ span: 8 }}
@@ -174,7 +172,12 @@ const UpdateMovie = () => {
                 >
                     <Input placeholder='' />
                 </Form.Item>
-
+                <Form.Item<FieldType>
+                    label="link trailer"
+                    name="urlTrailer"
+                >
+                    <Input placeholder='' />
+                </Form.Item>
                 <Form.Item<FieldType>
                     label="Ngày phát hành"
                     name="releaseDate"

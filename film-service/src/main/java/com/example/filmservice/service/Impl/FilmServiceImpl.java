@@ -131,7 +131,7 @@ public class FilmServiceImpl implements FilmService {
         film.setDuration(filmDto.getDuration());
         List<Type> types = getListFilmTypes(filmDto.getTypeIds());
         film.setTypes(types);
-
+        film.setUrlTrailer(filmDto.getUrlTrailer());
         filmRepository.save(film);
         thumbnailsRepository.saveAll(thumnails);
 
@@ -188,6 +188,7 @@ public class FilmServiceImpl implements FilmService {
             System.out.println("đã xóa xong");
 
         }
+        film.setUrlTrailer(editFilmDto.getUrlTrailer());
         film.setName(editFilmDto.getName());
         film.setDescription(editFilmDto.getDescription());
         try {

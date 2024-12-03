@@ -126,7 +126,13 @@ const CreateMovie = () => {
                 >
                     <Input placeholder='' />
                 </Form.Item>
-
+                <Form.Item<FieldType>
+                    label="Link trailer"
+                    name="urlTrailer"
+                    rules={[{ required: true, message: 'không được bỏ trống!' }]}
+                >
+                    <Input placeholder='' />
+                </Form.Item>
                 <Form.Item<FieldType>
                     label="Ngày phát hành"
                     name="releaseDate"

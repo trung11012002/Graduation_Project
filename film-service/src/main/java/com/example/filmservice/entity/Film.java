@@ -40,7 +40,8 @@ public class Film {
 
     @Column(name = "score_avg")
     private Float score;
-
+    @Column(name = "url_trailer")
+    private String urlTrailer;
     @OneToMany(mappedBy = "film", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Thumnail> thumnails;
 

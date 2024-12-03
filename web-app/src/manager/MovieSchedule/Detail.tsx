@@ -57,7 +57,7 @@ const Detail: React.FC<IDetail> = ({ data, getSchedule }) => {
                     src={urlImg}
                 />
                 <div>
-                    <span style={{fontWeight: "bold", fontSize: "1.1rem"}}>Tên phim: {data.name}</span>
+                    <span style={{fontWeight: "bold", fontSize: "1.1rem"}}>Tên phim: {data.filmName}</span>
                     <span>Ngày chiếu: {converDate(data.startTime)}</span>
                     <span>Giờ bắt đầu: {converTime(data.startTime)}</span>
                     <span>Dự kiến kết thúc: {converTime(data.endTime)}</span>
