@@ -1,5 +1,6 @@
 package com.cinema.scheduleservice.dto.response;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,6 @@ public class FilmResponse {
     private String description;
     private String releaseDate;
     private Integer duration;
+    private String urlTrailer;
     private List<String> thumnails;
 }

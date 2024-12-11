@@ -20,4 +20,5 @@ public class EditFilmDto {
     private Integer duration;
     private List<Integer> deleteThumbnails;
     private List<MultipartFile> thumnails;
+    private String urlTrailer;
 }

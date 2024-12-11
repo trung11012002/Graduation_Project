@@ -21,6 +21,7 @@ public interface FilmMapper {
     @Mapping(target = "typeIds", source = "types")
     @Mapping(target = "thumnails", source = "thumnails")
     @Mapping(target = "typeNames", source = "types")
+    @Mapping(target = "urlTrailer", source = "urlTrailer")
     FilmResponse toFilmResponse(Film film);
 
     default List<Integer> mapTypesToTypeIds(List<Type> types) {

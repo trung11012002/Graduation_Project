@@ -58,10 +58,11 @@ const Detail: React.FC<IDetail> = ({data, getFilms }) => {
 
     // const urlImg = data.thumnails[0]?.url ? data.thumnails[0]?.url : ""
     const urlImg = data.thumnails[0] ? data.thumnails[0] : "";
+    const urlVideo = data.urlTrailer ? data.urlTrailer : "";
     return (
         <div className='Detail' key={data.id}>
             <div className='left_Detail'>
-                <AnimatedPoster imgUrl={urlImg} videoUrl={""}></AnimatedPoster>
+                <AnimatedPoster imgUrl={urlImg} videoUrl={urlVideo}></AnimatedPoster>
                 <div>
                     <span style={{fontWeight: "bold", fontSize: "1.1rem"}}>Tên phim: {data.name}</span>
                     <span>Thể loại: {type.join(", ")}</span>

@@ -18,20 +18,19 @@ async function geminiCallApi(model: any, prompt: any) {
 
 export async function geminiAi(inputString: any) {
     const res = await getAllFilms();
-    if(!inputString){
+    console.log(res)
         if(res?.code === 1000) {
+            console.log("api call success")
             const data = res.data;
-            let inputFilm = "đây là các thông tin film trong database của tôi. tôi sẽ đưa bạn câu hỏi và bạn chỉ được trả lời dựa theo thông tin ở database. Nếu câu hỏi không có thông tin ở database của tôi thì trả lời tôi không có câu trả lời cho câu hỏi này. ";
+            let inputFilm = "đây là các thông tin film trong rạp phim của tôi. tôi sẽ đưa bạn câu hỏi và bạn chỉ được trả lời dựa theo thông tin ở database. Nếu câu hỏi không có thông tin ở database của tôi thì trả lời tôi không có câu trả lời cho câu hỏi này. ";
             data.map((value: any) => {
-                inputFilm += "tên film " + value.name + " mô tả " + value.description;
+                inputFilm += "tên film " + value.name + " mô tả " + value.description + " thể loại " + value.typeNames.join(", ") + " thời lượng " + value.duration + " phút. ";
             })
             let input = inputFilm + "đây là câu hỏi: "  + inputString;
+            input += " trả lời với khách hàng tự nhiên nhất có thể. ";
             const messageResponse = await geminiCallApi(model, input);
             return messageResponse;
         }else {
             return "Có lỗi xảy ra khi gọi API";
         }
-    }else{
-
-    }
 }
