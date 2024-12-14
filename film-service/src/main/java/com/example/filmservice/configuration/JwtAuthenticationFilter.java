@@ -26,6 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
             "/user/**",
+            "/films/all",
     };
 
     @Autowired
@@ -74,11 +75,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     throw new AppException(ErrorCode.UNAUTHENTICATED);
                 }
                 // check status active
-//                if (!userDetails.getActive()) {
-//                    jwtAuthenticationEntryPoint.commence(
-//                            request, response, new AuthenticationException("User is not active") {});
-//                    return;
-//                }
+                if (userDetails.getActive()) {
+                    jwtAuthenticationEntryPoint.commence(
+                            request, response, new AuthenticationException("User is not active") {});
+                    return;
+                }
 
                 SecurityContextHolder.clearContext();
                 UsernamePasswordAuthenticationToken authentication =

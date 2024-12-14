@@ -19,4 +19,6 @@ public class FilmDto {
     private String releaseDate;
     private Integer duration;
     private List<MultipartFile> thumnails;
+    private String urlTrailer;
+
 }

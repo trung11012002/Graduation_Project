@@ -17,9 +17,6 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-//    @Autowired
-//    private JwtUtils jwtUtils;
-//
     @GetMapping("/customers")
     public ApiResponse<List<UserResponse>> findAllCustomerAccount() {
         return ApiResponse.<List<UserResponse>>builder()
@@ -58,9 +55,4 @@ public class UserController {
 
         return userService.changePassword(userId, oldPassword, newPassword);
     }
-
-//    @PostMapping("/forgot-password")
-//    public Result forgotPassword(@RequestBody String email) {
-//        return userService.forgotPassword(email);
-//    }
 }

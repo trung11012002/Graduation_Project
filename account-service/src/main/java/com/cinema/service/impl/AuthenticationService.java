@@ -94,7 +94,9 @@ public class AuthenticationService implements IAuthenticationService {
     public LoginResponse authencticate(AuthenticationResquest resquest) {
         User user = userRepository.findByUsername(resquest.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
+        if(user.isBlocked()) {
+            throw new AppException(ErrorCode.USER_BLOCKED);
+        }
         boolean authenticated = passwordEncoder.matches(resquest.getPassword(), user.getPassword());
 
         if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
@@ -195,6 +197,7 @@ public class AuthenticationService implements IAuthenticationService {
                 .recipient(request.getEmail())
                 .subject("Welcome to cinema")
                 .body(request.getUsername())
+                .templateCode("welcome")
                 .build();
         //Publish message to kafka
         kafkaTemplate.send("notification-delivery", notificationEvent);

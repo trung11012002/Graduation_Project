@@ -11,6 +11,7 @@ import {WebSocketContext} from "../../contexts/WebSocketContext";
 import Stomp from "stompjs";
 import SockJS from 'sockjs-client';
 import NotificationComponent from "./Notification";
+import {geminiAi} from "../../apis/geminiAi";
 
 const {confirm} = Modal;
 
@@ -64,35 +65,16 @@ const HeaderWeb = () => {
     }, [location]);
 
 
-
-    // stompClientGlobal.connect({}, (frame: any) => {
-    //     // Subscribe to a topic
-    //     stompClientGlobal.subscribe('/notification-global', receiveMessage(message));
-    //     // Send a message to the topic
-    //     // stompClientGlobal.send('/app/notification-global', {}, JSON.stringify({
-    //     //     content: 'Hello World',
-    //     //     sender: 'me'
-    //     // }));
-    // });
     const notificationsFromParent: string[] = [];
     function receiveMessage(message: any) {
         const messageBody = JSON.parse(message.body);
         notificationsFromParent.push(messageBody.content);
         // setNotifications([...notifications, messageBody.content]);
     }
-    // function sendMessage() {
-    //
-    //     var chatMessage = {
-    //         sender: "trung",
-    //         content: "trung123"
-    //     };
-    //     stompClient1.send('/app/chat.sendMessage', {}, JSON.stringify({content: 'Hello World 1', sender: 'me'}));
-    //     stompClient2.send('/app/hello', {}, JSON.stringify({content: 'Hello World 2', sender: 'me'}));
-    // }
 
     return (
         <div className='header'>
-            <div className='logo'>FILM BOOKING</div>
+            <div className='logo'><img src="https://res.cloudinary.com/dme0cssq0/image/upload/v1732725928/film-booking-high-resolution-logo-transparent_5_mksz3f.webp" /></div>
             <div className='header-right'>
                 {user?.isLogin ? (
                     <div

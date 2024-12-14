@@ -41,6 +41,7 @@ public class CinemaServiceImpl implements CinemaService {
             throw new AppException(ErrorCode.USER_NOT_ADMIN);
 
         cinema.setAdmin(user);
+        cinema.setStatus(true);
         cinemaRepository.save(cinema);
         
         return cinemaMapper.toCinemaResponse(cinema);
@@ -66,5 +67,38 @@ public class CinemaServiceImpl implements CinemaService {
     public List<CinemaResponse> findAll() {
         var cinemas = cinemaRepository.findAll();
         return cinemaMapper.toCinemaResponses(cinemas);
+    }
+
+    @Override
+    public CinemaResponse updateStatusCinema(Integer id) {
+        Cinema cinema = cinemaRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.CINEMA_NOT_FOUND));
+
+        if (cinema.getStatus()) {
+            cinema.setStatus(false);
+        } else {
+            cinema.setStatus(true);
+        }
+        cinemaRepository.save(cinema);
+        return null;
+    }
+
+    @Override
+    public CinemaResponse updateCinema(CinemaDto request) {
+        Cinema cinema = cinemaRepository.findById(request.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.CINEMA_NOT_FOUND));
+
+        User user = userRepository.findById(request.getAdminId())
+                .orElseThrow(() -> new AppException(ErrorCode.ADMIN_NOT_FOUND));
+
+        if(user.getManagedCinema() != null){
+            throw new AppException(ErrorCode.USER_MANAGE_CINEMA);
+        }
+        cinema.setName(request.getName());
+        cinema.setAddress(request.getAddress());
+        cinema.setAdmin(user);
+
+        cinemaRepository.save(cinema);
+        return null;
     }
 }

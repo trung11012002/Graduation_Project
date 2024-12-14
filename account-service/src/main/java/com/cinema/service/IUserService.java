@@ -37,5 +37,5 @@ public interface IUserService {
     List<UserResponse> findAllAdminAccountWithoutCinema();
 
 
-//    Result forgotPassword(String email);
+    String forgotPassword(String email);
 }

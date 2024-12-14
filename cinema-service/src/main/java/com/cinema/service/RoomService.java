@@ -14,4 +14,6 @@ public interface RoomService {
     RoomResponse findRoomById(Integer id);
 
     List<RoomResponse> findAllRoomInCinema(Integer cinemaId);
+
+    RoomResponse editRoom(Integer roomId, RoomDto dto);
 }

@@ -26,7 +26,7 @@
 
 .login-form h1 {
     cursor: pointer;
-    color: #71d3f7;
+    color: #222;
 }
 
 .login-form form {
@@ -49,18 +49,18 @@
 }
 
 .login-form input {
-    width: 65%;
+    width: 50%;
     border-radius: 5px;
     padding: 15px 20px;
     outline: none;
     /* margin-bottom: 20px; */
-    border: 1px solid #71d3f7;
+    border: 1px solid #222;
 }
 
 .login-form button {
     width: 200px;
     padding: 15px 20px;
-    background-color: #71d3f7;
+    background-color: #222;
     color: white;
     border: none;
     font-weight: bold;
@@ -94,7 +94,7 @@
 
 .register-form h1 {
     cursor: pointer;
-    color: #71d3f7;
+    color: #222;
 }
 
 .register-form form {
@@ -121,13 +121,13 @@
     border-radius: 5px;
     padding: 10px 15px;
     outline: none;
-    border: 1px solid #71d3f7;
+    border: 1px solid #25c8f1;
 }
 
 .register-form button {
     width: 200px;
     padding: 15px 20px;
-    background-color: #71d3f7;
+    background-color: #222;
     color: white;
     border: none;
     font-weight: bold;
@@ -180,7 +180,7 @@
 
 .forgot-password h1 {
     cursor: pointer;
-    color: #71d3f7;
+    color: #222;
 }
 
 .forgot-password form {
@@ -209,13 +209,13 @@
     padding: 15px 20px;
     outline: none;
     /* margin-bottom: 20px; */
-    border: 1px solid #71d3f7;
+    border: 1px solid #222;
 }
 
 .forgot-password button {
     width: 200px;
     padding: 15px 20px;
-    background-color: #71d3f7;
+    background-color: #222;
     color: white;
     border: none;
     font-weight: bold;
@@ -239,3 +239,17 @@
     border-top: 1px solid #71d3f7;
     padding-top: 1rem;
 }
+.stylish-img {
+    display: block; /* Đảm bảo ảnh là một khối riêng */
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng mượt */
+}
+
+.stylish-img:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3); /* Thêm bóng đổ mềm */
+}
+
+/*.box-form-login{*/
+/*    width: 80%;*/
+/*}*/

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { cinemaByDay } from '../../apis/theater';
 import { converTime } from '../../components/FuctionGlobal';
+import AnimatedPoster from "../../components/ImageFilm/AnimatedPoster";
 
 interface IContent {
   theater: any
@@ -89,11 +90,12 @@ const Content: React.FC<IContent> = ({ theater }) => {
             schedules.map((schedule: any, index: number) => {
               // const type = schedule.filmResponse.typeNames.map((type: any, index: number) => (<span key={index}>{`${type}${schedule.filmResponse.typeNames.length - 1 === index ? "" : ", "}`}</span>))
               const typeNames = schedule.filmResponse.typeNames.join(', ');
-
+              const urlImage = schedule.filmResponse.thumnails[0];
+              const urlVideo = schedule.filmResponse.urlTrailer;
               return (
                 <div key={index} className='list_film-Content-Showtimes'>
                   <div className='img-list_film-Content-Showtimes'>
-                    <img src={schedule.filmResponse.thumnails[0]} alt="" />
+                    <AnimatedPoster imgUrl={urlImage} videoUrl={urlVideo}></AnimatedPoster>
                   </div>
                   <div>
                     <p className='name-film'>{schedule.filmResponse.name}</p>

@@ -10,6 +10,7 @@ import com.cinema.dto.response.IntrospectResponse;
 import com.cinema.dto.response.LoginResponse;
 import com.cinema.dto.response.UserResponse;
 import com.cinema.service.IAuthenticationService;
+import com.cinema.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
     IAuthenticationService authenticationService;
+
+    IUserService userService;
 
     @PostMapping("/signin")
     ApiResponse<LoginResponse> authenticate(@RequestBody AuthenticationResquest resquest) {
@@ -79,6 +82,12 @@ public class AuthenticationController {
 //                .build();
 //    }
 
-
+    @PostMapping("/forgot-password")
+    public ApiResponse<String> forgotPassword(@RequestBody String email) {
+        return ApiResponse.<String>builder()
+                .data(userService.forgotPassword(email))
+                .code(1000)
+                .build();
+    }
 
 }

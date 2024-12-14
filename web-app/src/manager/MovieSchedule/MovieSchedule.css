@@ -9,9 +9,22 @@
 .Detail {
     display: flex;
     justify-content: space-between;
-    margin: 1rem 0;
+    /*margin: 1rem 0;*/
     border-bottom: 1px solid rgb(199, 199, 199);
     padding: 0.5rem;
+    margin: 0 100px;
+
+    /* Thêm shadow */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng nhạt */
+    border-radius: 8px; /* Bo góc nhẹ cho đẹp */
+    background-color: #fff; /* Đảm bảo bóng rõ hơn nếu nền trang khác màu */
+    transition: box-shadow 0.3s ease; /* Thêm hiệu ứng khi hover */
+    margin-bottom: 10px;
+}
+
+/* Hiệu ứng bóng đậm hơn khi hover */
+.Detail:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .left_Detail {
@@ -29,11 +42,18 @@
 .right_Detail div button{
     width: 150px;
 }
-
+/*.right_Detail div button:hover{*/
+/*    width: 150px;*/
+/*    background-color: #222 !important;*/
+/*}*/
 .UpdateSchedule header{
     display: flex;
     justify-content: center;
     font-size: 1.2rem;
     margin: 1rem 0;
     font-weight: bold;
+}
+.ant-btn-variant-outlined:hover {
+    color: #e00d2a !important;
+    border-color: #e00d2a !important;
 }

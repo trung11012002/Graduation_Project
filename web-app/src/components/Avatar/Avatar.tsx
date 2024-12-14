@@ -8,7 +8,7 @@ interface PropsAvatar {
 const Avatar: React.FC<PropsAvatar> = ({ url, width }) => {
   const avatarUrl =
     url ||
-    "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745";
+    "https://cdn-icons-png.flaticon.com/128/2202/2202112.png";
 
   const avatarWidth = width || "50px";
   return (

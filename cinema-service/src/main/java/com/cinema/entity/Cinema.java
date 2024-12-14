@@ -57,4 +57,7 @@ public class Cinema {
 
     @Column(name = "lastModifyBy")
     private String lastModifyBy;
+
+    @Column(name = "status")
+    private Boolean status;
 }

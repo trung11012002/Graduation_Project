@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -131,7 +132,7 @@ public class FilmServiceImpl implements FilmService {
         film.setDuration(filmDto.getDuration());
         List<Type> types = getListFilmTypes(filmDto.getTypeIds());
         film.setTypes(types);
-
+        film.setUrlTrailer(filmDto.getUrlTrailer());
         filmRepository.save(film);
         thumbnailsRepository.saveAll(thumnails);
 
@@ -188,6 +189,7 @@ public class FilmServiceImpl implements FilmService {
             System.out.println("đã xóa xong");
 
         }
+        film.setUrlTrailer(editFilmDto.getUrlTrailer());
         film.setName(editFilmDto.getName());
         film.setDescription(editFilmDto.getDescription());
         try {

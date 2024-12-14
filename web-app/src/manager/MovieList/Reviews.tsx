@@ -25,6 +25,7 @@ const Reviews = () => {
   if (!data) return <></>
 
   const urlImg = data.thumnails[0].url
+  const typeNames = data.types.map((type: any) => type.name).join(", ");
   return (
     <div className='Reviews MovieSchedule'>
       <header>Chi tiết phim</header>
@@ -35,7 +36,7 @@ const Reviews = () => {
         />
         <div>
           <span style={{fontWeight: "bold", fontSize: "1.1rem"}}>Tên phim: {data.name}</span>
-          <span>Thể loại: </span>
+          <span>Thể loại:  {typeNames}</span>
           <span>Mô tả: {data.description}</span>
           <span>Thời lượng: {data.duration}phút</span>
           <span>Ngày phát hành: {converDate(data.releaseDate)}</span>

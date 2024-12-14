@@ -25,8 +25,7 @@ const ForgotPassword = () => {
         const { email } = data
         if (email) {
             const res = await forgotPassword({ email })
-            if (res?.code === 200) {
-                console.log(res)
+            if (res?.code === 1000) {
                 success("Mật khẩu đăng nhập đã được gửi về email của bạn. Vui lòng kiểm tra")
                 navigate('/login')
             } else {
@@ -51,7 +50,7 @@ const ForgotPassword = () => {
         <div className='Form'>
             <div>
                 <div className='forgot-password'>
-                    <h1 onClick={navigateHome}>FILM BOOKING</h1>
+                    <h1 onClick={navigateHome}>ABSOLUTE CINEMA</h1>
 
                     <div className='instruct'>
                         <h3>Quên mật khẩu?</h3>
@@ -79,7 +78,7 @@ const ForgotPassword = () => {
                 </div>
 
                 <div className='img-loginform'>
-                    <img src={"https://kaliforms.com/wp-content/uploads/2021/04/movie-ticket-booking-form-scaled.jpg"} alt="" />
+                    <img className="stylish-img"  src={"https://res.cloudinary.com/dbym9b0xi/image/upload/v1732933898/d8f685cc-81cb-480e-879e-72a58649454c_oejrgi.jpg"} alt="" />
                 </div>
             </div>
         </div>

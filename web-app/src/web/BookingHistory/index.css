@@ -22,8 +22,9 @@
 .right_Detail {
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
+     /*justify-content: center;*/
     align-items: center;
+    margin-top: 50px;
 }
 
 .right_Detail *{
@@ -37,4 +38,8 @@
 .success-booking-history img {
     height: 20px;
     width: 20px;
+}
+.btn-detail span {
+    margin: 5px 10px 2px 2px;
+    /*margin: auto;*/
 }

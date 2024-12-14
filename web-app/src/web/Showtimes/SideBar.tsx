@@ -28,10 +28,10 @@ const SideBar: React.FC<ISideBar> = ({ listTheater, setTheater }) => {
           >
             <div>
               <span>
-                <img src="https://res.cloudinary.com/dbduzdrla/image/upload/v1703260547/phuc/movie_qa1l92.png" alt="" />
+                <img src="https://res.cloudinary.com/dbym9b0xi/image/upload/v1732721292/camera-movie_10435257_jzqbrd.png" alt="" />
                 &nbsp;&nbsp;{value.name}
               </span>
-              <img src="https://res.cloudinary.com/dbduzdrla/image/upload/v1703260409/phuc/next_1_r9ypi8.png" alt="" />
+              <img src="https://cdn-icons-png.flaticon.com/512/3236/3236907.png" alt="" />
             </div>
           </div>
         )

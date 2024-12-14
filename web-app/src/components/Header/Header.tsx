@@ -13,7 +13,6 @@ const Header = () => {
   const auth = useContext(AuthContextProvider)
   const user = auth?.userState
   const navigate = useNavigate();
-
   const navigateLoginForm = (e: any) => {
     e.preventDefault();
     navigate('/login')
@@ -54,7 +53,9 @@ const Header = () => {
 
   return (
     <div className='header'>
-      <div className='logo'>FILM BOOKING</div>
+      <div className='logo'>
+        <img src="https://res.cloudinary.com/dme0cssq0/image/upload/v1732725928/film-booking-high-resolution-logo-transparent_5_mksz3f.webp" />
+      </div>
       <div className='header-right'>
         <div className='option_main'>
           
@@ -76,10 +77,10 @@ const Header = () => {
             </Dropdown>
           </div>
           :
-          <div className='auth'>
-            <span onClick={navigateLoginForm}>Đăng nhập</span>
-            <span onClick={() => {navigate("/register")}}>Đăng ký</span>
-          </div>
+            <div className='auth'>
+              <span onClick={navigateLoginForm}>Đăng nhập</span>
+              <span onClick={() => { navigate("/register") }}>Đăng ký</span>
+            </div>
         }
 
       </div>

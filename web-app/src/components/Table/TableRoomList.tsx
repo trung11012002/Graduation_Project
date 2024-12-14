@@ -1,13 +1,14 @@
 import React from 'react';
-import { Table } from "antd";
+import {Button, Table} from "antd";
 import type { ColumnsType } from 'antd/es/table';
 
 interface ITableRoomList {
-    dataSource: any
+    dataSource: any,
+    onEdit: (recordId:any) => void
 }
 
 // STT, Tên phòng, Số hàng ghế, Số ghế mỗi hàng
-const TableRoomList:React.FC<ITableRoomList> = ({dataSource}) => {
+const TableRoomList:React.FC<ITableRoomList> = ({dataSource, onEdit}) => {
 
     const columns: ColumnsType<any> = [
         {
@@ -37,6 +38,16 @@ const TableRoomList:React.FC<ITableRoomList> = ({dataSource}) => {
             dataIndex: 'horizontalSeats',
             align: 'center',
             className: ''
+        },
+        {
+            title: 'Hành động',
+            key: 'action',
+            align: 'center',
+            render: (_, record) => (
+                <Button onClick={() => onEdit(record.id)}>
+                    Sửa
+                </Button>
+            ),
         },
     ];
 

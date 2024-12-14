@@ -56,7 +56,7 @@ const UploadImage: React.FC<IUploadImage> = ({ setFile, listFile, deleteThumbnai
 
     return (
         <Upload
-            action="https://run.mocky.io/v3/5377066f-b1b7-438d-8bcc-b58e5e0fb76f"
+            action="https://run.mocky.io/v3/ba4c94ab-f0dc-489d-b597-419317968529"
             listType="picture-card"
             fileList={fileList}
             onChange={handleChange}
