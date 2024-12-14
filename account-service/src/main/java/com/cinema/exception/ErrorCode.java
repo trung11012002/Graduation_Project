@@ -28,6 +28,7 @@ public enum ErrorCode {
     EMAIL_EXISTED(1019, "Email existed", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1020, "User not found", HttpStatus.BAD_REQUEST),
     WRONG_PASSWORD(1021, "Wrong password", HttpStatus.BAD_REQUEST),
+    USER_BLOCKED(1022, "User blocked", HttpStatus.BAD_REQUEST),
     ;
 
     private int code;

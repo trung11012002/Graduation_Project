@@ -94,7 +94,9 @@ public class AuthenticationService implements IAuthenticationService {
     public LoginResponse authencticate(AuthenticationResquest resquest) {
         User user = userRepository.findByUsername(resquest.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
+        if(user.isBlocked()) {
+            throw new AppException(ErrorCode.USER_BLOCKED);
+        }
         boolean authenticated = passwordEncoder.matches(resquest.getPassword(), user.getPassword());
 
         if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);

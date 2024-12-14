@@ -31,4 +31,4 @@ spring:
 
 app:
   services:
-    film: http://localhost:8083/film-service
+    film: http://localhost:8084/film-service

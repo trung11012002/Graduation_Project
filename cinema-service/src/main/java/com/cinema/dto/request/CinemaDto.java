@@ -12,4 +12,5 @@ public class CinemaDto {
     private String name;
     private String address;
     private Integer adminId;
+    private Boolean status;
 }

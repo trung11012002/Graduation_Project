@@ -32,9 +32,9 @@ public class GenerateHtmlEmail {
                             <div class='content'>
                                 <h2>Xin chào, %s!</h2>
                                 <p>Cảm ơn bạn đã đăng ký thành viên! Thế giới điện ảnh tuyệt vời đang chờ đón bạn.</p>
-                                <a href='https://yourcinema.com/account' class='cta-button'>Khám Phá Ngay!</a>
+                                <a href='http://localhost:3000/' class='cta-button'>Khám Phá Ngay!</a>
                             </div>
-                            <div class='footer'>Nếu có thắc mắc, hãy <a href='mailto:support@yourcinema.com'>liên hệ chúng tôi</a>.</div>
+                            <div class='footer'>Nếu có thắc mắc, hãy <a href='mailto:support@cinema.com'>liên hệ chúng tôi</a>.</div>
                         </div>
                     </body>
                     </html>

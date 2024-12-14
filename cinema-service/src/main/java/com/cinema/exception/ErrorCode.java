@@ -21,6 +21,7 @@ public enum ErrorCode {
     CURRENT_USER_NOT_MANAGE_CINEMA(1011, "The current user does not manage a cinema", HttpStatus.BAD_REQUEST),
     CINEMA_NOT_FOUND(1011, "Cinema not found", HttpStatus.BAD_REQUEST),
     ROOM_NOT_FOUND(1011, "Room not found", HttpStatus.BAD_REQUEST),
+    USER_MANAGE_CINEMA(1012, "User managed a cinema", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

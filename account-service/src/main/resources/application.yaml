@@ -44,8 +44,8 @@ jwtSignerKey:
   access: h0W6M8VNfODz9SMSgtmzh2B63q8F4xEwyWuwcG6DMGeSYe1UA5EN3NOwIBkb7BUv
   refresh: U3fCUgmxJG/U5EwINn2nIzY5xPwNtGQKDAszzxhS3tOD4yBLHztW+Q+X3her8fwt
 
-valid-duration: 900
-refreshable-duration: 3600
+valid-duration: 300000000000000
+refreshable-duration: 3600000000000
 timeDeleteTokenInvalid: 3000
 
 logging:

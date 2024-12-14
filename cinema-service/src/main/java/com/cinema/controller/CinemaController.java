@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,6 +52,22 @@ public class CinemaController {
         return ApiResponse.<List<CinemaResponse>>builder()
                 .code(1000)
                 .data(cinemaService.findAll())
+                .build();
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<CinemaResponse> updateStatusCinema(@PathVariable Integer id) {
+        return ApiResponse.<CinemaResponse>builder()
+                .code(1000)
+                .data(cinemaService.updateStatusCinema(id))
+                .build();
+    }
+
+    @PutMapping("/edit")
+    public ApiResponse<CinemaResponse> updateCinema(@RequestBody CinemaDto request) {
+        return ApiResponse.<CinemaResponse>builder()
+                .code(1000)
+                .data(cinemaService.updateCinema(request))
                 .build();
     }
 }

@@ -70,7 +70,7 @@ const Form = () => {
 
                 <div className='login-form'>
                     <h1 onClick={navigateHome}>ABSOLUTE CINEMA</h1>
-                    <form onSubmit={submitFormLogin}>
+                    <form className="box-form-login" onSubmit={submitFormLogin}>
                         <div>
                             <label htmlFor="username">Tên đăng nhập:</label>
                             <input

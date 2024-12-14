@@ -7,6 +7,10 @@ const TheaterList = () => {
 
   const [listTheater, setListTheater] = useState<any>()
   useEffect(() => {
+    getTheaterAll()
+  }, [])
+
+  const getTheaterAll = () => {
     (async() => {
       const res = await GetAllCinema()
       if(res?.code === 1000) {
@@ -20,12 +24,12 @@ const TheaterList = () => {
         setListTheater(newData)
       }
     })()
-  }, [])
+  }
 
   return (
     <div className='MovieSchedule'>
       <header>Danh sách rạp</header>
-        <TableTheaterList dataSource={listTheater} />
+        <TableTheaterList dataSource={listTheater} getTheaterAll = {getTheaterAll}/>
     </div>
   )
 }
