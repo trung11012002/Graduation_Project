@@ -71,7 +71,28 @@ export const createRoom = async (
     }
 ) => {
     return await callApi("cinema-service/room/create-room", "post", data)
-} 
+}
+
+export const updateRoom = async (
+    data: {
+        id?: number
+        name?: string
+        horizontalSeats?: number
+        verticalSeats?: number
+        cinemaId?: number
+    }
+) => {
+    return await callApi("cinema-service/room/edit-room", "post", data)
+}
+
+export const getRoomDetails = async (
+    data: {
+        id?: number
+    }
+) => {
+    return await callApi(`cinema-service/room/${data.id}`, "post", data)
+}
+
 
 // cinema-service/api/v1/room/room-in-cinema
 export const roomInCinema = async (

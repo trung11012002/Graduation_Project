@@ -14,6 +14,7 @@ import CreateMovie from "./CreateMovie/CreateMovie";
 import MovieList from "./MovieList/MovieList";
 import Reviews from "./MovieList/Reviews";
 import UpdateInfor from "../components/PersonalInformation/UpdateInfor";
+import EditRoom from "./EditRoom/EditRoom";
 
 const Manager = () => {
   return (
@@ -35,6 +36,8 @@ const Manager = () => {
             <Route path="/projection-history/view-all-booking/:id" element={<ShowOrder />} />
 
             <Route path="/create-room" element={<CreateRoom />} />
+
+            <Route path="/edit-room/:id" element={<EditRoom />} />
 
             <Route path="/room-list" element={<RoomList />} />
 
