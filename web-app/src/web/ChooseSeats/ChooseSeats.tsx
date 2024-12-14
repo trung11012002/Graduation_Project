@@ -79,7 +79,6 @@ const ChooseSeats = () => {
       (async () => {
         const res = await getSeatsStatus({ scheduleId: Number(scheduleId) })
         if (res?.code === 200) {
-          console.log('82',res.data)
           setTickets(res.data)
         }
         else {

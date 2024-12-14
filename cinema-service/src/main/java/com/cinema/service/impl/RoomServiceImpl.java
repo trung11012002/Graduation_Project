@@ -68,4 +68,17 @@ public class RoomServiceImpl implements RoomService {
 
         return roomMapper.toRoomResponses(rooms);
     }
+
+    @Override
+    public RoomResponse editRoom(Integer roomId, RoomDto dto) {
+        Room room = roomRepository.findById(roomId).get();
+        room.setName(dto.getName());
+        room.setHorizontalSeats(dto.getHorizontalSeats());
+        room.setVerticalSeats(dto.getVerticalSeats());
+        Cinema cinema = cinemaRepository.findById(dto.getCinemaId())
+                .orElseThrow(() -> new AppException(ErrorCode.CINEMA_NOT_FOUND));
+        room.setCinema(cinema);
+        roomRepository.save(room);
+        return roomMapper.toRoomResponse(room);
+    }
 }

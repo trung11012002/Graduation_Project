@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import TableRoomList from '../../components/Table/TableRoomList';
 import { AuthContextProvider } from '../../contexts/AuthContext';
 import { MoviesContextProvider } from '../../contexts/Movies';
+import { useNavigate } from 'react-router-dom';
 import { roomInCinema } from '../../apis/theater';
 
 const RoomList = () => {
@@ -13,6 +14,8 @@ const RoomList = () => {
   const cinema = moviesContext?.movies.cinema
 
   const [data, setData] = useState<any>([])
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (cinema.id) {
@@ -34,6 +37,11 @@ const RoomList = () => {
     }
   }, [cinema])
 
+  const handleEdit = (id: string) => {
+    // Điều hướng đến URL với id
+    navigate(`/admin/edit-room/${id}`);
+  };
+
   useEffect(() => {
     if (user) {
       findCinema(user.id)
@@ -44,7 +52,7 @@ const RoomList = () => {
     <div className='MovieSchedule'>
       <header>Danh sách phòng</header>
 
-      <TableRoomList dataSource={data} />
+      <TableRoomList dataSource={data}  onEdit={handleEdit}/>
     </div>
   )
 }

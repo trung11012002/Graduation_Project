@@ -48,4 +48,12 @@ public class RoomController {
                 .data(roomService.findAllRoomInCinema(cinemaId))
                 .build();
     }
+
+    @PostMapping("/edit-room")
+    public ApiResponse<RoomResponse> editRoom(@RequestBody RoomDto dto){
+       return ApiResponse.<RoomResponse>builder()
+               .code(1000)
+               .data(roomService.editRoom(dto.getId(), dto))
+               .build();
+    }
 }
