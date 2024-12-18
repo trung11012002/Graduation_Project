@@ -34,4 +34,6 @@ public class CinemaResponse {
     private String createdBy;
 
     private String lastModifyBy;
+
+    private Boolean status;
 }

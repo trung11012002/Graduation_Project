@@ -34,7 +34,7 @@ public class EmailService {
         String body = GenerateHtmlEmail.generateHtmlEmailWelcome(request.getTo().getEmail());
         EmailRequest emailRequest = EmailRequest.builder()
                 .sender(Sender.builder()
-                        .name("Cinema Welcome")
+                        .name("Cinema")
                         .email("vuquangtrung0987654321@gmail.com")
                         .build())
                 .to(List.of(request.getTo()))

@@ -60,5 +60,5 @@ export const forgotPassword = async (
         email: string
     }
 ) => {
-    return await callApi<any>("user-service/api/v1/auth/forgot-password", "post", data)
+    return await callApi<any>("account-service/auth/forgot-password", "post", data)
 }

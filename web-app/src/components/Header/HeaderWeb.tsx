@@ -123,7 +123,6 @@ const HeaderWeb = () => {
                         </Link>
                         <button onClick={navigateLoginForm}>Đăng nhập</button>
                         <button onClick={() => navigate('/register')}>Đăng ký</button>
-                        <button onClick={geminiAi}>Test gemini</button>
                     </div>
                 )}
             </div>
