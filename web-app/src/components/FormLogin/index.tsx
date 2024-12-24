@@ -40,10 +40,10 @@ const Form = () => {
             localStorage.setItem('tokenRefresh', res.data.tokenRefresh)
             auth?.autoLogin();
             success("Đăng nhập thành công")
-            res.data.role === "SUPER_ADMIN" ?
+            res.data.role.name === "SUPER_ADMIN" ?
                 navigate('/super-admin/theater-list')
                 :
-                res.data.role === "ADMIN" ?
+                res.data.role.name === "ADMIN" ?
                     navigate('/admin/movie-schedule')
                     :
                     navigate('/')
