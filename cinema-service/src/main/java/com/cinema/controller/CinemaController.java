@@ -39,7 +39,6 @@ public class CinemaController {
                 .data(cinemaService.findCinemaByAdmin(adminId))
                 .build();
     }
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping("/{id}")
     public ApiResponse<CinemaResponse> findCinema(@PathVariable Integer id) {
         return ApiResponse.<CinemaResponse>builder()
@@ -47,7 +46,7 @@ public class CinemaController {
                 .data(cinemaService.findCinemaById(id))
                 .build();
     }
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+
     @PostMapping
     public ApiResponse<List<CinemaResponse>> findAllCinema() {
         return ApiResponse.<List<CinemaResponse>>builder()

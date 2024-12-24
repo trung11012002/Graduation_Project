@@ -32,7 +32,6 @@ public class RoomController {
                 .data(roomService.createRoom(roomDto))
                 .build();
     }
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}")
     public ApiResponse<RoomResponse> findRoomById(@PathVariable Integer id) {
         return ApiResponse.<RoomResponse>builder()
@@ -40,7 +39,6 @@ public class RoomController {
                 .data(roomService.findRoomById(id))
                 .build();
     }
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/room-in-cinema")
     public ApiResponse<List<RoomResponse>> findRoomByCinema(@RequestParam Integer cinemaId) {
         return ApiResponse.<List<RoomResponse>>builder()
