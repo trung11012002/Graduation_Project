@@ -1,15 +1,8 @@
 package com.cinema.scheduleservice.service.Impl;
 
-import com.cinema.scheduleservice.dto.request.ScheduleDto;
-import com.cinema.scheduleservice.dto.response.*;
-import com.cinema.scheduleservice.entity.*;
-import com.cinema.scheduleservice.exception.AppException;
-import com.cinema.scheduleservice.exception.ErrorCode;
-import com.cinema.scheduleservice.mapper.FilmMapper;
-import com.cinema.scheduleservice.mapper.ScheduleMapper;
-import com.cinema.scheduleservice.repositories.*;
-import com.cinema.scheduleservice.service.ScheduleService;
-import com.cloudinary.api.exceptions.ApiException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,25 +12,36 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.cinema.scheduleservice.dto.request.ScheduleDto;
+import com.cinema.scheduleservice.dto.response.*;
+import com.cinema.scheduleservice.entity.*;
+import com.cinema.scheduleservice.exception.AppException;
+import com.cinema.scheduleservice.exception.ErrorCode;
+import com.cinema.scheduleservice.mapper.FilmMapper;
+import com.cinema.scheduleservice.mapper.ScheduleMapper;
+import com.cinema.scheduleservice.repositories.*;
+import com.cinema.scheduleservice.service.ScheduleService;
 
 @Service
 public class ScheduleResponseImpl implements ScheduleService {
     @Autowired
     private FilmRepository filmRepository;
+
     @Autowired
     private RoomRepository roomRepository;
+
     @Autowired
     private ScheduleRepository scheduleRepository;
+
     @Autowired
     private ScheduleMapper scheduleMapper;
+
     @Autowired
     private TicketRepository ticketRepository;
+
     @Autowired
     private CinemaRepository cinemaRepository;
+
     @Autowired
     private FilmMapper filmMapper;
 
@@ -47,14 +51,12 @@ public class ScheduleResponseImpl implements ScheduleService {
         LocalDateTime startTime = convertToLocalDateTimeFromString(dto.getStartTime());
         checkTime(startTime);
         Optional<Film> op1 = filmRepository.findById(dto.getFilmId());
-        if (!op1.isPresent())
-            throw new AppException(ErrorCode.FILM_NOT_FOUND);
+        if (!op1.isPresent()) throw new AppException(ErrorCode.FILM_NOT_FOUND);
         Film film = op1.get();
         Integer durations = film.getDuration(); // in seconds
         LocalDateTime endTime = startTime.plusMinutes(durations);
         Optional<Room> op2 = roomRepository.findById(dto.getRoomId());
-        if (!op2.isPresent())
-            throw new AppException(ErrorCode.ROOM_NOT_FOUND);
+        if (!op2.isPresent()) throw new AppException(ErrorCode.ROOM_NOT_FOUND);
         Room room = op2.get();
         boolean isRoomAvailable = isRoomAvailable(room, startTime, endTime);
         if (!isRoomAvailable) {
@@ -80,31 +82,25 @@ public class ScheduleResponseImpl implements ScheduleService {
     @Override
     public ScheduleCreateResponse getScheduleById(Integer id) {
         Optional<Schedule> op = scheduleRepository.findById(id);
-        if (!op.isPresent())
-            throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
-        else
-            return scheduleMapper.toScheduleCreateResponse(op.get());
+        if (!op.isPresent()) throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
+        else return scheduleMapper.toScheduleCreateResponse(op.get());
     }
 
     @Override
     public ScheduleCreateResponse updateSchedule(ScheduleDto dto) {
         Optional<Schedule> optional = scheduleRepository.findById(dto.getId());
-        if (!optional.isPresent())
-            throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
-        if (isBooked(dto.getId()))
-            throw new AppException(ErrorCode.SCHEDULE_IS_BOOKED);
+        if (!optional.isPresent()) throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
+        if (isBooked(dto.getId())) throw new AppException(ErrorCode.SCHEDULE_IS_BOOKED);
         Schedule schedule = optional.get();
         LocalDateTime startTime = convertToLocalDateTimeFromString(dto.getStartTime());
         checkTime(startTime);
         Optional<Film> op1 = filmRepository.findById(dto.getFilmId());
-        if (!op1.isPresent())
-            throw new AppException(ErrorCode.FILM_NOT_FOUND);
+        if (!op1.isPresent()) throw new AppException(ErrorCode.FILM_NOT_FOUND);
         Film film = op1.get();
         Integer durations = film.getDuration(); // in seconds
         LocalDateTime endTime = startTime.plusMinutes(durations);
         Optional<Room> op2 = roomRepository.findById(dto.getRoomId());
-        if (!op2.isPresent())
-            throw new AppException(ErrorCode.ROOM_NOT_FOUND);
+        if (!op2.isPresent()) throw new AppException(ErrorCode.ROOM_NOT_FOUND);
         Room room = op2.get();
         boolean isRoomAvailable = isRoomAvailable(room, startTime, endTime);
         if (!isRoomAvailable) {
@@ -121,10 +117,9 @@ public class ScheduleResponseImpl implements ScheduleService {
     @Override
     public ScheduleCreateResponse deleteSchedule(Integer id) {
         Optional<Schedule> optional = scheduleRepository.findById(id);
-        if (!optional.isPresent())
-            throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
-        if (isBooked(id))   // check if schedule is booked
-            throw new AppException(ErrorCode.SCHEDULE_IS_BOOKED);
+        if (!optional.isPresent()) throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
+        if (isBooked(id)) // check if schedule is booked
+        throw new AppException(ErrorCode.SCHEDULE_IS_BOOKED);
         scheduleRepository.deleteById(id);
         return scheduleMapper.toScheduleCreateResponse(optional.get());
     }
@@ -132,8 +127,7 @@ public class ScheduleResponseImpl implements ScheduleService {
     @Override
     public List<ScheduleResponse> findAllCurrentScheduleInCinema(Integer cinemaId) {
         Optional<Cinema> op = cinemaRepository.findById(cinemaId);
-        if (!op.isPresent())
-            throw new AppException(ErrorCode.CINEMA_NOT_FOUND);
+        if (!op.isPresent()) throw new AppException(ErrorCode.CINEMA_NOT_FOUND);
         List<Schedule> schedules = findScheduleByTimeOption(op.get(), false);
         Collections.sort(schedules, Comparator.comparing(Schedule::getStartTime));
         Collections.reverse(schedules);
@@ -156,8 +150,7 @@ public class ScheduleResponseImpl implements ScheduleService {
     @Override
     public ListScheduleResponseByPage findAllCurrentScheduleInCinemaByPage(Integer cinemaId, int page, int size) {
         Optional<Cinema> op = cinemaRepository.findById(cinemaId);
-        if (!op.isPresent())
-            throw new AppException(ErrorCode.CINEMA_NOT_FOUND);
+        if (!op.isPresent()) throw new AppException(ErrorCode.CINEMA_NOT_FOUND);
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("startTime").ascending());
         Page<Schedule> schedulesPage = findScheduleByTimeOption_withpage(op.get(), false, pageable);
         List<ScheduleResponse> responses = new ArrayList<>();
@@ -179,12 +172,11 @@ public class ScheduleResponseImpl implements ScheduleService {
     @Override
     public ListScheduleResponseByPage findAllHistoryScheduleInCinemaByPage(Integer cinemaId, int page, int size) {
         Optional<Cinema> op = cinemaRepository.findById(cinemaId);
-        if (!op.isPresent())
-            throw new AppException(ErrorCode.CINEMA_NOT_FOUND);
+        if (!op.isPresent()) throw new AppException(ErrorCode.CINEMA_NOT_FOUND);
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("startTime").ascending());
-        Page<Schedule> schedules = findScheduleByTimeOption_withpage(op.get(), true,pageable);
+        Page<Schedule> schedules = findScheduleByTimeOption_withpage(op.get(), true, pageable);
         List<ScheduleResponse> responses = new ArrayList<>();
-        for (Schedule schedule: schedules.getContent()) {
+        for (Schedule schedule : schedules.getContent()) {
             ScheduleResponse response = scheduleMapper.toScheduleResponse(schedule);
             Room room = schedule.getRoom();
             int totalSeats = room.getHorizontalSeats() * room.getVerticalSeats();
@@ -197,7 +189,6 @@ public class ScheduleResponseImpl implements ScheduleService {
         PageInfo pageInfo = new PageInfo((int) schedules.getTotalElements(), size);
         ListScheduleResponseByPage res = new ListScheduleResponseByPage(responses, pageInfo);
         return res;
-
     }
 
     @Override
@@ -211,9 +202,9 @@ public class ScheduleResponseImpl implements ScheduleService {
         Map<Integer, Integer> map = new HashMap<>();
         List<ShowFilmByDayResponse> result = new ArrayList<>();
         int index = 0;
-        for (Room room: rooms) {
+        for (Room room : rooms) {
             List<Schedule> schedules = scheduleRepository.findByDateRangeAndRoomId(dateStart, endDate, room.getId());
-            for (Schedule schedule: schedules) {
+            for (Schedule schedule : schedules) {
                 Film film = schedule.getFilm();
                 FilmResponse filmResponse = filmMapper.toFilmResponse(film);
                 if (map.containsKey(filmResponse.getId())) {
@@ -223,8 +214,7 @@ public class ScheduleResponseImpl implements ScheduleService {
                     scheduleResponseList.add(scheduleMapper.toScheduleResponse(schedule));
                     response.setScheduleResponseList(scheduleResponseList);
                     result.set(position, response);
-                }
-                else {
+                } else {
                     ShowFilmByDayResponse response = new ShowFilmByDayResponse();
                     response.setFilmResponse(filmResponse);
                     List<Schedule> list = new ArrayList<>();
@@ -241,7 +231,8 @@ public class ScheduleResponseImpl implements ScheduleService {
 
     @Override
     public List<OrderedResponse> findAllOrdered(Integer scheduleId) {
-        List<Ticket> tickets = ticketRepository.findByScheduleId(scheduleId)
+        List<Ticket> tickets = ticketRepository
+                .findByScheduleId(scheduleId)
                 .orElseThrow(() -> new AppException(ErrorCode.TICKET_NOT_FOUND));
 
         // Sử dụng Map để lưu trữ OrderedResponse theo bookingId
@@ -274,9 +265,11 @@ public class ScheduleResponseImpl implements ScheduleService {
             } else {
                 order.setVips(order.getVips() + 1);
             }
-            order.setSeats(order.getSeats().isEmpty()
-                    ? ticket.getSeatNumberVertical() + "-" + ticket.getSeatNumberHorizontal()
-                    : order.getSeats() + ", " + ticket.getSeatNumberVertical() + "-" + ticket.getSeatNumberHorizontal());
+            order.setSeats(
+                    order.getSeats().isEmpty()
+                            ? ticket.getSeatNumberVertical() + "-" + ticket.getSeatNumberHorizontal()
+                            : order.getSeats() + ", " + ticket.getSeatNumberVertical() + "-"
+                                    + ticket.getSeatNumberHorizontal());
             order.setTotalPaid(order.getTotalPaid() + ticket.getPrice());
         }
 
@@ -284,22 +277,21 @@ public class ScheduleResponseImpl implements ScheduleService {
         return new ArrayList<>(responseMap.values());
     }
 
-
     @Override
     public RevenueStatisticResponse getRevenueStatistic(Integer cinemaId, String startDate, String endDate) {
         Optional<Cinema> op = cinemaRepository.findById(cinemaId);
-        if (!op.isPresent())
-            throw new AppException(ErrorCode.CINEMA_NOT_FOUND);
+        if (!op.isPresent()) throw new AppException(ErrorCode.CINEMA_NOT_FOUND);
         Cinema cinema = op.get();
         LocalDateTime start = convertToLocalDateTimeFromString(startDate + "T00:00:00");
         LocalDateTime end = convertToLocalDateTimeFromString(endDate + "T23:59:59");
         if (end.isBefore(start)) {
             throw new AppException(ErrorCode.INVALID_TIME);
         }
-        List<Schedule> schedules = scheduleRepository.findAllByRoom_CinemaAndStartTimeAfterAndStartTimeBefore(cinema, start, end);
+        List<Schedule> schedules =
+                scheduleRepository.findAllByRoom_CinemaAndStartTimeAfterAndStartTimeBefore(cinema, start, end);
         long totalRevenue = 0L;
         List<ScheduleRevenueStatistic> revenueSchedules = new ArrayList<>();
-        for (Schedule schedule: schedules) {
+        for (Schedule schedule : schedules) {
             Film film = schedule.getFilm();
             FilmResponse filmResponse = filmMapper.toFilmResponse(film);
             ScheduleResponse response = scheduleMapper.toScheduleResponse(schedule);
@@ -308,12 +300,11 @@ public class ScheduleResponseImpl implements ScheduleService {
             revenueSchedule.setRoomName(response.getRoomName());
             revenueSchedule.setShowDate(schedule.getStartTime());
 
-            List<Ticket> tickets = ticketRepository.findByScheduleId(schedule.getId()).orElseThrow(
-                    () -> new AppException(ErrorCode.TICKET_NOT_FOUND)
-            );
+            List<Ticket> tickets = ticketRepository
+                    .findByScheduleId(schedule.getId())
+                    .orElseThrow(() -> new AppException(ErrorCode.TICKET_NOT_FOUND));
             revenueSchedule.setTicketsSold(tickets.size());
-            long revenue = tickets.stream()
-                    .mapToLong(Ticket::getPrice).sum();
+            long revenue = tickets.stream().mapToLong(Ticket::getPrice).sum();
             revenueSchedule.setRevenue(revenue);
             revenueSchedules.add(revenueSchedule);
             totalRevenue += revenue;
@@ -327,8 +318,7 @@ public class ScheduleResponseImpl implements ScheduleService {
     @Override
     public SeatsStatus findAllBookedSeat(Integer scheduleId) {
         Optional<Schedule> op = scheduleRepository.findById(scheduleId);
-        if (!op.isPresent())
-            throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
+        if (!op.isPresent()) throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
         Schedule schedule = op.get();
         ScheduleResponse scheduleResponse = scheduleMapper.toScheduleResponse(schedule);
         SeatsStatus seatsStatus = new SeatsStatus();
@@ -336,11 +326,11 @@ public class ScheduleResponseImpl implements ScheduleService {
         seatsStatus.setScheduleResponse(scheduleResponse);
         seatsStatus.setRow(room.getVerticalSeats());
         seatsStatus.setColumn(room.getHorizontalSeats());
-        List<Ticket> tickets = ticketRepository.findByScheduleId(scheduleId).orElseThrow(
-                () -> new AppException(ErrorCode.TICKET_NOT_FOUND)
-        );
+        List<Ticket> tickets = ticketRepository
+                .findByScheduleId(scheduleId)
+                .orElseThrow(() -> new AppException(ErrorCode.TICKET_NOT_FOUND));
         List<String> responses = new ArrayList<>();
-        for (Ticket ticket: tickets) {
+        for (Ticket ticket : tickets) {
             responses.add(ticket.getSeatNumberVertical() + "-" + ticket.getSeatNumberHorizontal());
         }
         seatsStatus.setBookedSeats(responses);
@@ -360,7 +350,7 @@ public class ScheduleResponseImpl implements ScheduleService {
         return schedules;
     }
 
-    //TODO: WITH PAGE
+    // TODO: WITH PAGE
     public Page<Schedule> findScheduleByTimeOption_withpage(Cinema cinema, boolean history, Pageable pageable) {
         LocalDateTime now = LocalDateTime.now();
         Page<Schedule> schedules;
@@ -387,16 +377,15 @@ public class ScheduleResponseImpl implements ScheduleService {
     private void checkTime(LocalDateTime dateTime) {
         // so sanh voi thoi gian hien tai
         LocalDateTime now = LocalDateTime.now();
-        if (dateTime.isBefore(now))
-            throw new AppException(ErrorCode.INVALID_TIME);
+        if (dateTime.isBefore(now)) throw new AppException(ErrorCode.INVALID_TIME);
         // neu thoi gian start truoc 10 tieng
-        if (dateTime.isBefore(now.plusHours(10)))
-            throw new AppException(ErrorCode.INVALID_TIME_CREATE_BEFORE_6_HOURS);
+        if (dateTime.isBefore(now.plusHours(10))) throw new AppException(ErrorCode.INVALID_TIME_CREATE_BEFORE_10_HOURS);
     }
 
     private boolean isRoomAvailable(Room room, LocalDateTime startTime, LocalDateTime endTime) {
-        List<Schedule> conflictingSchedules = scheduleRepository.findByRoomAndStartTimeLessThanEqualAndEndTimeGreaterThanEqual(
-                room, endTime, startTime);
+        List<Schedule> conflictingSchedules =
+                scheduleRepository.findByRoomAndStartTimeLessThanEqualAndEndTimeGreaterThanEqual(
+                        room, endTime, startTime);
 
         return conflictingSchedules.isEmpty();
     }

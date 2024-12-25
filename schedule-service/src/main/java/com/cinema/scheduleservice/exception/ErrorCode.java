@@ -1,8 +1,9 @@
 package com.cinema.scheduleservice.exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+
+import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
@@ -28,7 +29,7 @@ public enum ErrorCode {
     SEAT_ALREADY_BOOKED(1019, "Seat already booked", HttpStatus.BAD_REQUEST),
     BOOKING_NOT_FOUND(1020, "Booking not found", HttpStatus.NOT_FOUND),
     INVALID_TIME(1021, "Invalid time", HttpStatus.BAD_REQUEST),
-    INVALID_TIME_CREATE_BEFORE_6_HOURS(1022, "Please create before 6 hour", HttpStatus.BAD_REQUEST),
+    INVALID_TIME_CREATE_BEFORE_10_HOURS(1022, "Please create before 6 hour", HttpStatus.BAD_REQUEST),
     FILM_NOT_FOUND(1023, "Film not found", HttpStatus.NOT_FOUND),
     ROOM_NOT_FOUND(1024, "Room not found", HttpStatus.NOT_FOUND),
     ROOM_NOT_AVAILABLE(1025, "Room was occupied during requested time", HttpStatus.BAD_REQUEST),

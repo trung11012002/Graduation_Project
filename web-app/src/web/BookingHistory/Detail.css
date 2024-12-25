@@ -1,0 +1,37 @@
+.button-detail, .button-rating {
+    font-size: 16px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;  /* Giữ các phần tử trong nút căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa văn bản và icon */
+    gap: 8px; /* Khoảng cách giữa icon và văn bản */
+    transition: all 0.3s ease;
+    height: 40px;  /* Điều chỉnh chiều cao nút để cân đối */
+}
+
+.button-detail:hover, .button-rating:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.button-detail {
+    background-color: #1890ff;
+    border-color: #1890ff;
+    color: white;
+}
+
+.button-detail:hover {
+    background-color: #40a9ff;
+    border-color: #40a9ff;
+}
+
+.button-rating {
+    background-color: #f1f1f1;
+    color: #1890ff;
+    border-color: #1890ff;
+}
+
+.button-rating:hover {
+    background-color: #1890ff;
+    color: white;
+}

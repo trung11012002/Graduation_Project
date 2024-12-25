@@ -2,6 +2,7 @@ import React, { } from 'react'
 import { Button, Modal } from 'antd';
 import TableOrderSummary from '../../components/Table/TableOrderSummary';
 import { formatVNDCurrency } from '../../components/FuctionGlobal';
+import './index.css';
 
 interface IConfirmBook {
     open: boolean,

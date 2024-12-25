@@ -31,7 +31,6 @@ public class CinemaController {
                 .data(cinemaService.createCinema(request))
                 .build();
     }
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping("/by-admin")
     public ApiResponse<CinemaResponse> findCinemaByAdmin(@RequestParam Integer adminId) {
         return ApiResponse.<CinemaResponse>builder()

@@ -1,14 +1,14 @@
 import React from 'react';
-import {Button, Table} from "antd";
+import { Button, Table, Tooltip } from "antd";
 import type { ColumnsType } from 'antd/es/table';
 
 interface ITableRoomList {
     dataSource: any,
-    onEdit: (recordId:any) => void
+    onEdit: (recordId: any) => void
 }
 
 // STT, Tên phòng, Số hàng ghế, Số ghế mỗi hàng
-const TableRoomList:React.FC<ITableRoomList> = ({dataSource, onEdit}) => {
+const TableRoomList: React.FC<ITableRoomList> = ({ dataSource, onEdit }) => {
 
     const columns: ColumnsType<any> = [
         {
@@ -16,48 +16,54 @@ const TableRoomList:React.FC<ITableRoomList> = ({dataSource, onEdit}) => {
             dataIndex: 'key',
             key: 'key',
             align: 'center',
-            className: ''
         },
         {
             title: 'Tên phòng',
             dataIndex: 'name',
             key: 'name',
             align: 'center',
-            className: ''
         },
         {
             title: 'Số hàng ghế',
-            key: 'verticalSeats',
             dataIndex: 'verticalSeats',
+            key: 'verticalSeats',
             align: 'center',
-            className: ''
         },
         {
             title: 'Số ghế mỗi hàng',
-            key: 'horizontalSeats',
             dataIndex: 'horizontalSeats',
+            key: 'horizontalSeats',
             align: 'center',
-            className: ''
         },
         {
             title: 'Hành động',
             key: 'action',
             align: 'center',
             render: (_, record) => (
-                <Button onClick={() => onEdit(record.id)}>
-                    Sửa
-                </Button>
+                <Tooltip title="Chỉnh sửa phòng">
+                    <Button
+                        size="small"
+                        onClick={() => onEdit(record.id)}
+                        style={{ backgroundColor: '#4CAF50', color: 'white', border: 'none' }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#45a049'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#4CAF50'}
+                    >
+                        Sửa
+                    </Button>
+                </Tooltip>
             ),
         },
     ];
 
-  return (
-    <Table
-            bordered={true}
-            columns={columns} dataSource={dataSource}
+    return (
+        <Table
+            bordered
+            columns={columns}
+            dataSource={dataSource}
             pagination={false}
+            rowKey="key"  // Đảm bảo mỗi hàng có một key duy nhất
         />
-  )
-}
+    );
+};
 
-export default TableRoomList
+export default TableRoomList;

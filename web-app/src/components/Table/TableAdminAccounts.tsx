@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { Button, Table } from "antd";
-import type { ColumnsType } from 'antd/es/table';
+import { Button, Table, Space, Tag, Tooltip } from "antd";
+import { ColumnsType } from 'antd/es/table';
 import { changeStatus } from '../../apis/user';
 import { MessageContextProvider } from '../../contexts/MessageContext';
+import { CheckCircleOutlined, BlockOutlined } from '@ant-design/icons';
 
 interface ITableRoom {
     dataSource: any
@@ -11,21 +12,19 @@ interface ITableRoom {
 
 // STT, Họ Tên, Username, Email, Địa Chỉ, Trạng Thái, Rạp Quản Lý
 const TableAdminAccounts: React.FC<ITableRoom> = ({ dataSource, getAccount }) => {
+    const mess = useContext(MessageContextProvider);
+    const success = mess?.success;
+    const error = mess?.error;
 
-    const mess = useContext(MessageContextProvider)
-    const success = mess?.success
-    const error = mess?.error
-
-    const change = async(id: number) => {
-        const res = await changeStatus({id: id})
-        if(res?.code === 1000) {
-            getAccount()
-            success("Cập nhập trạng thái thành công")
+    const change = async (id: number) => {
+        const res = await changeStatus({ id: id });
+        if (res?.code === 1000) {
+            getAccount();
+            success("Cập nhật trạng thái thành công");
+        } else {
+            error(res?.msg);
         }
-        else {
-            error(res?.msg)
-        }
-    }
+    };
 
     const columns: ColumnsType<any> = [
         {
@@ -33,42 +32,36 @@ const TableAdminAccounts: React.FC<ITableRoom> = ({ dataSource, getAccount }) =>
             dataIndex: 'key',
             key: 'key',
             align: 'center',
-            className: ''
         },
         {
             title: 'Họ Tên',
             dataIndex: 'name',
             key: 'name',
             align: 'center',
-            className: ''
         },
         {
             title: 'Username',
-            key: 'username',
             dataIndex: 'username',
+            key: 'username',
             align: 'center',
-            className: ''
         },
         {
             title: 'Email',
-            key: 'email',
             dataIndex: 'email',
+            key: 'email',
             align: 'center',
-            className: ''
         },
         {
             title: 'Địa Chỉ',
-            key: 'address',
             dataIndex: 'address',
+            key: 'address',
             align: 'center',
-            className: ''
         },
         {
             title: 'Rạp Quản Lý',
-            key: 'nameCinema',
             dataIndex: 'nameCinema',
+            key: 'nameCinema',
             align: 'center',
-            className: ''
         },
         {
             title: 'Trạng Thái',
@@ -77,36 +70,54 @@ const TableAdminAccounts: React.FC<ITableRoom> = ({ dataSource, getAccount }) =>
             render: (_, record) => {
                 return (
                     <>
-                        {!record.blocked ?
-                            (
-                                <div>
-                                    <span style={{color:"green"}}>Hoạt động</span>
-                                    <Button size='small' onClick={() => change(Number(record.id))}>Chặn</Button>
-                                </div>
-                            )
-                            :
-                            (
-                                <div>
-                                    <span style={{color:"red"}}>Đã chặn</span>
-                                    <Button size='small' onClick={() => change(Number(record.id))}>Bỏ chặn</Button>
-                                </div>
-                            )
-                        }
+                        {!record.blocked ? (
+                            <Space size="middle">
+                                <Tag color="green">Hoạt động</Tag>
+                                <Tooltip title="Chặn tài khoản">
+                                    <Button
+                                        type="primary"
+                                        icon={<BlockOutlined />}
+                                        size="small"
+                                        onClick={() => change(Number(record.id))}
+                                    >
+                                        Chặn
+                                    </Button>
+                                </Tooltip>
+                            </Space>
+                        ) : (
+                            <Space size="middle">
+                                <Tag color="red">Đã chặn</Tag>
+                                <Tooltip title="Bỏ chặn tài khoản">
+                                    <Button
+                                        type="default"
+                                        icon={<CheckCircleOutlined />}
+                                        size="small"
+                                        onClick={() => change(Number(record.id))}
+                                    >
+                                        Bỏ chặn
+                                    </Button>
+                                </Tooltip>
+                            </Space>
+                        )}
                     </>
-                )
+                );
             },
             align: 'center',
-            className: 'blocked_TableAdminAccounts'
         },
     ];
 
     return (
-        <Table
-            bordered={true}
-            columns={columns} dataSource={dataSource}
-            pagination={false}
-        />
-    )
-}
+        <div style={{ margin: '20px', backgroundColor: '#fff', borderRadius: '8px', padding: '20px' }}>
+            <Table
+                bordered
+                columns={columns}
+                dataSource={dataSource}
+                pagination={false}
+                rowClassName="hover-row"
+                style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}
+            />
+        </div>
+    );
+};
 
-export default TableAdminAccounts
+export default TableAdminAccounts;

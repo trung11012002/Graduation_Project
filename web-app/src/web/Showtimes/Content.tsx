@@ -2,33 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { cinemaByDay } from '../../apis/theater';
 import { converTime } from '../../components/FuctionGlobal';
-import AnimatedPoster from "../../components/ImageFilm/AnimatedPoster";
+import styles from './Content.module.css';
 
 interface IContent {
   theater: any
 }
 
 const current_day: { [key: number]: string } = {
-  0: "chủ nhật",
-  1: "thứ 2",
-  2: "thứ 3",
-  3: "thứ 4",
-  4: "thứ 5",
-  5: "thứ 6",
-  6: "thứ 7"
+  0: "CN",
+  1: "T2",
+  2: "T3",
+  3: "T4",
+  4: "T5",
+  5: "T6",
+  6: "T7"
 }
 
 const Content: React.FC<IContent> = ({ theater }) => {
-
   const [schedules, setSchedules] = useState<any>()
   const { id } = useParams()
   const navigate = useNavigate()
 
-
   const currentDate = new Date()
-
   const [date, setDate] = useState<string>(
-    `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`
+      `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`
   )
 
   currentDate.setDate(currentDate.getDate() - 1)
@@ -36,7 +33,6 @@ const Content: React.FC<IContent> = ({ theater }) => {
   const dateOption = []
 
   for (let i = 0; i < 7; i++) {
-
     currentDate.setDate(currentDate.getDate() + 1)
     const currentDayOfWeek = current_day[currentDate.getDay()];
     const day = currentDate.getDate().toString().padStart(2, '0')
@@ -44,18 +40,21 @@ const Content: React.FC<IContent> = ({ theater }) => {
     const year = currentDate.getFullYear()
 
     dateOption.push(
-      <div
-        key={i} className={`${date.split("-")[2] !== day ? "date_Content-Showtimes" : "reverse-date_Content-Showtimes"}`}
-        onClick={() => { setDate(`${year}-${month}-${day}`) }}
-      >
-        <p>{day}</p>
-        <p>{i === 0 ? "hôm nay" : currentDayOfWeek}</p>
-      </div>
+        <div
+            key={i}
+            className={`
+          ${styles.dateItem} 
+          ${date.split("-")[2] === day ? styles.dateItemActive : ''}
+        `}
+            onClick={() => { setDate(`${year}-${month}-${day}`) }}
+        >
+          <span>{day}/{month}</span>
+          <span>{i === 0 ? "Hôm nay" : currentDayOfWeek}</span>
+        </div>
     )
   }
 
   const getAllScheduleByCinema = async (cinemaId: number, date: string) => {
-    console.log(date)
     const data = {
       cinemaId: cinemaId,
       date: date
@@ -66,66 +65,61 @@ const Content: React.FC<IContent> = ({ theater }) => {
     }
   }
 
-
   useEffect(() => {
     if (id) {
       getAllScheduleByCinema(Number(id), date)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, id])
 
   return (
-    <div className='Content-Showtimes'>
-      <header>
-        <h3>Lịch chiếu phim {theater && theater.name}</h3>
-        <p className='address_Content-Showtimes'>{theater && theater.address}</p>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h3>Lịch chiếu phim tại {theater?.name}</h3>
+          <p>{theater?.address}</p>
 
-        <div className='main-date_Content-Showtimes'>
-          {dateOption}
+          <div className={styles.dateSelector}>
+            {dateOption}
+          </div>
         </div>
-      </header>
-      <div>
-        {
-          schedules && schedules.length ?
-            schedules.map((schedule: any, index: number) => {
-              // const type = schedule.filmResponse.typeNames.map((type: any, index: number) => (<span key={index}>{`${type}${schedule.filmResponse.typeNames.length - 1 === index ? "" : ", "}`}</span>))
-              const typeNames = schedule.filmResponse.typeNames.join(', ');
-              const urlImage = schedule.filmResponse.thumnails[0];
-              const urlVideo = schedule.filmResponse.urlTrailer;
-              return (
-                <div key={index} className='list_film-Content-Showtimes'>
-                  <div className='img-list_film-Content-Showtimes'>
-                    <AnimatedPoster imgUrl={urlImage} videoUrl={urlVideo}></AnimatedPoster>
-                  </div>
-                  <div>
-                    <p className='name-film'>{schedule.filmResponse.name}</p>
-                    <p className='type-film'>{typeNames}</p>
 
-                    <div className='list_time-schedule_Content-Showtimes'>
-                      {schedule.scheduleResponseList.map((value: any, index: number) => {
-                        return (
-                          <div
-                            className='time-schedule_Content-Showtimes'
-                            onClick={() => {
-                              navigate(`/showtimes/${id}/choose-seats/${value.id}`)
-                            }}
-                          >
-                            {converTime(value.startTime)} ~ {converTime(value.endTime)}
-                          </div>
-                        )
-                      })}
+        <div className={styles.movieList}>
+          {schedules && schedules.length ? (
+              schedules.map((schedule: any, index: number) => {
+                const typeNames = schedule.filmResponse.typeNames.join(', ');
+                const urlImage = schedule.filmResponse.thumnails[0];
+
+                return (
+                    <div key={index} className={styles.movieItem}>
+                      <div className={styles.moviePoster}>
+                        <img src={urlImage} alt={schedule.filmResponse.name} />
+                      </div>
+
+                      <div className={styles.movieDetails}>
+                        <div className={styles.movieName}>{schedule.filmResponse.name}</div>
+                        <div className={styles.movieType}>{typeNames}</div>
+
+                        <div className={styles.showtimeList}>
+                          {schedule.scheduleResponseList.map((value: any, timeIndex: number) => (
+                              <div
+                                  key={timeIndex}
+                                  className={styles.showtimeItem}
+                                  onClick={() => navigate(`/showtimes/${id}/choose-seats/${value.id}`)}
+                              >
+                                {converTime(value.startTime)} ~ {converTime(value.endTime)}
+                              </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              )
-            })
-            :
-            <div className='notfount-Content-Showtimes'>
-              Không có phim nào được chiếu trong hôm nay {`:(((`}
-            </div>
-        }
+                )
+              })
+          ) : (
+              <div className={styles.noShowtimes}>
+                Không có phim nào được chiếu hôm nay 😢
+              </div>
+          )}
+        </div>
       </div>
-    </div>
   )
 }
 

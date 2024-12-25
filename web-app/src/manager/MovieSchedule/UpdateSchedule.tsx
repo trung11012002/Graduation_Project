@@ -56,8 +56,8 @@ const UpdateSchedule = () => {
       success("Thành công!!!!!!!!!!!!!!!!!!!!!")
       navigate("/admin/movie-schedule")
     } else {
-      console.log('res', res?.data.msg)
-      switch (res?.data.msg)  {
+      console.log('res', res)
+      switch (res?.msg)  {
         case "Schedule conflict": error("Lịch chiếu đã được đặt(không thể sửa)"); break;
         case "Room was occupied during requested time" : error("Phòng đã được đặt trong thời gian yêu cầu"); break;
       }

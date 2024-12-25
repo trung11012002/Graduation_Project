@@ -1,0 +1,62 @@
+/* Các nút chính với border tròn và màu sắc hiện đại */
+.button-detail, .button-delete, .button-view {
+    font-size: 14px;
+    padding: 12px 24px; /* Cải thiện padding để nút trông dễ nhìn hơn */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Khoảng cách giữa icon và văn bản */
+    border-radius: 25px; /* Border tròn hoàn toàn */
+    transition: all 0.3s ease;
+    height: 45px;
+    cursor: pointer;
+    text-transform: uppercase; /* Chữ in hoa để tạo vẻ sang trọng */
+
+}
+
+/* Nút "Sửa" (màu xanh dương đậm) */
+.button-detail {
+    background-color: #007bff; /* Xanh dương đậm */
+    border-color: #007bff;
+    color: white;
+}
+
+.button-detail:hover {
+    background-color: #0056b3; /* Xanh dương tối hơn khi hover */
+    border-color: #0056b3;
+}
+
+/* Nút "Xóa" (màu đỏ) */
+.button-delete {
+    background-color: #dc3545; /* Đỏ */
+    color: white;
+    border-color: #dc3545;
+}
+
+.button-delete:hover {
+    background-color: #c82333; /* Đỏ đậm khi hover */
+    border-color: #c82333;
+}
+
+/* Nút "Xem vé đã đặt" (màu xanh lá) */
+.button-view {
+    background-color: #28a745; /* Xanh lá */
+    color: white;
+    border-color: #28a745;
+}
+
+.button-view:hover {
+    background-color: #218838; /* Xanh lá đậm khi hover */
+    border-color: #218838;
+}
+
+/* Thêm hiệu ứng border-shadow khi hover */
+.button-detail:hover, .button-delete:hover, .button-view:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng đổ bóng nhẹ khi hover */
+}
+
+/* Hiệu ứng cho các nút khi đang ở trạng thái focus (được chọn) */
+.button-detail:focus, .button-delete:focus, .button-view:focus {
+    outline: none; /* Loại bỏ outline mặc định */
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5); /* Thêm viền sáng khi nút được chọn */
+}

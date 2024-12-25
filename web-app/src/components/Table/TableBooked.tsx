@@ -1,11 +1,12 @@
 import React from 'react';
-import { Space, Table, Tag } from "antd";
+import { Space, Table, Tag, Tooltip } from "antd";
 import type { ColumnsType } from 'antd/es/table';
 import { converDate, converTime } from '../FuctionGlobal';
 
 interface ITableRoom {
     dataSource: any
 }
+
 const TableBooked: React.FC<ITableRoom> = ({ dataSource }) => {
 
     const columns: ColumnsType<any> = [
@@ -14,21 +15,18 @@ const TableBooked: React.FC<ITableRoom> = ({ dataSource }) => {
             dataIndex: 'key',
             key: 'key',
             align: 'center',
-            className: ''
         },
         {
             title: 'Họ Tên',
             dataIndex: 'fullname',
             key: 'fullname',
             align: 'center',
-            className: ''
         },
         {
             title: 'Email',
             key: 'email',
             dataIndex: 'email',
             align: 'center',
-            className: ''
         },
         {
             title: 'Thời gian đặt',
@@ -43,14 +41,12 @@ const TableBooked: React.FC<ITableRoom> = ({ dataSource }) => {
                 )
             },
             align: 'center',
-            className: ''
         },
         {
             title: 'Số lượng vé',
             key: 'numberOfTicket',
             dataIndex: 'numberOfTicket',
             align: 'center',
-            className: ''
         },
         {
             title: 'Loại ghế',
@@ -59,37 +55,67 @@ const TableBooked: React.FC<ITableRoom> = ({ dataSource }) => {
             render: (_, record) => {
                 return (
                     <Space size={"small"}>
-                        <Tag bordered={false} color="green">{`Thường: ${record.regulars}`}</Tag>
-                        <Tag bordered={false} color="yellow">{`VIP: ${record.vips}`}</Tag>
+                        <Tag
+                            bordered={false}
+                            color="default"
+                            style={{
+                                backgroundColor: '#f0f0f0',
+                                color: '#444',
+                                fontWeight: 'bold',
+                                textTransform: 'uppercase'
+                            }}
+                        >
+                            {`Thường: ${record.regulars}`}
+                        </Tag>
+                        <Tag
+                            bordered={false}
+                            color="red"
+                            style={{
+                                backgroundColor: '#c0392b',
+                                color: '#fff',
+                                fontWeight: 'bold',
+                                textTransform: 'uppercase',
+                                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            {`VIP: ${record.vips}`}
+                        </Tag>
                     </Space>
                 )
             },
             align: 'center',
-            className: ''
         },
         {
             title: 'Vị trí ngồi',
             key: 'seats',
             dataIndex: 'seats',
             align: 'center',
-            className: ''
         },
         {
             title: 'Thanh toán',
             key: 'totalPaid',
             dataIndex: 'totalPaid',
+            render: (_, record) => {
+                return (
+                    <Tooltip title={`Thanh toán: ${record.totalPaid} VNĐ`}>
+                        <span>{record.totalPaid.toLocaleString()} VNĐ</span>
+                    </Tooltip>
+                )
+            },
             align: 'center',
-            className: ''
         },
     ];
 
     return (
         <Table
-            bordered={true}
-            columns={columns} dataSource={dataSource}
+            bordered
+            columns={columns}
+            dataSource={dataSource}
             pagination={false}
+            rowKey="key"
         />
     )
 }
 
-export default TableBooked
+export default TableBooked;

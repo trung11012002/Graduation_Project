@@ -6,6 +6,7 @@ import { AuthContextProvider } from '../../contexts/AuthContext';
 import { Button, Dropdown, MenuProps, Modal, Space } from 'antd';
 import { CloseOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import Avatar from '../Avatar/Avatar';
+import NotificationComponent from "./Notification";
 
 const { confirm } = Modal;
 
@@ -52,39 +53,38 @@ const Header = () => {
   ];
 
   return (
-    <div className='header'>
-      <div className='logo'>
-        <img src="https://res.cloudinary.com/dme0cssq0/image/upload/v1732725928/film-booking-high-resolution-logo-transparent_5_mksz3f.webp" />
-      </div>
-      <div className='header-right'>
-        <div className='option_main'>
-          
-        </div>
-
-        {user?.isLogin ?
-          <div
-            style={{ fontSize: '1.2rem', display: "flex", alignItems: 'center' }}
-            className='auth'
-          >
-            <p className='name_header'> Xin chào {user.user?.username}</p>
-            <Dropdown
-              menu={{ items }}
-              trigger={["click"]}
-            >
-              <Space style={{cursor:"pointer"}}> 
-                <Avatar width='50px' />
-              </Space>
-            </Dropdown>
+      <header className='header'>
+        <div className='header-container'>
+          <div className='logo'>
+            <img src="https://res.cloudinary.com/dme0cssq0/image/upload/v1732725928/film-booking-high-resolution-logo-transparent_5_mksz3f.webp" alt="Logo"/>
           </div>
-          :
-            <div className='auth'>
-              <span onClick={navigateLoginForm}>Đăng nhập</span>
-              <span onClick={() => { navigate("/register") }}>Đăng ký</span>
-            </div>
-        }
-
-      </div>
-    </div>
+          <div className='auth-section'>
+            {user?.isLogin ? (
+                <>
+                  <span className='welcome-text'>Xin chào {user.user?.username}</span>
+                  <Dropdown
+                      menu={{
+                        items: [
+                          {key: '1', label: <Link to='/update-information'>Thông tin cá nhân</Link>},
+                          {key: '2', label: <Button onClick={showLogoutModal}>Đăng xuất</Button>}
+                        ]
+                      }}
+                      trigger={['click']}
+                  >
+                    <div className='avatar-container'>
+                      <Avatar width='40px'/>
+                    </div>
+                  </Dropdown>
+                </>
+            ) : (
+                <div className='auth-buttons'>
+                  <button className='login-btn' onClick={navigateLoginForm}>Đăng nhập</button>
+                  <button className='register-btn' onClick={() => navigate('/register')}>Đăng ký</button>
+                </div>
+            )}
+          </div>
+        </div>
+      </header>
   )
 }
 

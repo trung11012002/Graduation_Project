@@ -5,20 +5,20 @@ import { CloseOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { deleteSchedule } from '../../apis/theater';
 import { MessageContextProvider } from '../../contexts/MessageContext';
 import { useNavigate } from 'react-router-dom';
+import './Detail.css';
 const { confirm } = Modal;
-
 interface IDetail {
-    data: any
-    getSchedule: any
+    data: any;
+    getSchedule: any;
 }
 
 const Detail: React.FC<IDetail> = ({ data, getSchedule }) => {
 
-    const mess = useContext(MessageContextProvider)
-    const success = mess?.success
-    const error = mess?.error
+    const mess = useContext(MessageContextProvider);
+    const success = mess?.success;
+    const error = mess?.error;
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const showLogoutModal = (id: number) => {
         confirm({
@@ -32,11 +32,11 @@ const Detail: React.FC<IDetail> = ({ data, getSchedule }) => {
                 try {
                     const res = await deleteSchedule({ scheduleId: id });
                     if (res?.code === 1000) {
-                        getSchedule()
-                        success("Xoá thành công")
+                        getSchedule();
+                        success("Xoá thành công");
                     }
                     else {
-                        error(res?.msg)
+                        error(res?.msg);
                     }
                 } catch (error) {
                     console.log('', error);
@@ -46,9 +46,10 @@ const Detail: React.FC<IDetail> = ({ data, getSchedule }) => {
         });
     };
 
-    if (!data) return <></>
+    if (!data) return <></>;
 
-    const urlImg = data.thumnails[0]
+    const urlImg = data.thumnails[0];
+
     return (
         <div className='Detail'>
             <div className='left_Detail'>
@@ -57,7 +58,7 @@ const Detail: React.FC<IDetail> = ({ data, getSchedule }) => {
                     src={urlImg}
                 />
                 <div>
-                    <span style={{fontWeight: "bold", fontSize: "1.1rem"}}>Tên phim: {data.filmName}</span>
+                    <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>Tên phim: {data.filmName}</span>
                     <span>Ngày chiếu: {converDate(data.startTime)}</span>
                     <span>Giờ bắt đầu: {converTime(data.startTime)}</span>
                     <span>Dự kiến kết thúc: {converTime(data.endTime)}</span>
@@ -68,22 +69,32 @@ const Detail: React.FC<IDetail> = ({ data, getSchedule }) => {
             <div className='right_Detail'>
                 <div>
                     <Button
-                        onClick={() => { navigate(`/admin/movie-schedule/update/${data.id}`, {
-                            state: data
-                        }) }}
+                        className="button-detail"
+                        onClick={() => { navigate(`/admin/movie-schedule/update/${data.id}`, { state: data }) }}
                     >
                         Sửa
                     </Button>
                 </div>
-                <div><Button onClick={() => showLogoutModal(data.id)} danger>Xóa</Button></div>
+                <div>
+                    <Button
+                        className="button-delete"
+                        onClick={() => showLogoutModal(data.id)}
+                    >
+                        Xóa
+                    </Button>
+                </div>
                 <div>Còn lại: {`${data.availables}/${data.totalSeats}`}</div>
-                <div><Button
-                 onClick={() => {
-                    navigate(`/admin/movie-schedule/view-all-booking/${data.id}`)
-                }}>Xem vé đã đặt</Button></div>
+                <div>
+                    <Button
+                        className="button-view"
+                        onClick={() => { navigate(`/admin/movie-schedule/view-all-booking/${data.id}`) }}
+                    >
+                        Xem vé đã đặt
+                    </Button>
+                </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Detail
+export default Detail;

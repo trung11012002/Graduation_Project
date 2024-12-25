@@ -86,8 +86,16 @@ const NotificationComponent = () => {
     const notificationMenu = <Menu items={notificationItems} />;
 
     return (
-        <Dropdown overlay={notificationMenu} trigger={['click']}>
-            <FontAwesomeIcon icon={faBell} size='2x' style={{ cursor: 'pointer', marginRight: '15px' }} />
+        <Dropdown
+            overlay={notificationMenu}
+            trigger={['click']}
+            placement="bottomRight"
+        >
+            <div className="notification-icon">
+                <FontAwesomeIcon icon={faBell} />
+                {/* Nếu có thông báo mới */}
+                <span className="notification-badge"></span>
+            </div>
         </Dropdown>
     );
 }

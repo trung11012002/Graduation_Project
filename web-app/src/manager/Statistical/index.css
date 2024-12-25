@@ -12,23 +12,57 @@
 .MovieSchedule_option>div>div {
     margin-right: 2rem;
 }
+.MovieSchedule_option Button {
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #1890ff;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.MovieSchedule_option Button:hover {
+    background-color: #40a9ff !important;
+    color: white !important;
+    transform: translateY(-3px);
+}
+
+.MovieSchedule_option Button:active {
+    background-color: #096dd9;
+    transform: translateY(0);
+}
+
+.MovieSchedule_option Button:focus {
+    outline: none;
+}
 
 .Statistical_sum {
-    margin: 1.5rem 2rem;
+    margin-top: 1.5rem;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    font-size: 1.2rem;
 }
 
 .Statistical_sum span:nth-child(1) {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: bold;
+    color: #2c3e50;
 }
 
 .Statistical_sum span:nth-child(2) {
-    margin-left: 0.3rem;
-    padding: 5px 12px;
+    margin-left: 0.5rem;
+    padding: 5px 15px;
+    font-size: 1rem;
     border: 1px solid #d9d9d9;
     border-radius: 6px;
-    line-height: 1;
+    background: #fff;
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.Statistical_sum span:nth-child(2):hover {
+    background: #f0f9f5;
+    color: #2ecc71;
 }
