@@ -1,0 +1,112 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.header p {
+    color: #666;
+    font-size: 14px;
+}
+
+.dateSelector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.dateItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    min-width: 70px;
+    transition: all 0.3s ease;
+}
+
+.dateItemActive {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.movieList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.movieItem {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.moviePoster {
+    width: 150px;
+    flex-shrink: 0;
+}
+
+.moviePoster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.movieDetails {
+    flex-grow: 1;
+    padding: 15px;
+}
+
+.movieName {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.movieType {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.showtimeList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.showtimeItem {
+    background-color: #f0f0f0;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.showtimeItem:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.noShowtimes {
+    text-align: center;
+    color: #888;
+    padding: 20px;
+}
