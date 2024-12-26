@@ -1,12 +1,12 @@
 package com.cinema.scheduleservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "cinema")
@@ -29,7 +29,6 @@ public class Cinema {
     private User admin;
 
     @OneToMany(mappedBy = "cinema", fetch = FetchType.LAZY)
-
     private List<Room> rooms;
 
     @Column(name = "createdAt")

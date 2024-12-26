@@ -123,4 +123,4 @@ const Content: React.FC<IContent> = ({ theater }) => {
   )
 }
 
-export default Content
+export default Content;

@@ -24,3 +24,28 @@ spring:
       enabled: true
     livereload:
       enabled: true
+  # Cấu hình RabbitMQ
+  rabbitmq:
+    host: localhost             # Địa chỉ của RabbitMQ server (có thể là localhost hoặc IP của server)
+    port: 5672                  # Cổng mặc định của RabbitMQ
+    username: guest             # Tên đăng nhập (mặc định là 'guest')
+    password: guest             # Mật khẩu (mặc định là 'guest')
+    virtual-host: /             # Virtual host, mặc định là '/'
+#    listener:
+#      simple:
+#        concurrency: 5          # Số lượng luồng mà listener sẽ sử dụng để lắng nghe thông điệp (có thể điều chỉnh theo nhu cầu)
+#        max-concurrency: 10     # Giới hạn số luồng tối đa
+#    # Đảm bảo kết nối với RabbitMQ
+#    connection-timeout: 10000  # Thời gian timeout khi kết nối RabbitMQ (10000ms = 10s)
+#    requested-heartbeat: 30    # Thời gian heartbeat giữa client và server RabbitMQ (30 giây)
+#    retry:
+#      enabled: true             # Kích hoạt tính năng retry trong trường hợp kết nối bị lỗi
+#      max-attempts: 3           # Số lần thử lại tối đa khi kết nối thất bại
+#      initial-interval: 1000    # Thời gian trễ giữa các lần thử lại (1000ms = 1s)
+#      multiplier: 1.5           # Hệ số tăng dần thời gian chờ giữa các lần thử lại
+#      max-interval: 10000      # Thời gian tối đa chờ trước khi thử lại (10000ms = 10s)
+
+app:
+  services:
+    cinema: http://localhost:8083/cinema-service
+    notification: http://localhost:8088/notification-service

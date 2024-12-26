@@ -1,10 +1,11 @@
 package com.cinema.scheduleservice.repositories;
 
-import com.cinema.scheduleservice.entity.Room;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.cinema.scheduleservice.entity.Room;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Integer> {

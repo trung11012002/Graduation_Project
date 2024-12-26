@@ -8,11 +8,14 @@ import { callApi } from "./callAPI"
 // getmapping
 export const createPayment = async(
     data: {
-        amount: number
         // orderInfor?: string
+        amount: number,
+        scheduleId: number,
+        userId: number,
+        seats: string[],
     }
 ) => {
-    return await callApi<any>(`payment-service/create-payment?amount=${data.amount}`, "post", data)
+    return await callApi<any>(`payment-service/create-payment`, "post", data)
 }
 
 // payment-service/api/v1/payment/result-info

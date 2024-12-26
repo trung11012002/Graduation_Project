@@ -1,11 +1,11 @@
 package com.cinema.scheduleservice.dto.response;
 
-import jakarta.persistence.Column;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -1,11 +1,11 @@
 package com.cinema.scheduleservice.utils;
 
-import com.nimbusds.jwt.SignedJWT;
 import org.springframework.stereotype.Service;
+
+import com.nimbusds.jwt.SignedJWT;
 
 @Service
 public class TokenUtils {
-
 
     public String getUsernameFromToken(String authHeader) {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {

@@ -1,13 +1,11 @@
 package com.cinema.scheduleservice.dto.response;
 
-import com.cinema.scheduleservice.entity.Ticket;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor

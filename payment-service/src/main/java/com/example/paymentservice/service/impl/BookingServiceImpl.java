@@ -7,6 +7,7 @@ import com.example.paymentservice.dto.TransactionDTO;
 import com.example.paymentservice.entity.Booking;
 import com.example.paymentservice.entity.Ticket;
 import com.example.paymentservice.entity.User;
+import com.example.paymentservice.enums.StatusPayment;
 import com.example.paymentservice.exception.AppException;
 import com.example.paymentservice.exception.ErrorCode;
 import com.example.paymentservice.mapper.BookingMapper;
@@ -100,5 +101,29 @@ public class BookingServiceImpl implements BookingService {
                 break;
         }
         return error;
+    }
+
+    @Override
+    @Transactional
+    public ApiResponse createBookingWithStatusPendingPayment(TransactionDTO dto) {
+        Booking booking = new Booking();
+        User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        booking.setUser(user);
+        booking.setBookingTime(LocalDateTime.now());
+        booking.setStatus(StatusPayment.PENDING.toString());
+        booking = bookingrepository.save(booking);
+        List<SeatDTO> seatDTOS = new ArrayList<>();
+        for(String s : dto.getSeats()){
+            String[] number = s.split("-");
+            SeatDTO seatDTO = new SeatDTO();
+            seatDTO.setRow(Integer.parseInt(number[0]));
+            seatDTO.setColumn(Integer.parseInt(number[1]));
+            seatDTOS.add(seatDTO);
+        }
+        List<Ticket> tickets = ticketService.createTickets(booking, dto.getScheduleId(), seatDTOS);
+        booking.setTickets(tickets);
+        booking = bookingrepository.save(booking);
+        BookingResponse response = mapper.toBookingResponse(booking);
+        return ApiResponse.builder().code(1000).msg("Success").data(response).build();
     }
 }

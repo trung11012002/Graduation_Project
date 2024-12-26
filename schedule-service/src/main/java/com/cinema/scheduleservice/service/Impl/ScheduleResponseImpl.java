@@ -226,6 +226,9 @@ public class ScheduleResponseImpl implements ScheduleService {
                 }
             }
         }
+        for (ShowFilmByDayResponse response : result) {
+            response.getScheduleResponseList().sort(Comparator.comparing(ScheduleResponse::getStartTime));
+        }
         return result;
     }
 

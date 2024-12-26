@@ -1,12 +1,13 @@
 package com.cinema.scheduleservice.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "film")
@@ -39,8 +40,10 @@ public class Film {
 
     @Column(name = "score_avg")
     private Float score;
+
     @Column(name = "url_trailer")
     private String urlTrailer;
+
     @OneToMany(mappedBy = "film", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Thumnail> thumnails;
 

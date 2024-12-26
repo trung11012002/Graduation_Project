@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -61,6 +62,18 @@ public class CinemaServiceImpl implements CinemaService {
                 .orElseThrow(() -> new AppException(ErrorCode.CURRENT_USER_NOT_MANAGE_CINEMA));
 
         return cinemaMapper.toCinemaResponse(cinema);
+    }
+
+    @Override
+    public List<CinemaResponse> findAllByStatus() {
+        var cinemas = cinemaRepository.findAll();
+        List<Cinema> result = new ArrayList<>();
+        for(Cinema cinema : cinemas){
+            if(cinema.getStatus()){
+                result.add(cinema);
+            }
+        }
+        return cinemaMapper.toCinemaResponses(result);
     }
 
     @Override

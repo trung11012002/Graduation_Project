@@ -1,16 +1,16 @@
 package com.cinema.scheduleservice.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.springframework.context.annotation.Configuration;
+
 import com.cinema.scheduleservice.dto.response.FilmResponse;
 import com.cinema.scheduleservice.entity.Film;
 import com.cinema.scheduleservice.entity.Thumnail;
 import com.cinema.scheduleservice.entity.Type;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
-import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 @Mapper(componentModel = "spring")
@@ -44,8 +44,8 @@ public interface FilmMapper {
         }
         return thumbnails.stream().map(Thumnail::getUrl).collect(Collectors.toList());
     }
+
     default List<String> mapTypeNames(List<Type> types) {
         return types.stream().map(Type::getName).collect(Collectors.toList());
     }
 }
-

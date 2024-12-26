@@ -1,11 +1,12 @@
 package com.cinema.scheduleservice.dto.request;
 
+import java.util.List;
+
 import com.cinema.scheduleservice.dto.response.Seat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor

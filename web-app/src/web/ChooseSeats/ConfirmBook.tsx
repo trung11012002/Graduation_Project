@@ -21,7 +21,8 @@ const ConfirmBook: React.FC<IConfirmBook> = ({
 }) => {
 
     const handleOk = () => {
-        window.open(url, "_self")
+        let urlPayment = localStorage.getItem("paymentUrl");
+        window.open(urlPayment!!, "_self")
     };
 
     const handleCancel = () => {

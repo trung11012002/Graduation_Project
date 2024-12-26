@@ -23,7 +23,7 @@ public class VNPayHelper {
             return formatter.format(cld.getTime());
         }
 
-        cld.add(Calendar.MINUTE, 15);
+        cld.add(Calendar.MINUTE, 2);
         return formatter.format(cld.getTime());
     }
 

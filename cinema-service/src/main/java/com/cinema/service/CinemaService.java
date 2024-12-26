@@ -14,6 +14,8 @@ public interface CinemaService {
 
     List<CinemaResponse> findAll();
 
+    List<CinemaResponse> findAllByStatus();
+
     CinemaResponse updateStatusCinema(Integer id);
 
     CinemaResponse updateCinema(CinemaDto request);

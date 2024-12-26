@@ -19,6 +19,7 @@ public class SecurityConfig {
     private static final String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
             "/user/**",
+            "/rabbit-test"
     };
 
     @Bean

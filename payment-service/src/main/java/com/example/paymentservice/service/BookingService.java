@@ -5,4 +5,6 @@ import com.example.paymentservice.dto.TransactionDTO;
 
 public interface BookingService {
     ApiResponse createBooking(TransactionDTO dto);
+
+    ApiResponse createBookingWithStatusPendingPayment(TransactionDTO dto);
 }

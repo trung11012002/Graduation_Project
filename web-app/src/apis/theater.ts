@@ -4,6 +4,9 @@ export const GetAllCinema = async () => {
     return await callApi<any>("cinema-service/cinema", "post")
 }
 
+export const GetAllCinemaByStatus = async () => {
+    return await callApi<any>("cinema-service/cinema/status", "post")
+}
 export const createCinema = async (
     data: {
         name?: string,

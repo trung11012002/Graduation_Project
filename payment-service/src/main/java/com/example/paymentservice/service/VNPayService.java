@@ -1,11 +1,25 @@
 package com.example.paymentservice.service;
 
+import com.example.paymentservice.configuration.RabbitMQConfig;
 import com.example.paymentservice.constants.VNPayConstants;
 import com.example.paymentservice.constants.VNPayHelper;
 import com.example.paymentservice.dto.OrderRequest;
+import com.example.paymentservice.dto.TransactionDTO;
+import com.example.paymentservice.entity.User;
+import com.example.paymentservice.exception.AppException;
+import com.example.paymentservice.exception.ErrorCode;
+import com.example.paymentservice.repository.UserRepository;
+import com.example.paymentservice.repository.httpclient.NotificationClient;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -15,8 +29,22 @@ import java.util.*;
 @Service
 @Slf4j
 public class VNPayService {
-    public String createOrder(HttpServletRequest request, OrderRequest orderRequest) throws UnsupportedEncodingException {
+    @Autowired
+    private BookingService bookingService;
 
+    @Autowired
+    private NotificationClient notificationClient;
+
+    @Autowired
+    private UserRepository userRepository;
+    @RabbitHandler
+    @RabbitListener(queues = RabbitMQConfig.QUEUE, ackMode = "AUTO")
+    public void createOrder(String requestVnpay) throws UnsupportedEncodingException, JsonProcessingException {
+//        bookingService.createBooking(requestVnpay);
+
+        log.info("Order received: {}", requestVnpay);
+        ObjectMapper objectMapper = new ObjectMapper();
+        OrderRequest orderRequest = objectMapper.readValue(requestVnpay, OrderRequest.class);
         Map<String, Object> payload = new HashMap(){{
             put("vnp_Version", VNPayConstants.VNP_VERSION);
             put("vnp_Command", VNPayConstants.VNP_COMMAND_ORDER);
@@ -28,10 +56,17 @@ public class VNPayService {
             put("vnp_OrderType", VNPayConstants.ORDER_TYPE);
             put("vnp_Locale", VNPayConstants.VNP_LOCALE);
             put("vnp_ReturnUrl", VNPayConstants.VNP_RETURN_URL);
-            put("vnp_IpAddr", VNPayHelper.getIpAddress(request));
+            put("vnp_IpAddr", orderRequest.getIpAddress());
             put("vnp_CreateDate", VNPayHelper.generateDate(false));
             put("vnp_ExpireDate", VNPayHelper.generateDate(true));
         }};
+
+        TransactionDTO transactionDTO = new TransactionDTO();
+        transactionDTO.setScheduleId(orderRequest.getScheduleId());
+        transactionDTO.setUserId(orderRequest.getUserId());
+        transactionDTO.setSeats(orderRequest.getSeats());
+
+        bookingService.createBookingWithStatusPendingPayment(transactionDTO);
 
         String queryUrl = getQueryUrl(payload).get("queryUrl")
                 + "&vnp_SecureHash="
@@ -43,7 +78,10 @@ public class VNPayService {
 
         log.info("Payment URL: {}", paymentUrl);
 
-        return paymentUrl;
+        // send payment url to client as websocket
+        User user = userRepository.findById(orderRequest.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        notificationClient.sendUrlPayment(paymentUrl, user.getUsername());
     }
 
     private Map<String, String> getQueryUrl(Map<String, Object> payload) throws UnsupportedEncodingException {

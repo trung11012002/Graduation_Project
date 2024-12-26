@@ -28,7 +28,11 @@ spring:
       multipart:
         max-file-size: 10MB
         max-request-size: 10MB
-
+    kafka:
+      bootstrap-servers: localhost:9094
+      producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 valid-duration: 900
 refreshable-duration: 3600
 timeDeleteTokenInvalid: 1

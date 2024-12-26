@@ -44,7 +44,6 @@ public class WebSocketSessionManager {
 //        messagingTemplate.convertAndSend("/notification-global", notifyMessage);
     }
 
-    // Khi user ngắt kết nối, xóa sessionId khỏi danh sách
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());

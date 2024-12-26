@@ -1,10 +1,10 @@
 package com.cinema.scheduleservice.dto.response;
 
+import java.time.LocalDateTime;
+
 import com.cinema.scheduleservice.entity.Cinema;
 import com.cinema.scheduleservice.entity.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.time.LocalDateTime;
 
 public class UserResponse {
     private Integer id;

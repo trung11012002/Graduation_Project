@@ -8,8 +8,10 @@ import java.util.stream.Collectors;
 
 import com.cloudinary.Api;
 import com.cloudinary.api.exceptions.ApiException;
+import com.event.dto.NotificationEvent;
 import com.example.filmservice.dto.response.ListFilmResponse;
 import com.example.filmservice.dto.response.PageInfo;
+import com.example.filmservice.entity.Notification;
 import com.example.filmservice.entity.Rating;
 import com.example.filmservice.exception.AppException;
 import com.example.filmservice.exception.ErrorCode;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +55,12 @@ public class FilmServiceImpl implements FilmService {
     @Autowired
     private RatingRepository ratingRepository;
     private final FilmMapper filmMapper;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
+    KafkaTemplate<String, Object> kafkaTemplate;
 
     public FilmServiceImpl(FilmMapper filmMapper) {
         this.filmMapper = filmMapper;
@@ -137,6 +146,27 @@ public class FilmServiceImpl implements FilmService {
         thumbnailsRepository.saveAll(thumnails);
 
         FilmResponse dataDto = filmMapper.toFilmResponse(film);
+
+
+        //create notification
+        Notification notification = Notification.builder()
+                .message("Phim mới vừa ra mắt " + film.getName())
+                .type("global")
+                .build();
+
+        notificationRepository.save(notification);
+
+        //send email
+        NotificationEvent notificationEvent = NotificationEvent.builder()
+                .channel("EMAIL")
+                .recipient("")
+                .subject("Welcome to cinema")
+                .body("Phim mới vừa ra mắt " + film.getName())
+                .templateCode("welcome")
+                .build();
+        //Publish message to kafka
+        kafkaTemplate.send("notification-film-new", notificationEvent);
+
 
         // Trả về kết quả thành công với FilmDto
         return ApiResponse.<FilmResponse>builder()

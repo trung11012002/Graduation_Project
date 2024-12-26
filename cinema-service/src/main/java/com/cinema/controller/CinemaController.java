@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,6 +55,15 @@ public class CinemaController {
                 .build();
     }
     @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PostMapping("/status")
+    public ApiResponse<List<CinemaResponse>> findAllCinemaByStatus() {
+        return ApiResponse.<List<CinemaResponse>>builder()
+                .code(1000)
+                .data(cinemaService.findAllByStatus())
+                .build();
+    }
+
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<CinemaResponse> updateStatusCinema(@PathVariable Integer id) {
         return ApiResponse.<CinemaResponse>builder()
@@ -61,6 +71,7 @@ public class CinemaController {
                 .data(cinemaService.updateStatusCinema(id))
                 .build();
     }
+
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PutMapping("/edit")
     public ApiResponse<CinemaResponse> updateCinema(@RequestBody CinemaDto request) {

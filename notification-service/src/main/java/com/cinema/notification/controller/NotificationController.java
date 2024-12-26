@@ -4,14 +4,19 @@ package com.cinema.notification.controller;
 import com.cinema.notification.dto.ApiResponse;
 import com.cinema.notification.dto.NotifyMessage;
 import com.cinema.notification.dto.request.NotificationRequest;
+import com.cinema.notification.dto.request.Recipient;
+import com.cinema.notification.dto.request.SendEmailRequest;
 import com.cinema.notification.dto.response.NotificationReponse;
 import com.cinema.notification.entity.Notification;
 import com.cinema.notification.service.INotificationService;
+import com.cinema.notification.utils.GenerateHtmlEmail;
+import com.event.dto.NotificationEvent;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -41,10 +46,6 @@ public class NotificationController {
 
     INotificationService notificationService;
 
-//    public NotificationController(SimpMessagingTemplate messagingTemplate) {
-//        this.messagingTemplate = messagingTemplate;
-//    }
-
     // Gửi thông báo đến tất cả người dùng
     @MessageMapping("/notification-global")
     @SendTo("/notification-global")
@@ -53,7 +54,6 @@ public class NotificationController {
         return request;
     }
 
-    // Gửi thông báo đến một user cụ thể
     @MessageMapping("/notification-user/{username}")
 //    @SendTo("/notification-user")
     public String notifyUser(SimpMessageHeaderAccessor sha, @PathVariable String username) {
@@ -63,11 +63,22 @@ public class NotificationController {
         return "Thông báo đã được gửi đến user " + username + ": " + message;
     }
 
-    @GetMapping("/notify/globalll")
+    @GetMapping("/notify/global")
     public String notifyAllUserss(@RequestParam String message) {
         System.out.println("message: " + message);
         NotifyMessage notifyMessage = NotifyMessage.builder()
                 .content(message)
+                .sender("System")
+                .build();
+        messagingTemplate.convertAndSend("/notification-global", notifyMessage);
+        return "Thông báo toàn hệ thống đã được gửi: " + message;
+    }
+
+    @KafkaListener(topics = "notification-film-new")
+    public String notifyAllUsers(NotificationEvent message) {
+        System.out.println("message: " + message);
+        NotifyMessage notifyMessage = NotifyMessage.builder()
+                .content(message.getBody())
                 .sender("System")
                 .build();
         messagingTemplate.convertAndSend("/notification-global", notifyMessage);
@@ -99,5 +110,11 @@ public class NotificationController {
                 .code(1000)
                 .data(notificationService.initNotification(username))
                 .build();
+    }
+
+    @PostMapping("/send-url-payment")
+    public String sendUrlPayment(@RequestParam String urlPayment, @RequestParam String username) {
+        messagingTemplate.convertAndSendToUser(username, "/notification-user/payment", urlPayment);
+        return "Send url payment to user " + urlPayment;
     }
 }

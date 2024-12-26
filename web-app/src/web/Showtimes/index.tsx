@@ -3,7 +3,7 @@ import './index.css';
 import HeaderWeb from '../../components/Header/HeaderWeb';
 import SideBar from './SideBar';
 import Content from './Content';
-import { GetAllCinema } from '../../apis/theater';
+import {GetAllCinema, GetAllCinemaByStatus} from '../../apis/theater';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Showtimes = () => {
@@ -18,7 +18,7 @@ const Showtimes = () => {
 
   useEffect(() => {
     (async () => {
-      const res = await GetAllCinema()
+      const res = await GetAllCinemaByStatus()
       if (res?.code === 1000) {
         setListTheater(res.data)
       }

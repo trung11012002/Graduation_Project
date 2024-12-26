@@ -1,6 +1,7 @@
 package com.cinema.scheduleservice.entity;
 
 import jakarta.persistence.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
