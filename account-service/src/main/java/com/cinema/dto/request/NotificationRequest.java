@@ -1,6 +1,7 @@
 package com.cinema.dto.request;
 
 import com.cinema.entity.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

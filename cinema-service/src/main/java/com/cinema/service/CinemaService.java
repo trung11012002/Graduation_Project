@@ -1,9 +1,9 @@
 package com.cinema.service;
 
+import java.util.List;
+
 import com.cinema.dto.request.CinemaDto;
 import com.cinema.dto.response.CinemaResponse;
-
-import java.util.List;
 
 public interface CinemaService {
     CinemaResponse createCinema(CinemaDto request);

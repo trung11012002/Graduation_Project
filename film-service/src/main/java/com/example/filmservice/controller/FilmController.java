@@ -39,12 +39,14 @@ public class FilmController {
         ApiResponse<ListFilmResponse> response = filmService.getFilms(page, perPage);
         return ResponseEntity.ok(response);
     }
+
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<FilmResponse>> createFilm(@ModelAttribute FilmDto filmDto) {
         ApiResponse<FilmResponse> response = filmService.createFilm(filmDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<ApiResponse<FilmResponse>> editFilm(@ModelAttribute EditFilmDto editFilmDto) {
@@ -57,6 +59,7 @@ public class FilmController {
         ApiResponse<Film> response = filmService.getFilmById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse<FilmResponse>> deleteFilm(@PathVariable Integer id) {

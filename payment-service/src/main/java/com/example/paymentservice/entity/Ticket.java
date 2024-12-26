@@ -1,6 +1,7 @@
 package com.example.paymentservice.entity;
 
 import jakarta.persistence.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -34,4 +35,3 @@ public class Ticket {
     @Column(name = "seat_number_vertical")
     private Integer seatNumberVertical;
 }
-

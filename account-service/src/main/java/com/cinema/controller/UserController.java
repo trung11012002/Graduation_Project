@@ -1,14 +1,15 @@
 package com.cinema.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import com.cinema.dto.request.ProfileEditRequest;
 import com.cinema.dto.response.ApiResponse;
 import com.cinema.dto.response.LoginResponse;
 import com.cinema.dto.response.UserResponse;
 import com.cinema.service.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -48,10 +49,10 @@ public class UserController {
                 .code(1000)
                 .build();
     }
+
     @GetMapping("/change-password")
-    public ApiResponse change_password(@RequestParam Integer userId,
-                         @RequestParam String oldPassword,
-                         @RequestParam String newPassword) {
+    public ApiResponse change_password(
+            @RequestParam Integer userId, @RequestParam String oldPassword, @RequestParam String newPassword) {
 
         return userService.changePassword(userId, oldPassword, newPassword);
     }

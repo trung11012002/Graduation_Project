@@ -52,6 +52,7 @@ public interface FilmMapper {
         }
         return thumbnails.stream().map(Thumnail::getUrl).collect(Collectors.toList());
     }
+
     default List<String> mapTypeNames(List<Type> types) {
         return types.stream().map(Type::getName).collect(Collectors.toList());
     }

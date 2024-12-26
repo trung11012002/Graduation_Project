@@ -20,5 +20,4 @@ public class FilmDto {
     private Integer duration;
     private List<MultipartFile> thumnails;
     private String urlTrailer;
-
 }

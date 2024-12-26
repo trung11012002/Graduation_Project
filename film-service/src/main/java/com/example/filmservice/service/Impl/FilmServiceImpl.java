@@ -6,41 +6,39 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.cloudinary.Api;
-import com.cloudinary.api.exceptions.ApiException;
-import com.event.dto.NotificationEvent;
-import com.example.filmservice.dto.response.ListFilmResponse;
-import com.example.filmservice.dto.response.PageInfo;
-import com.example.filmservice.entity.Notification;
-import com.example.filmservice.entity.Rating;
-import com.example.filmservice.exception.AppException;
-import com.example.filmservice.exception.ErrorCode;
-import com.example.filmservice.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.event.dto.NotificationEvent;
 import com.example.filmservice.Mapper.FilmMapper;
 import com.example.filmservice.cloudinary.CloudinaryService;
 import com.example.filmservice.dto.request.EditFilmDto;
 import com.example.filmservice.dto.request.FilmDto;
 import com.example.filmservice.dto.response.ApiResponse;
 import com.example.filmservice.dto.response.FilmResponse;
+import com.example.filmservice.dto.response.ListFilmResponse;
+import com.example.filmservice.dto.response.PageInfo;
 import com.example.filmservice.entity.Film;
+import com.example.filmservice.entity.Notification;
+import com.example.filmservice.entity.Rating;
 import com.example.filmservice.entity.Thumnail;
 import com.example.filmservice.entity.Type;
+import com.example.filmservice.exception.AppException;
+import com.example.filmservice.exception.ErrorCode;
+import com.example.filmservice.repositories.*;
 import com.example.filmservice.service.FilmService;
 
 @Service
 public class FilmServiceImpl implements FilmService {
     @Autowired
     private FilmRepository filmRepository;
+
     @Autowired
     private ScheduleRepository scheduleRepository;
 
@@ -52,8 +50,10 @@ public class FilmServiceImpl implements FilmService {
 
     @Autowired
     private FilmTypeRepository filmTypeRepository;
+
     @Autowired
     private RatingRepository ratingRepository;
+
     private final FilmMapper filmMapper;
 
     @Autowired
@@ -95,11 +95,10 @@ public class FilmServiceImpl implements FilmService {
         PageInfo pageInfo = new PageInfo((int) films.getTotalElements(), size);
         ListFilmResponse filmPageResponse = new ListFilmResponse(filmResponses, pageInfo);
 
-
         return ApiResponse.<ListFilmResponse>builder()
                 .code(1000)
                 .msg("Success")
-                .data(filmPageResponse)  // Trả về FilmPageResponse chứa danh sách phim và thông tin phân trang
+                .data(filmPageResponse) // Trả về FilmPageResponse chứa danh sách phim và thông tin phân trang
                 .build();
     }
 
@@ -147,8 +146,7 @@ public class FilmServiceImpl implements FilmService {
 
         FilmResponse dataDto = filmMapper.toFilmResponse(film);
 
-
-        //create notification
+        // create notification
         Notification notification = Notification.builder()
                 .message("Phim mới vừa ra mắt " + film.getName())
                 .type("global")
@@ -156,7 +154,7 @@ public class FilmServiceImpl implements FilmService {
 
         notificationRepository.save(notification);
 
-        //send email
+        // send email
         NotificationEvent notificationEvent = NotificationEvent.builder()
                 .channel("EMAIL")
                 .recipient("")
@@ -164,9 +162,8 @@ public class FilmServiceImpl implements FilmService {
                 .body("Phim mới vừa ra mắt " + film.getName())
                 .templateCode("welcome")
                 .build();
-        //Publish message to kafka
+        // Publish message to kafka
         kafkaTemplate.send("notification-film-new", notificationEvent);
-
 
         // Trả về kết quả thành công với FilmDto
         return ApiResponse.<FilmResponse>builder()
@@ -217,7 +214,6 @@ public class FilmServiceImpl implements FilmService {
             }
             thumnails.removeAll(thumnailsToRemove);
             System.out.println("đã xóa xong");
-
         }
         film.setUrlTrailer(editFilmDto.getUrlTrailer());
         film.setName(editFilmDto.getName());
@@ -254,7 +250,7 @@ public class FilmServiceImpl implements FilmService {
             film.setTypes(types);
         }
         filmRepository.save(film);
-//        thumbnailsRepository.saveAll(thumnails);
+        //        thumbnailsRepository.saveAll(thumnails);
         FilmResponse dataDto = filmMapper.toFilmResponse(film);
         return ApiResponse.<FilmResponse>builder()
                 .code(1000)
@@ -304,11 +300,7 @@ public class FilmServiceImpl implements FilmService {
                     .build();
         Film film = op.get();
         FilmResponse dataDto = filmMapper.toFilmResponse(film);
-        return ApiResponse.<Film>builder()
-                .code(1000)
-                .msg("Success")
-                .data(film)
-                .build();
+        return ApiResponse.<Film>builder().code(1000).msg("Success").data(film).build();
     }
 
     @Override
@@ -320,7 +312,7 @@ public class FilmServiceImpl implements FilmService {
                     .build();
         }
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Film> films = filmRepository.searchByName(name,pageable);
+        Page<Film> films = filmRepository.searchByName(name, pageable);
         List<FilmResponse> filmResponses =
                 films.getContent().stream().map(filmMapper::toFilmResponse).collect(Collectors.toList());
         PageInfo pageInfo = new PageInfo((int) films.getTotalElements(), size);
@@ -339,15 +331,12 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public FilmResponse updateScore(Integer filmId) {
-        Film op = filmRepository.findById(filmId).orElseThrow(
-                () -> new AppException(ErrorCode.FILM_NOT_FOUND)
-        );
+        Film op = filmRepository.findById(filmId).orElseThrow(() -> new AppException(ErrorCode.FILM_NOT_FOUND));
         List<Rating> ratings = ratingRepository.findAllByFilm(op);
-        if (ratings == null || ratings.isEmpty())
-            throw new AppException(ErrorCode.RATING_IS_EMPTY);
+        if (ratings == null || ratings.isEmpty()) throw new AppException(ErrorCode.RATING_IS_EMPTY);
         List<Integer> stars = ratings.stream().map(Rating::getStar).collect(Collectors.toList());
         int sum = 0;
-        for (Integer star: stars) {
+        for (Integer star : stars) {
             sum += star;
         }
         float avgScore = (float) sum / stars.size();
@@ -358,13 +347,13 @@ public class FilmServiceImpl implements FilmService {
         return filmMapper.toFilmResponse(op);
     }
 
-//
+    //
 
     private List<Type> getListFilmTypes(List<Integer> ids) {
         List<Type> types = new ArrayList<>();
         for (Integer id : ids) {
-            Type type = filmTypeRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Loại phim không tồn tại"));
+            Type type =
+                    filmTypeRepository.findById(id).orElseThrow(() -> new RuntimeException("Loại phim không tồn tại"));
             types.add(type);
         }
         return types;

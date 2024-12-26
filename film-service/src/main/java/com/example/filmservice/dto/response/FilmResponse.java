@@ -20,5 +20,4 @@ public class FilmResponse {
     private List<String> thumnails;
     private Float score;
     private String urlTrailer;
-
 }

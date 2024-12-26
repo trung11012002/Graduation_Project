@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,6 +31,7 @@ public class CinemaController {
                 .data(cinemaService.createCinema(request))
                 .build();
     }
+
     @PostMapping("/by-admin")
     public ApiResponse<CinemaResponse> findCinemaByAdmin(@RequestParam Integer adminId) {
         return ApiResponse.<CinemaResponse>builder()
@@ -39,6 +39,7 @@ public class CinemaController {
                 .data(cinemaService.findCinemaByAdmin(adminId))
                 .build();
     }
+
     @PostMapping("/{id}")
     public ApiResponse<CinemaResponse> findCinema(@PathVariable Integer id) {
         return ApiResponse.<CinemaResponse>builder()
@@ -54,6 +55,7 @@ public class CinemaController {
                 .data(cinemaService.findAll())
                 .build();
     }
+
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping("/status")
     public ApiResponse<List<CinemaResponse>> findAllCinemaByStatus() {

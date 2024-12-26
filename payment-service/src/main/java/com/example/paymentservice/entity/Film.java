@@ -1,12 +1,13 @@
 package com.example.paymentservice.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "film")
@@ -22,7 +23,8 @@ public class Film {
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "film_type",
+    @JoinTable(
+            name = "film_type",
             joinColumns = @JoinColumn(name = "film_id"),
             inverseJoinColumns = @JoinColumn(name = "type_id"))
     private List<Type> types;
@@ -56,7 +58,4 @@ public class Film {
 
     @Column(name = "lastModifyBy")
     private String lastModifyBy;
-
-
 }
-

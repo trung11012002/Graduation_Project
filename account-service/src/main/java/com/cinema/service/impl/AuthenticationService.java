@@ -1,11 +1,20 @@
 package com.cinema.service.impl;
 
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.cinema.dto.request.AuthenticationResquest;
 import com.cinema.dto.request.IntrospectRequest;
 import com.cinema.dto.request.LogoutRequest;
-import com.cinema.dto.request.NotificationRequest;
 import com.cinema.dto.request.RegisterRequest;
-import com.cinema.dto.response.AuthenticationResponse;
 import com.cinema.dto.response.IntrospectResponse;
 import com.cinema.dto.response.LoginResponse;
 import com.cinema.dto.response.RoleResponse;
@@ -33,21 +42,12 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.text.ParseException;
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -70,7 +70,6 @@ public class AuthenticationService implements IAuthenticationService {
 
     NotificationRepository notificationRepository;
 
-
     @NonFinal
     @Value("${jwtSignerKey.access}")
     protected String SIGNER_KEY_ACCESS;
@@ -92,9 +91,10 @@ public class AuthenticationService implements IAuthenticationService {
     protected long TIME_DELETE_TOKEN_INVALID;
 
     public LoginResponse authencticate(AuthenticationResquest resquest) {
-        User user = userRepository.findByUsername(resquest.getUsername())
+        User user = userRepository
+                .findByUsername(resquest.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        if(user.isBlocked()) {
+        if (user.isBlocked()) {
             throw new AppException(ErrorCode.USER_BLOCKED);
         }
         boolean authenticated = passwordEncoder.matches(resquest.getPassword(), user.getPassword());
@@ -164,13 +164,11 @@ public class AuthenticationService implements IAuthenticationService {
     @Override
     public UserResponse register(RegisterRequest request, boolean isAdmin) {
         String error = errorUsername(request.getUsername());
-        if (error != null)
-            throw new AppException(ErrorCode.USERNAME_INVALID_REGISTER);
+        if (error != null) throw new AppException(ErrorCode.USERNAME_INVALID_REGISTER);
 
         boolean isValid = validateEmail(request.getEmail());
 
-        if (!isValid)
-            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        if (!isValid) throw new AppException(ErrorCode.EMAIL_EXISTED);
 
         User user = userMapper.toUser(request);
 
@@ -182,7 +180,7 @@ public class AuthenticationService implements IAuthenticationService {
         user.setRole(role);
         user = userRepository.save(user);
 
-        //create notification
+        // create notification
         Notification notification = Notification.builder()
                 .message("Welcome to cinema")
                 .type("only-user")
@@ -191,7 +189,7 @@ public class AuthenticationService implements IAuthenticationService {
 
         notificationRepository.save(notification);
 
-        //send email
+        // send email
         NotificationEvent notificationEvent = NotificationEvent.builder()
                 .channel("EMAIL")
                 .recipient(request.getEmail())
@@ -199,7 +197,7 @@ public class AuthenticationService implements IAuthenticationService {
                 .body(request.getUsername())
                 .templateCode("welcome")
                 .build();
-        //Publish message to kafka
+        // Publish message to kafka
         kafkaTemplate.send("notification-delivery", notificationEvent);
 
         return userMapper.toUserResponse(user);
@@ -216,8 +214,8 @@ public class AuthenticationService implements IAuthenticationService {
         }
         if (username == null) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user =
+                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         // role
         String role = user.getRole().getName().toUpperCase();
@@ -242,20 +240,20 @@ public class AuthenticationService implements IAuthenticationService {
         return response;
     }
 
-
-//
-//    @Override
-//    public AuthenticationResponse refreshToken(RefreshRequest refreshRequest) throws ParseException, JOSEException {
-//        SignedJWT signedJWT = verifyTokenRefresh(refreshRequest.getTokenRefresh());
-//        String username = signedJWT.getJWTClaimsSet().getSubject();
-//        UserResponse user = (UserResponse) redisServiceUser.get("user_" + username);
-//        if (user == null) throw new AppException(ErrorCode.USER_NOT_EXISTED);
-//        var token = generateAccessToken(user);
-//        return AuthenticationResponse.builder()
-//                .tokenAccess(token)
-//                .authenticated(true)
-//                .build();
-//    }
+    //
+    //    @Override
+    //    public AuthenticationResponse refreshToken(RefreshRequest refreshRequest) throws ParseException, JOSEException
+    // {
+    //        SignedJWT signedJWT = verifyTokenRefresh(refreshRequest.getTokenRefresh());
+    //        String username = signedJWT.getJWTClaimsSet().getSubject();
+    //        UserResponse user = (UserResponse) redisServiceUser.get("user_" + username);
+    //        if (user == null) throw new AppException(ErrorCode.USER_NOT_EXISTED);
+    //        var token = generateAccessToken(user);
+    //        return AuthenticationResponse.builder()
+    //                .tokenAccess(token)
+    //                .authenticated(true)
+    //                .build();
+    //    }
 
     private String generateAccessToken(User user) {
         // create access token
@@ -348,8 +346,7 @@ public class AuthenticationService implements IAuthenticationService {
         }
 
         Optional<User> op = userRepository.findByUsername(username);
-        if (op.isPresent())
-            return "Tên đăng nhập đã được sử dụng";
+        if (op.isPresent()) return "Tên đăng nhập đã được sử dụng";
 
         return null;
     }
@@ -361,8 +358,7 @@ public class AuthenticationService implements IAuthenticationService {
 
     public boolean validateEmail(String email) {
         Optional<User> op = userRepository.findByEmail(email);
-        if (op.isPresent())
-            return false;
+        if (op.isPresent()) return false;
         return true;
     }
 }

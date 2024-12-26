@@ -1,27 +1,28 @@
 package com.cinema.controller;
 
-import com.cinema.dto.request.AuthenticationResquest;
-import com.cinema.dto.request.IntrospectRequest;
-import com.cinema.dto.request.LogoutRequest;
-import com.cinema.dto.request.RegisterRequest;
-import com.cinema.dto.response.ApiResponse;
-import com.cinema.dto.response.AuthenticationResponse;
-import com.cinema.dto.response.IntrospectResponse;
-import com.cinema.dto.response.LoginResponse;
-import com.cinema.dto.response.UserResponse;
-import com.cinema.service.IAuthenticationService;
-import com.cinema.service.IUserService;
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.cinema.dto.request.AuthenticationResquest;
+import com.cinema.dto.request.IntrospectRequest;
+import com.cinema.dto.request.LogoutRequest;
+import com.cinema.dto.request.RegisterRequest;
+import com.cinema.dto.response.ApiResponse;
+import com.cinema.dto.response.IntrospectResponse;
+import com.cinema.dto.response.LoginResponse;
+import com.cinema.dto.response.UserResponse;
+import com.cinema.service.IAuthenticationService;
+import com.cinema.service.IUserService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @RestController
 @RequestMapping("/auth")
@@ -35,19 +36,13 @@ public class AuthenticationController {
     @PostMapping("/signin")
     ApiResponse<LoginResponse> authenticate(@RequestBody AuthenticationResquest resquest) {
         var result = authenticationService.authencticate(resquest);
-        return ApiResponse.<LoginResponse>builder()
-                .data(result)
-                .code(1000)
-                .build();
+        return ApiResponse.<LoginResponse>builder().data(result).code(1000).build();
     }
 
     @PostMapping("/introspect")
     ApiResponse<IntrospectResponse> authenticate(@RequestBody @Valid IntrospectRequest resquest) {
         var result = authenticationService.introspect(resquest);
-        return ApiResponse.<IntrospectResponse>builder()
-                .data(result)
-                .code(1000)
-                .build();
+        return ApiResponse.<IntrospectResponse>builder().data(result).code(1000).build();
     }
 
     @PostMapping("/logout")
@@ -72,15 +67,14 @@ public class AuthenticationController {
                 .build();
     }
 
-
-//    @PostMapping("/refresh")
-//    ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest resquest)
-//            throws ParseException, JOSEException {
-//        return ApiResponse.<AuthenticationResponse>builder()
-//                .result(authenticationService.refreshToken(resquest))
-//                .code(1000)
-//                .build();
-//    }
+    //    @PostMapping("/refresh")
+    //    ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest resquest)
+    //            throws ParseException, JOSEException {
+    //        return ApiResponse.<AuthenticationResponse>builder()
+    //                .result(authenticationService.refreshToken(resquest))
+    //                .code(1000)
+    //                .build();
+    //    }
 
     @PostMapping("/forgot-password")
     public ApiResponse<String> forgotPassword(@RequestBody String email) {
@@ -89,5 +83,4 @@ public class AuthenticationController {
                 .code(1000)
                 .build();
     }
-
 }

@@ -1,11 +1,12 @@
 package com.cinema.repository;
 
-import com.cinema.entity.Notification;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.cinema.entity.Notification;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer> {

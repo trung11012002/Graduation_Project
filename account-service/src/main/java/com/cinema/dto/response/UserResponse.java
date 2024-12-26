@@ -1,14 +1,14 @@
 package com.cinema.dto.response;
 
-import com.cinema.entity.Cinema;
+import java.time.LocalDateTime;
+
 import com.cinema.entity.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -35,7 +35,7 @@ public class UserResponse {
     @JsonIgnore
     private Role role;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private CinemaResponse managedCinema;
 
     private LocalDateTime createdAt;

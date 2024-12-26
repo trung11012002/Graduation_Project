@@ -23,6 +23,7 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create-room")
     public ApiResponse<RoomResponse> createRoom(
@@ -32,6 +33,7 @@ public class RoomController {
                 .data(roomService.createRoom(roomDto))
                 .build();
     }
+
     @PostMapping("/{id}")
     public ApiResponse<RoomResponse> findRoomById(@PathVariable Integer id) {
         return ApiResponse.<RoomResponse>builder()
@@ -39,6 +41,7 @@ public class RoomController {
                 .data(roomService.findRoomById(id))
                 .build();
     }
+
     @PostMapping("/room-in-cinema")
     public ApiResponse<List<RoomResponse>> findRoomByCinema(@RequestParam Integer cinemaId) {
         return ApiResponse.<List<RoomResponse>>builder()
@@ -46,12 +49,13 @@ public class RoomController {
                 .data(roomService.findAllRoomInCinema(cinemaId))
                 .build();
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/edit-room")
-    public ApiResponse<RoomResponse> editRoom(@RequestBody RoomDto dto){
-       return ApiResponse.<RoomResponse>builder()
-               .code(1000)
-               .data(roomService.editRoom(dto.getId(), dto))
-               .build();
+    public ApiResponse<RoomResponse> editRoom(@RequestBody RoomDto dto) {
+        return ApiResponse.<RoomResponse>builder()
+                .code(1000)
+                .data(roomService.editRoom(dto.getId(), dto))
+                .build();
     }
 }

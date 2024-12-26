@@ -1,10 +1,11 @@
 package com.example.paymentservice.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "schedule")
@@ -42,4 +43,3 @@ public class Schedule {
     @Column(name = "lastModifyBy")
     private String lastModifyBy;
 }
-

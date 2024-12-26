@@ -1,12 +1,10 @@
 package com.example.reviewservice.dto.response;
 
-import com.example.reviewservice.entity.Film;
-import com.example.reviewservice.entity.User;
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor

@@ -2,8 +2,6 @@ package com.example.filmservice.dto.response;
 
 import java.util.List;
 
-import com.example.filmservice.entity.Film;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

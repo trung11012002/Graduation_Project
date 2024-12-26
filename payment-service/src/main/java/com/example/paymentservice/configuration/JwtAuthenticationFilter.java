@@ -1,14 +1,13 @@
 package com.example.paymentservice.configuration;
 
-import com.example.paymentservice.dto.CustomUserDetails;
-import com.example.paymentservice.exception.AppException;
-import com.example.paymentservice.exception.ErrorCode;
-import com.example.paymentservice.service.impl.CustomUserDetailsService;
-import com.nimbusds.jwt.SignedJWT;
+import java.io.IOException;
+import java.text.ParseException;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -17,15 +16,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.text.ParseException;
+import com.example.paymentservice.dto.CustomUserDetails;
+import com.example.paymentservice.exception.AppException;
+import com.example.paymentservice.exception.ErrorCode;
+import com.example.paymentservice.service.impl.CustomUserDetailsService;
+import com.nimbusds.jwt.SignedJWT;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final String[] PUBLIC_ENDPOINTS = {
-            "/auth/**",
-            "/user/**",
-            "/rabbit-test",
+        "/auth/**", "/user/**", "/rabbit-test",
     };
 
     @Autowired

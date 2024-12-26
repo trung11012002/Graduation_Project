@@ -1,30 +1,13 @@
 package com.cinema.notification.controller;
 
+import java.util.List;
 
-import com.cinema.notification.dto.ApiResponse;
-import com.cinema.notification.dto.NotifyMessage;
-import com.cinema.notification.dto.request.NotificationRequest;
-import com.cinema.notification.dto.request.Recipient;
-import com.cinema.notification.dto.request.SendEmailRequest;
-import com.cinema.notification.dto.response.NotificationReponse;
-import com.cinema.notification.entity.Notification;
-import com.cinema.notification.service.INotificationService;
-import com.cinema.notification.utils.GenerateHtmlEmail;
-import com.event.dto.NotificationEvent;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +16,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.cinema.notification.dto.ApiResponse;
+import com.cinema.notification.dto.NotifyMessage;
+import com.cinema.notification.dto.request.NotificationRequest;
+import com.cinema.notification.dto.response.NotificationReponse;
+import com.cinema.notification.service.INotificationService;
+import com.event.dto.NotificationEvent;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -55,7 +48,7 @@ public class NotificationController {
     }
 
     @MessageMapping("/notification-user/{username}")
-//    @SendTo("/notification-user")
+    //    @SendTo("/notification-user")
     public String notifyUser(SimpMessageHeaderAccessor sha, @PathVariable String username) {
         String message = "Hello from " + sha.getUser().getName();
         System.out.println("message: " + message);
@@ -66,10 +59,8 @@ public class NotificationController {
     @GetMapping("/notify/global")
     public String notifyAllUserss(@RequestParam String message) {
         System.out.println("message: " + message);
-        NotifyMessage notifyMessage = NotifyMessage.builder()
-                .content(message)
-                .sender("System")
-                .build();
+        NotifyMessage notifyMessage =
+                NotifyMessage.builder().content(message).sender("System").build();
         messagingTemplate.convertAndSend("/notification-global", notifyMessage);
         return "Thông báo toàn hệ thống đã được gửi: " + message;
     }
@@ -88,10 +79,8 @@ public class NotificationController {
     @GetMapping("/user/{username}")
     public String notifyAllUsersss(@PathVariable String username, @RequestParam String message) {
         log.info("Message send to : {}", username + " with message: " + message);
-        NotifyMessage notifyMessage = NotifyMessage.builder()
-                .content(message)
-                .sender("System")
-                .build();
+        NotifyMessage notifyMessage =
+                NotifyMessage.builder().content(message).sender("System").build();
         messagingTemplate.convertAndSendToUser(username, "/notification-user/messages", notifyMessage);
         return "Send " + message + " to " + username;
     }

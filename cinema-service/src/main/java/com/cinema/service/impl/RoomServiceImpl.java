@@ -1,5 +1,12 @@
 package com.cinema.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.cinema.dto.request.RoomDto;
 import com.cinema.dto.response.RoomResponse;
 import com.cinema.entity.Cinema;
@@ -10,13 +17,6 @@ import com.cinema.mapper.RoomMapper;
 import com.cinema.repository.CinemaRepository;
 import com.cinema.repository.RoomRepository;
 import com.cinema.service.RoomService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -35,7 +35,8 @@ public class RoomServiceImpl implements RoomService {
     public RoomResponse createRoom(RoomDto request) {
         Room room = roomMapper.toRoom(request);
 
-        Cinema cinema = cinemaRepository.findById(request.getCinemaId())
+        Cinema cinema = cinemaRepository
+                .findById(request.getCinemaId())
                 .orElseThrow(() -> new AppException(ErrorCode.CINEMA_NOT_FOUND));
 
         room.setCinema(cinema);
@@ -43,8 +44,7 @@ public class RoomServiceImpl implements RoomService {
         roomRepository.save(room);
 
         List<Room> rooms = cinema.getRooms();
-        if (rooms == null)
-            rooms = new ArrayList<>();
+        if (rooms == null) rooms = new ArrayList<>();
         rooms.add(room);
         cinema.setRooms(rooms);
         cinemaRepository.save(cinema);
@@ -53,16 +53,15 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomResponse findRoomById(Integer id) {
-        Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.ROOM_NOT_FOUND));
+        Room room = roomRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ROOM_NOT_FOUND));
 
         return roomMapper.toRoomResponse(room);
     }
 
     @Override
     public List<RoomResponse> findAllRoomInCinema(Integer cinemaId) {
-        Cinema cinema = cinemaRepository.findById(cinemaId)
-                .orElseThrow(() -> new AppException(ErrorCode.CINEMA_NOT_FOUND));
+        Cinema cinema =
+                cinemaRepository.findById(cinemaId).orElseThrow(() -> new AppException(ErrorCode.CINEMA_NOT_FOUND));
 
         List<Room> rooms = roomRepository.findByCinema(cinema);
 
@@ -75,7 +74,8 @@ public class RoomServiceImpl implements RoomService {
         room.setName(dto.getName());
         room.setHorizontalSeats(dto.getHorizontalSeats());
         room.setVerticalSeats(dto.getVerticalSeats());
-        Cinema cinema = cinemaRepository.findById(dto.getCinemaId())
+        Cinema cinema = cinemaRepository
+                .findById(dto.getCinemaId())
                 .orElseThrow(() -> new AppException(ErrorCode.CINEMA_NOT_FOUND));
         room.setCinema(cinema);
         roomRepository.save(room);

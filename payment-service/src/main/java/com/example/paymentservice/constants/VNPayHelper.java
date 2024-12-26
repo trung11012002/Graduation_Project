@@ -1,16 +1,15 @@
 package com.example.paymentservice.constants;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.context.annotation.Configuration;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 public class VNPayHelper {
     public static String generateDate(boolean forExpire) {
@@ -49,7 +48,6 @@ public class VNPayHelper {
         }
 
         return digest;
-
     }
 
     public static String Sha256(String message) {
@@ -74,10 +72,9 @@ public class VNPayHelper {
         }
 
         return digest;
-
     }
 
-    //Util for VNPAY
+    // Util for VNPAY
     public static String hashAllFields(Map fields) {
 
         List fieldNames = new ArrayList(fields.keySet());
@@ -101,7 +98,6 @@ public class VNPayHelper {
         }
 
         return hmacSHA512(VNPayConstants.SECRET_KEY, sb.toString());
-
     }
 
     public static String hmacSHA512(final String key, final String data) {
@@ -128,7 +124,6 @@ public class VNPayHelper {
 
             return "";
         }
-
     }
 
     public static String getIpAddress(HttpServletRequest request) {
@@ -147,7 +142,6 @@ public class VNPayHelper {
         }
 
         return ipAdress;
-
     }
 
     public static String getRandomNumber(int len) {
@@ -161,6 +155,5 @@ public class VNPayHelper {
         }
 
         return sb.toString();
-
     }
 }

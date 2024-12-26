@@ -1,10 +1,11 @@
 package com.cinema.repository;
 
-import com.cinema.entity.Cinema;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.cinema.entity.Cinema;
 
 @Repository
 public interface CinemaRepository extends JpaRepository<Cinema, Integer> {

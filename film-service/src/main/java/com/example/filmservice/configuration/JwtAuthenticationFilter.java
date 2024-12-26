@@ -1,15 +1,13 @@
 package com.example.filmservice.configuration;
 
+import java.io.IOException;
+import java.text.ParseException;
 
-import com.example.filmservice.dto.response.CustomUserDetails;
-import com.example.filmservice.exception.AppException;
-import com.example.filmservice.exception.ErrorCode;
-import com.example.filmservice.service.Impl.CustomUserDetailsService;
-import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -18,15 +16,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.text.ParseException;
+import com.example.filmservice.dto.response.CustomUserDetails;
+import com.example.filmservice.exception.AppException;
+import com.example.filmservice.exception.ErrorCode;
+import com.example.filmservice.service.Impl.CustomUserDetailsService;
+import com.nimbusds.jwt.SignedJWT;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final String[] PUBLIC_ENDPOINTS = {
-            "/auth/**",
-            "/user/**",
-            "/films/all",
+        "/auth/**", "/user/**", "/films/all",
     };
 
     @Autowired
@@ -44,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String uri = request.getRequestURI();
         String contextPath = request.getContextPath();
-        String requestURI= uri.substring(contextPath.length());
+        String requestURI = uri.substring(contextPath.length());
         for (String publicEndpoint : PUBLIC_ENDPOINTS) {
             if (requestURI.startsWith(publicEndpoint.replace("**", ""))) {
                 filterChain.doFilter(request, response);

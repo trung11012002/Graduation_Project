@@ -1,9 +1,9 @@
 package com.cinema.repository;
 
-import com.cinema.entity.Film;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.cinema.entity.Film;
+
 @Repository
-public interface FilmRepository extends JpaRepository<Film, Integer> {
-}
+public interface FilmRepository extends JpaRepository<Film, Integer> {}

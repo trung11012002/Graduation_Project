@@ -1,13 +1,12 @@
 package com.cinema.notification.mapper;
 
-import com.cinema.notification.dto.request.NotificationRequest;
-import com.cinema.notification.dto.response.NotificationReponse;
-import com.cinema.notification.dto.response.UserResponse;
-import com.cinema.notification.entity.Notification;
-import com.cinema.notification.entity.User;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 
-import java.util.List;
+import com.cinema.notification.dto.request.NotificationRequest;
+import com.cinema.notification.dto.response.NotificationReponse;
+import com.cinema.notification.entity.Notification;
 
 @Mapper(componentModel = "spring")
 public interface NotificationMapper {

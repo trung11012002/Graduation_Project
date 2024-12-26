@@ -60,9 +60,8 @@ const ChooseSeats: React.FC = () => {
 
   const confirmBook = async () => {
     const totalPrice = calculateTotalPrice();
-    const res = await createPayment({ amount: totalPrice });
     const data = {
-      amount: sumPrice,
+      amount: totalPrice,
       scheduleId: Number(scheduleId),
       userId: user?.id!!,
       seats: String(localStorage.getItem('checkActive')).split(','),

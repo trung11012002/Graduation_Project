@@ -14,5 +14,4 @@ public class User1 implements Principal {
     public String getName() {
         return name;
     }
-
 }

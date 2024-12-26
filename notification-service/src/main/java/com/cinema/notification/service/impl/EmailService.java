@@ -1,5 +1,10 @@
 package com.cinema.notification.service.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.cinema.notification.dto.request.EmailRequest;
 import com.cinema.notification.dto.request.SendEmailRequest;
 import com.cinema.notification.dto.request.Sender;
@@ -8,15 +13,12 @@ import com.cinema.notification.exception.AppException;
 import com.cinema.notification.exception.ErrorCode;
 import com.cinema.notification.repository.httpclient.EmailClient;
 import com.cinema.notification.utils.GenerateHtmlEmail;
+
 import feign.FeignException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +29,8 @@ public class EmailService {
     @Value("${notification.email.brevo-apikey}")
     @NonFinal
     String apiKey;
-//    @NonFinal
-//    GenerateHtmlEmail generateHtmlEmail;
+    //    @NonFinal
+    //    GenerateHtmlEmail generateHtmlEmail;
 
     public EmailResponse sendEmail(SendEmailRequest request) {
         String body = GenerateHtmlEmail.generateHtmlEmailWelcome(request.getTo().getEmail());
@@ -43,7 +45,7 @@ public class EmailService {
                 .build();
         try {
             return emailClient.sendEmail(apiKey, emailRequest);
-        } catch (FeignException e){
+        } catch (FeignException e) {
             throw new AppException(ErrorCode.CANNOT_SEND_EMAIL);
         }
     }

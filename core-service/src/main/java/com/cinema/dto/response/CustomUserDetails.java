@@ -1,11 +1,12 @@
 package com.cinema.dto.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Collection;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

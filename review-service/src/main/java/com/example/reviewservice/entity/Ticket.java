@@ -1,6 +1,7 @@
 package com.example.reviewservice.entity;
 
 import jakarta.persistence.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
