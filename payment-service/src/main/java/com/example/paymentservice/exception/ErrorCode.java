@@ -18,6 +18,7 @@ public enum ErrorCode {
     INVALID_DOB(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1011, "User not found", HttpStatus.BAD_REQUEST),
     SCHEDULE_NOT_FOUND(1011, "Schedule not found", HttpStatus.BAD_REQUEST),
+    BOOKING_NOT_FOUND(1012, "Booking not found", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

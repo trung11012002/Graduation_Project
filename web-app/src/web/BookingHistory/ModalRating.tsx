@@ -3,6 +3,7 @@ import { Button, Modal, Rate } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { rateMovie } from '../../apis/movie'
 import { AuthContextProvider } from '../../contexts/AuthContext'
+import {MessageContextProvider} from "../../contexts/MessageContext";
 
 interface IModalRating {
     open: boolean,
@@ -19,18 +20,24 @@ const ModalRating: React.FC<IModalRating> = ({ open, setOpen, movie, getHistoryB
     const [valueRate, setValueRate] = useState<number>(0)
     const [value, setValue] = useState<string>("")
 
+    const mess = useContext(MessageContextProvider);
+    const success = mess?.success;
+    const error = mess?.error;
+
     const handleOk = async() => {
         const data = {
-            filmId: Number(movie.id),
+            filmId: Number(movie.filmResponse.id),
             userId: Number(user?.id),
             star: valueRate,
             comment: value
         }
         const res = await rateMovie(data)
-        if(res?.code === 200) {
-            console.log(res.data)
+        if(res?.code === 1000) {
             setOpen(false);
-            getHistoryBooking()
+            getHistoryBooking();
+            success("Đánh giá thành công");
+        } else {
+            error("Đánh giá thất bại");
         }
     };
 
@@ -43,7 +50,7 @@ const ModalRating: React.FC<IModalRating> = ({ open, setOpen, movie, getHistoryB
             // width={700}
             style={{}}
             open={open}
-            title={`Đánh giá phim ${movie.name}`}
+            title={`Đánh giá phim ${movie.filmResponse.name}`}
             onOk={handleOk}
             onCancel={handleCancel}
             footer={[

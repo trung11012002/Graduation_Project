@@ -41,30 +41,32 @@ public class BookingServiceImpl implements BookingService {
 
     @Transactional(transactionManager = "transactionManager")
     @Override
-    public ApiResponse createBooking(TransactionDTO dto) {
+    public ApiResponse<String> updateBooking(TransactionDTO dto) {
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        Booking booking = bookingrepository.findById(dto.getBookingId())
+                .orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_FOUND));
+
         String error = errorTransactionResponseCode(dto.getResponseCode());
         if (error != null) {
-            return ApiResponse.builder().code(403).msg(error).build();
+            booking.setStatus(StatusPayment.DECLINED.toString());
+            bookingrepository.save(booking);
+            return ApiResponse.<String>builder()
+                    .code(9000)
+                    .data(error)
+                    .build();
         }
-        Booking booking = new Booking();
-        User user =
-                userRepository.findById(dto.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        booking.setUser(user);
+
         booking.setBookingTime(LocalDateTime.now());
+        booking.setStatus(StatusPayment.APPROVED.toString());
         booking = bookingrepository.save(booking);
-        List<SeatDTO> seatDTOS = new ArrayList<>();
-        for (String s : dto.getSeats()) {
-            String[] number = s.split("-");
-            SeatDTO seatDTO = new SeatDTO();
-            seatDTO.setRow(Integer.parseInt(number[0]));
-            seatDTO.setColumn(Integer.parseInt(number[1]));
-            seatDTOS.add(seatDTO);
-        }
-        List<Ticket> tickets = ticketService.createTickets(booking, dto.getScheduleId(), seatDTOS);
-        booking.setTickets(tickets);
-        booking = bookingrepository.save(booking);
+
         BookingResponse response = mapper.toBookingResponse(booking);
-        return ApiResponse.builder().code(1000).msg("Success").data(response).build();
+        return ApiResponse.<String>builder()
+                .code(1000)
+                .data("Thanh toán thành công")
+                .build();
     }
 
     private String errorTransactionResponseCode(String responseCode) {
@@ -109,13 +111,16 @@ public class BookingServiceImpl implements BookingService {
                 error =
                         "Giao dịch không thành công do: KH nhập sai mật khẩu thanh toán quá số lần quy định. Xin quý khách vui lòng thực hiện lại giao dịch";
                 break;
+            case "15":
+                error = "Giao dịch không thành công do: Hết thời gian giao dịch.";
+                break;
         }
         return error;
     }
 
     @Override
     @Transactional
-    public ApiResponse createBookingWithStatusPendingPayment(TransactionDTO dto) {
+    public Booking createBookingWithStatusPendingPayment(TransactionDTO dto) {
         Booking booking = new Booking();
         User user =
                 userRepository.findById(dto.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -134,7 +139,6 @@ public class BookingServiceImpl implements BookingService {
         List<Ticket> tickets = ticketService.createTickets(booking, dto.getScheduleId(), seatDTOS);
         booking.setTickets(tickets);
         booking = bookingrepository.save(booking);
-        BookingResponse response = mapper.toBookingResponse(booking);
-        return ApiResponse.builder().code(1000).msg("Success").data(response).build();
+        return booking;
     }
 }

@@ -151,7 +151,7 @@ public class ScheduleResponseImpl implements ScheduleService {
     public ListScheduleResponseByPage findAllCurrentScheduleInCinemaByPage(Integer cinemaId, int page, int size) {
         Optional<Cinema> op = cinemaRepository.findById(cinemaId);
         if (!op.isPresent()) throw new AppException(ErrorCode.CINEMA_NOT_FOUND);
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("startTime").ascending());
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("startTime").descending());
         Page<Schedule> schedulesPage = findScheduleByTimeOption_withpage(op.get(), false, pageable);
         List<ScheduleResponse> responses = new ArrayList<>();
         for (Schedule schedule : schedulesPage.getContent()) {
@@ -173,7 +173,7 @@ public class ScheduleResponseImpl implements ScheduleService {
     public ListScheduleResponseByPage findAllHistoryScheduleInCinemaByPage(Integer cinemaId, int page, int size) {
         Optional<Cinema> op = cinemaRepository.findById(cinemaId);
         if (!op.isPresent()) throw new AppException(ErrorCode.CINEMA_NOT_FOUND);
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("startTime").ascending());
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("startTime").descending());
         Page<Schedule> schedules = findScheduleByTimeOption_withpage(op.get(), true, pageable);
         List<ScheduleResponse> responses = new ArrayList<>();
         for (Schedule schedule : schedules.getContent()) {
@@ -235,7 +235,7 @@ public class ScheduleResponseImpl implements ScheduleService {
     @Override
     public List<OrderedResponse> findAllOrdered(Integer scheduleId) {
         List<Ticket> tickets = ticketRepository
-                .findByScheduleId(scheduleId)
+                .findApprovedTickets(scheduleId)
                 .orElseThrow(() -> new AppException(ErrorCode.TICKET_NOT_FOUND));
 
         // Sử dụng Map để lưu trữ OrderedResponse theo bookingId
@@ -306,8 +306,14 @@ public class ScheduleResponseImpl implements ScheduleService {
             List<Ticket> tickets = ticketRepository
                     .findByScheduleId(schedule.getId())
                     .orElseThrow(() -> new AppException(ErrorCode.TICKET_NOT_FOUND));
-            revenueSchedule.setTicketsSold(tickets.size());
-            long revenue = tickets.stream().mapToLong(Ticket::getPrice).sum();
+            List<Ticket> ticketsFilterApproved = tickets.stream()
+                    .filter(ticket -> ticket.getBooking().getStatus().equals("APPROVED"))
+                    .toList();
+
+            revenueSchedule.setTicketsSold(ticketsFilterApproved.size());
+            long revenue = tickets.stream()
+                    .filter(ticket -> ticket.getBooking().getStatus().equals("APPROVED"))
+                    .mapToLong(Ticket::getPrice).sum();
             revenueSchedule.setRevenue(revenue);
             revenueSchedules.add(revenueSchedule);
             totalRevenue += revenue;
@@ -330,7 +336,7 @@ public class ScheduleResponseImpl implements ScheduleService {
         seatsStatus.setRow(room.getVerticalSeats());
         seatsStatus.setColumn(room.getHorizontalSeats());
         List<Ticket> tickets = ticketRepository
-                .findByScheduleId(scheduleId)
+                .findApprovedTickets(scheduleId)
                 .orElseThrow(() -> new AppException(ErrorCode.TICKET_NOT_FOUND));
         List<String> responses = new ArrayList<>();
         for (Ticket ticket : tickets) {

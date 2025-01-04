@@ -30,6 +30,7 @@ export const resultInfoPayment = async(
         userId: number
         responseCode: string
         seats: string[]
+        bookingId: number
     }
 ) => {
     console.log(data)

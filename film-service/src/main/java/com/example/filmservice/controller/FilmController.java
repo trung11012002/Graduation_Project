@@ -47,7 +47,7 @@ public class FilmController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<ApiResponse<FilmResponse>> editFilm(@ModelAttribute EditFilmDto editFilmDto) {
         ApiResponse<FilmResponse> response = filmService.editFilm(editFilmDto);
@@ -60,7 +60,7 @@ public class FilmController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse<FilmResponse>> deleteFilm(@PathVariable Integer id) {
         ApiResponse<FilmResponse> response = filmService.deleteFilmById(id);

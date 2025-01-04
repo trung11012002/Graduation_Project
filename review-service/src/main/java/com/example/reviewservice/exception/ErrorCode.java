@@ -16,9 +16,9 @@ public enum ErrorCode {
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
     INVALID_DOB(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
-    USER_NOT_FOUND(1010, "Admin not found", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(1010, "User not found", HttpStatus.BAD_REQUEST),
     USER_NOT_ADMIN(1011, "User is not an admin", HttpStatus.BAD_REQUEST),
-    FILM_NOT_FOUND(1011, "User not found", HttpStatus.BAD_REQUEST),
+    FILM_NOT_FOUND(1011, "Film not found", HttpStatus.BAD_REQUEST),
     RATING_NOT_FOUND(1011, "Rating not found", HttpStatus.BAD_REQUEST),
     ;
 

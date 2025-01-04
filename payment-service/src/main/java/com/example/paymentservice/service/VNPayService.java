@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import com.example.paymentservice.entity.Booking;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -39,6 +41,7 @@ public class VNPayService {
 
     @RabbitHandler
     @RabbitListener(queues = RabbitMQConfig.QUEUE, ackMode = "AUTO")
+    @Transactional
     public void createOrder(String requestVnpay) throws UnsupportedEncodingException, JsonProcessingException {
         //        bookingService.createBooking(requestVnpay);
 
@@ -68,7 +71,7 @@ public class VNPayService {
         transactionDTO.setUserId(orderRequest.getUserId());
         transactionDTO.setSeats(orderRequest.getSeats());
 
-        bookingService.createBookingWithStatusPendingPayment(transactionDTO);
+        Booking booking = bookingService.createBookingWithStatusPendingPayment(transactionDTO);
 
         String queryUrl = getQueryUrl(payload).get("queryUrl")
                 + "&vnp_SecureHash="
@@ -85,7 +88,7 @@ public class VNPayService {
         User user = userRepository
                 .findById(orderRequest.getUserId())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        notificationClient.sendUrlPayment(paymentUrl, user.getUsername());
+        notificationClient.sendUrlPayment(paymentUrl, user.getUsername(), booking.getId());
     }
 
     private Map<String, String> getQueryUrl(Map<String, Object> payload) throws UnsupportedEncodingException {

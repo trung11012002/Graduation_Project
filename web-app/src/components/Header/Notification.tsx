@@ -120,9 +120,12 @@ const NotificationComponent = () => {
     }
 
     function receiveUrlPayment(message: any) {
-        const paymentUrl = message.body;
+        const result = message.body.split(" ");
+        const paymentUrl = result[0];
+        const bookingId = result[1];
         if (paymentUrl) {
             localStorage.setItem("paymentUrl", paymentUrl);
+            localStorage.setItem("bookingId", bookingId);
         }
     }
 

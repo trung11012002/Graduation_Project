@@ -48,7 +48,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponse checkAvailableSeats(BookingDto bookingDto) {
         List<Ticket> ticketsBooked = ticketRepository
-                .findByScheduleId(bookingDto.getScheduleId())
+                .findApprovedTickets(bookingDto.getScheduleId())
                 .orElseThrow(() -> new AppException(ErrorCode.TICKET_NOT_FOUND));
         if (!ticketsBooked.isEmpty()) {
             List<Seat> seats = bookingDto.getSeats();
@@ -90,6 +90,9 @@ public class BookingServiceImpl implements BookingService {
         Collections.sort(bookings, Comparator.comparing(Booking::getBookingTime, Comparator.reverseOrder()));
         List<HistoryBookingResponse> responses = new ArrayList<>();
         for (Booking booking : bookings) {
+            if(!booking.getStatus().equals("APPROVED")) {
+                continue;
+            }
             HistoryBookingResponse response = new HistoryBookingResponse();
             response.setTimeBooking(booking.getBookingTime());
             response.setId(booking.getId());

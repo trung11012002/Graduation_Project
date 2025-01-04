@@ -14,4 +14,5 @@ public class TransactionDTO {
     private Integer userId;
     private List<String> seats;
     private String responseCode;
+    private Integer bookingId;
 }

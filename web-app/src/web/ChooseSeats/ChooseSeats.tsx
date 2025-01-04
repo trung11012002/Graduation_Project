@@ -64,7 +64,8 @@ const ChooseSeats: React.FC = () => {
       amount: totalPrice,
       scheduleId: Number(scheduleId),
       userId: user?.id!!,
-      seats: String(localStorage.getItem('checkActive')).split(','),
+      // seats: String(localStorage.getItem('checkActive')).split(','),
+      seats: String(`${checkActive}`).split(','),
     }
     const res = await createPayment(data)
     if (res?.code === 1000) {

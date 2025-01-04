@@ -102,8 +102,9 @@ public class NotificationController {
     }
 
     @PostMapping("/send-url-payment")
-    public String sendUrlPayment(@RequestParam String urlPayment, @RequestParam String username) {
-        messagingTemplate.convertAndSendToUser(username, "/notification-user/payment", urlPayment);
-        return "Send url payment to user " + urlPayment;
+    public String sendUrlPayment(@RequestParam String urlPayment, @RequestParam String username, @RequestParam Integer bookingId) {
+        String result =  urlPayment + " " + bookingId;
+        messagingTemplate.convertAndSendToUser(username, "/notification-user/payment", result);
+        return "Send url payment to user " + result;
     }
 }

@@ -60,21 +60,8 @@ public class PaymentController {
         return ApiResponse.builder().code(1000).data("Success").msg("Success").build();
     }
 
-    @PostMapping("/rabbit-test")
-    public ApiResponse<String> createPayment(@RequestParam(name = "message") String message)
-            throws JsonProcessingException {
-        OrderRequest orderRequest = new OrderRequest();
-        orderRequest.setAmount(100000L);
-        orderRequest.setOrderInfo("Thanh toán vé xem phim của:");
-        ObjectMapper objectMapper = new ObjectMapper();
-        String test = objectMapper.writeValueAsString(orderRequest);
-        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE, test);
-
-        return ApiResponse.<String>builder().data("Success").build();
-    }
-
     @PostMapping("/result-info")
-    public ApiResponse transactionInfo(@RequestBody TransactionDTO dto) {
-        return bookingService.createBooking(dto);
+    public ApiResponse<String> transactionInfo(@RequestBody TransactionDTO dto) {
+        return bookingService.updateBooking(dto);
     }
 }

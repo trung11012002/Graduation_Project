@@ -43,19 +43,25 @@ const PaymentSuccess = () => {
 
   const data = getAllUrlParams(location.search);
   console.log(1111);
-
   useEffect(() => {
     console.log(data);
+    console.log(data.vnp_ResponseCode);
+
     if (data.vnp_ResponseCode) {
       (async () => {
         const res = await resultInfoPayment({
           scheduleId: Number(localStorage.getItem('scheduleId')),
           userId: Number(localStorage.getItem('userId')),
           responseCode: data.vnp_ResponseCode,
-          seats: String(localStorage.getItem('checkActive')).split(',')
+          seats: String(localStorage.getItem('checkActive')).split(','),
+          bookingId: Number(localStorage.getItem('bookingId')),
         });
-        console.log(res);
+
         if (res?.data === 1000) {
+          localStorage.removeItem("scheduleId");
+          localStorage.removeItem("userId");
+          localStorage.removeItem("checkActive");
+        }else if (res?.data === 9000) {
           localStorage.removeItem("scheduleId");
           localStorage.removeItem("userId");
           localStorage.removeItem("checkActive");
@@ -65,7 +71,7 @@ const PaymentSuccess = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const isSuccess = data.vnp_ResponseCode === "00"; // Kiểm tra trạng thái thành công hay thất bại
+  const isSuccess = data.vnp_ResponseCode === "00";
 
   return (
       <>

@@ -60,3 +60,19 @@
     outline: none; /* Loại bỏ outline mặc định */
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5); /* Thêm viền sáng khi nút được chọn */
 }
+/*.right_Detail{*/
+/*    padding: 0 0;*/
+/*}*/
+/*.button-detail{*/
+/*    margin-top: 5px;*/
+/*}*/
+
+.button-detail span {
+    margin-top: 15px;
+}
+.button-delete span {
+    margin-top: 15px;
+}
+.button-view span {
+    margin-top: 15px;
+}

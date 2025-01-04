@@ -56,7 +56,7 @@ public class CinemaController {
                 .build();
     }
 
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+//    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping("/status")
     public ApiResponse<List<CinemaResponse>> findAllCinemaByStatus() {
         return ApiResponse.<List<CinemaResponse>>builder()

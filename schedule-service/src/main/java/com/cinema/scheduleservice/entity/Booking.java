@@ -30,4 +30,6 @@ public class Booking {
     @OneToMany(mappedBy = "booking")
     @JsonIgnore
     private List<Ticket> tickets;
+
+    private String status;
 }
